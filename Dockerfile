@@ -1,11 +1,10 @@
-# Node.js 환경 설정
 FROM node:18
 
-WORKDIR /frontend
-COPY app ./app
 WORKDIR /frontend/app
-
-# React 앱 설치 & 실행
+COPY app/package.json app/package-lock.json ./
+RUN npm cache clean --force
+RUN npm install --no-fund --no-audit --legacy-peer-deps --max-old-space-size=4096
+COPY app ./
 RUN npm install
 
 # 5173포트 환경변수 설정
