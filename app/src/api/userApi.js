@@ -1,6 +1,6 @@
 import { useAuthStore } from "../store/userStore";
 
-const API_BASE_URL = "/api";
+const API_BASE_URL = "http://server.clip-up.kr";
 
 export const userAPI = {
   login: async (data) => {

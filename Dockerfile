@@ -6,7 +6,7 @@ COPY app ./app
 WORKDIR /frontend/app
 
 # React 앱 설치 & 실행
-RUN npm install
+RUN sudo npm install
 
 # 5173포트 환경변수 설정
 ENV PORT=5173
