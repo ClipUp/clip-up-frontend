@@ -1,11 +1,10 @@
 FROM node:18
 
-WORKDIR /frontend/app
+WORKDIR /frontend
 COPY app/package.json app/package-lock.json ./
-RUN npm cache clean --force
-RUN npm install --no-fund --no-audit --legacy-peer-deps --max-old-space-size=4096
-COPY app ./
-RUN npm install
+RUN node --max-old-space-size=4096 $(which npm) install --no-fund --no-audit --legacy-peer-deps
+COPY app ./app
+WORKDIR /frontend/app
 
 # 5173포트 환경변수 설정
 ENV PORT=5173
