@@ -1,8 +1,9 @@
-FROM node:18
+FROM node:16
 
 WORKDIR /frontend
 COPY app/package.json app/package-lock.json ./
-RUN node --max-old-space-size=4096 $(which npm) install --no-fund --no-audit --legacy-peer-deps
+ENV UV_THREADPOOL_SIZE=8
+RUN npm install --no-fund --no-audit --legacy-peer-deps --loglevel verbose
 COPY app ./app
 WORKDIR /frontend/app
 
