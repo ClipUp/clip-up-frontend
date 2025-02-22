@@ -2,7 +2,6 @@ FROM node:16
 
 WORKDIR /frontend
 COPY app/package.json app/package-lock.json ./
-ENV UV_THREADPOOL_SIZE=8
 RUN npm install
 COPY app ./app
 WORKDIR /frontend/app
