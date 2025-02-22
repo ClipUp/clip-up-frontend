@@ -16,7 +16,7 @@ const SignIn = () => {
   };
 
   const handleLogin = async () => {
-    signInMutation.mutate({ userEmail, userPwd });
+    signInMutation.mutate({email: userEmail, password: userPwd});
   };
 
   return (
