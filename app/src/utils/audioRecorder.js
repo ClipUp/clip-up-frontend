@@ -1,8 +1,9 @@
 class AudioRecorder {
 	constructor(onDataAvailable, onStopRecording) {
 	  this.mediaRecorder = null;
+	  this.audio = [];
 	  this.audioChunks = [];
-	  this.maxDuration = 60 * 1000; // 60초
+	  this.maxDuration = 10 * 60 * 1000; // 10분
 	  this.onDataAvailable = onDataAvailable;
 	  this.onStopRecording = onStopRecording;
 	  this.stream = null;
@@ -30,7 +31,8 @@ class AudioRecorder {
 
 		this.mediaRecorder.ondataavailable = (event) => {
 		  if (event.data.size > 0) {
-			this.audioChunks.push(event.data);
+				this.audioChunks.push(event.data);
+				this.audio.push(event.data);
 		  }
 		};
 
@@ -45,7 +47,6 @@ class AudioRecorder {
 		this.mediaRecorder.start();
 		this.visualizeWaveform();
 
-		// 60초 후 자동 저장 및 새 파일 시작
 		setTimeout(() => {
 		  if (this.mediaRecorder.state === "recording") {
 			this.mediaRecorder.stop();

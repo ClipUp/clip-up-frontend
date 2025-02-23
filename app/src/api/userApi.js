@@ -1,6 +1,4 @@
-import { useAuthStore } from "../store/userStore";
-
-const API_BASE_URL = "http://server.clip-up.kr";
+import { API_BASE_URL, fetchWithAuth } from "./fetchUtils";
 
 export const userAPI = {
   login: async (data) => {
@@ -13,7 +11,7 @@ export const userAPI = {
     return res.json();
   },
 
-  createUser: async (data) => {
+  register: async (data) => {
     const res = await fetch(`${API_BASE_URL}/api/v1/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -24,17 +22,14 @@ export const userAPI = {
   },
 
   updateUserPwd: async (data) => {
-	const accessToken = useAuthStore.getState().accessToken;
-	if (!accessToken) throw new Error("Failed to update user pwd: unauthorization");
-    const res = await fetch(`${API_BASE_URL}/api/v1/auth/password`, {
+    const res = fetchWithAuth("/api/v1/auth/password", {
       method: "POST",
       headers: {
-		"Content-Type": "application/json",
-		Authorizaion: `Bearer ${accessToken}`
-	},
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error("Failed to update user pwd");
+    if (!res.ok) throw new Error("Failed to create user");
     return res.json();
   },
 };
