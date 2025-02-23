@@ -1,4 +1,4 @@
-import AudioRecorder from "../features/audio/audioRecorder";
+import AudioRecorder from "../features/audio/AudioRecorder";
 
 const Record = () => {
 	return (

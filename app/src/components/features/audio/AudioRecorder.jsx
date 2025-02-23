@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import AudioRecorderUtil from "../../../utils/audioRecorder";
+import AudioRecorderUtil from "../../../utils/audioRecorderUtil";
 
 const AudioRecorder = () => {
   const [isRecording, setIsRecording] = useState(false);
