@@ -1,7 +1,7 @@
 import Button from "../../ui/button/Button";
 import SignIn from "../../features/user/SignIn";
 import SignUp from "../../features/user/SignUp";
-import { useModalStore } from "../../../store/ModalStore";
+import { useModalStore } from "../../../store/modalStore";
 
 const Unauthorized = () => {
 	const { openModal } = useModalStore();

@@ -2,7 +2,7 @@ import { useState } from "react";
 import CategoryItem from "./CategoryItem";
 import { useAuthStore } from "../../../store/userStore";
 import { useNavigate } from "react-router-dom";
-import { useModalStore } from "../../../store/ModalStore";
+import { useModalStore } from "../../../store/modalStore";
 import SignIn from "../user/SignIn";
 import Button from "../../ui/button/Button";
 

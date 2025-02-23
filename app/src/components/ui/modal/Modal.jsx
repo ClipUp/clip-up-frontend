@@ -1,4 +1,4 @@
-import { useModalStore } from '../../../store/ModalStore';
+import { useModalStore } from '../../../store/modalStore';
 import './Modal.scss';
 import propTypes from 'prop-types';
 
