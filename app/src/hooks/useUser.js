@@ -19,6 +19,17 @@ const useSignIn = () => {
   });
 };
 
+const useAutoSignIn = () => {
+  const setAccessToken = useAuthStore((state) => state.setAccessToken);
+
+  return useMutation({
+    mutationFn: () => userAPI.autoLogin(),
+    onSuccess: (data) => {
+      setAccessToken(data.data.accessToken);
+    },
+  });
+};
+
 const useUpdateUserPwd = () => {
 	const mutation = useMutation({
 		mutationFn: (data) => userAPI.updateUserPwd(data),
@@ -26,4 +37,4 @@ const useUpdateUserPwd = () => {
   return mutation;
 }
 
-export {useSignUp, useSignIn, useUpdateUserPwd};
+export {useSignUp, useSignIn, useAutoSignIn, useUpdateUserPwd};

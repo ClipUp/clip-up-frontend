@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useModalStore } from "../../../store/modalStore";
 import SignIn from "../user/SignIn";
 import Button from "../../ui/button/Button";
+import SignUp from "../user/SignUp";
 
 const DEFAULT_CATEGORY = 0;
 const CATEGORIES = [
@@ -25,7 +26,7 @@ const CategoryList = () => {
     if (await confirm("로그인 하시겠습니까?")) {
       openModal(<>
         <SignIn />
-        <Button title="가입" variant="important" onClick={() => {}}>
+        <Button title="가입" variant="important" onClick={() => {openModal(<SignUp />)}}>
           가입
         </Button>
       </>);

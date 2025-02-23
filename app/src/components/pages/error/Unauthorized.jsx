@@ -2,13 +2,14 @@ import Button from "../../ui/button/Button";
 import SignIn from "../../features/user/SignIn";
 import SignUp from "../../features/user/SignUp";
 import { useModalStore } from "../../../store/modalStore";
+import { useState } from "react";
 
 const Unauthorized = () => {
 	const { openModal } = useModalStore();
 	const handleLoginBtn = () => {
 		openModal(<>
 			<SignIn />
-			<Button title="가입" variant="important" onClick={() => {}}>
+			<Button title="가입" variant="important" onClick={() => {openModal(<SignUp />)}}>
 				가입
 			</Button>
 		</>);

@@ -1,4 +1,3 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Main from "./components/layout/Main";
 import Header from "./components/layout/Header";
@@ -12,31 +11,42 @@ import { useAuthStore } from "./store/userStore";
 import Unauthorized from "./components/pages/error/Unauthorized";
 import Record from "./components/pages/Record";
 import Modal from "./components/ui/modal/Modal";
-const queryClient = new QueryClient();
+import { useEffect } from "react";
+import { useAutoSignIn } from "./hooks/useUser";
 
 const App = () => {
   const accessToken = useAuthStore((state) => state.accessToken);
+  const setAccessToken = useAuthStore((state) => state.setAccessToken);
   const routeWithAuth = (children) => {
     return accessToken ? children : <Unauthorized />;
   }
+  const autoSiginInMutation = useAutoSignIn();
+  useEffect(() => {
+    const fetchToken = async () => {
+      if (!accessToken) {
+        await autoSiginInMutation.mutate();
+      }
+    };
+
+    fetchToken();
+  }, [accessToken, setAccessToken]);
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Header />
-        <Main>
-          <SideBar />
-            <Routes>
-              <Route path="/" element={routeWithAuth(<Home />)}></Route>
-              <Route path="/note/list/:isDeleted" element={routeWithAuth(<NoteList />)}></Route>
-              <Route path="/note/:noteState" element={routeWithAuth(<Note />)}></Route>
-              <Route path="/note/new" element={routeWithAuth(<Record />)}></Route>
-              <Route path="*" element={<NotFound />}></Route>
-            </Routes>
-        </Main>
-        <Footer></Footer>
-        <Modal title="로그인/회원가입"></Modal>
-      </BrowserRouter>
-    </QueryClientProvider>
+    <BrowserRouter>
+      <Header />
+      <Main>
+        <SideBar />
+          <Routes>
+            <Route path="/" element={routeWithAuth(<Home />)}></Route>
+            <Route path="/note/list/:isDeleted" element={routeWithAuth(<NoteList />)}></Route>
+            <Route path="/note/:noteState" element={routeWithAuth(<Note />)}></Route>
+            <Route path="/note/new" element={routeWithAuth(<Record />)}></Route>
+            <Route path="*" element={<NotFound />}></Route>
+          </Routes>
+      </Main>
+      <Footer></Footer>
+      <Modal title="로그인/회원가입"></Modal>
+    </BrowserRouter>
   );
 };
 
