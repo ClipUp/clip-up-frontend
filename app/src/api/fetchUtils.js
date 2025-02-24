@@ -1,6 +1,6 @@
 import { useAuthStore } from "../store/userStore";
 
-const API_BASE_URL = "http://server.clip-up.kr";
+const API_BASE_URL = "https://server.clip-up.kr";
 const MAX_RETRY_CNT = 1;
 
 const fetchWithAutoRetry = async (apiCall) => {
