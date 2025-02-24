@@ -8,12 +8,16 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5173,
     strictPort: true,
-    cors: {
-      origin: ['https://clip-up.kr', 'https://server.clip-up.kr'],
-      credentials: true,
-    },
+    cors: true,
     hmr: {
       clientPort: 443,
+    },
+    middlewareMode: true,
+    configureServer(server) {
+      server.middlewares.use('/health', (_, res) => {
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        res.end('ok');
+      });
     },
   }
 })
