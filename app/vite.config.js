@@ -10,14 +10,7 @@ export default defineConfig({
     strictPort: true,
     cors: true,
     hmr: {
-      clientPort: 443,
-    },
-    middlewareMode: true,
-    configureServer(server) {
-      server.middlewares.use('/health', (_, res) => {
-        res.writeHead(200, { 'Content-Type': 'text/plain' });
-        res.end('ok');
-      });
+      clientPort: 80,
     },
   }
 })
