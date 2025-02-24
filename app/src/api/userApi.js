@@ -5,6 +5,7 @@ export const userAPI = {
     const res = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: 'include',
       body: JSON.stringify(data),
     });
     if (!res.ok) throw new Error("Failed to create user");
