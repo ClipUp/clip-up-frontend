@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { noteApi } from "../../../api/noteApi";
 import NoteItem from "./NoteItem";
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import "./noteList.scss";
 
 const NoteListTemplate = () => {
@@ -16,9 +16,7 @@ const NoteListTemplate = () => {
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
   });
-
-  const noteList = data?.pages.flatMap(page => page.list) || [];
-
+  const noteList = data?.pages.flatMap(page => page.list) || []; 
   const observer = useRef();
   const lastNoteRef = useCallback(
     (node) => {
@@ -33,6 +31,32 @@ const NoteListTemplate = () => {
     },
     [isFetchingNextPage, hasNextPage]
   );
+  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+  const handleResize = () => {
+    setWindowHeight(window.innerHeight);
+  };
+
+  useEffect(() => {
+    const element = document.querySelector('.note-list');
+    if (element) {
+      element.style.height = `${windowHeight}px`;
+    }
+
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      // 컴포넌트 언마운트 시 이벤트 리스너 제거
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [windowHeight]);
+
+  useEffect(() => {
+    const element = document.querySelector('.note-list');
+    if (element) {
+      element.style.height = `${windowHeight}px`;
+    }
+  }, [windowHeight]);
 
   return (
     <div className="note-list">
