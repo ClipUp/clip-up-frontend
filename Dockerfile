@@ -1,13 +1,7 @@
-FROM node:16
+FROM nginx:alpine
 
-WORKDIR /frontend
-COPY app/package.json app/package-lock.json ./
-RUN npm install
-COPY app ./app
-WORKDIR /frontend/app
+COPY dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# 5173포트 환경변수 설정
-ENV PORT=5173
-EXPOSE 5173
+EXPOSE 80
 
-CMD ["npm", "run", "dev", "--", "--host"]
