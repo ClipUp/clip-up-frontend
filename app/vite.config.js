@@ -9,6 +9,7 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     cors: true,
+    allowedHosts: ['clip-up.kr', 'server.clip-up.kr'],
     hmr: {
       clientPort: 80,
     },
