@@ -10,7 +10,7 @@ export default defineConfig({
     strictPort: true,
     cors: true,
     hmr: {
-      clientPort: 443,
+      clientPort: 80,
     },
   }
 })
