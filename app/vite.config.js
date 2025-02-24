@@ -8,13 +8,15 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 5173,
-    cors: {
-      origin: '*', // 모든 도메인 허용
-      methods: ['GET', 'POST'], // 허용할 HTTP 메서드
-      allowedHeaders: ['Content-Type'], // 허용할 헤더
-    },
-    hmr: {
-      clientPort: 5173,
+  },
+  build: {
+    outDir: 'dist', // 빌드 결과물이 저장될 디렉토리
+    assetsDir: 'assets', // 정적 파일(이미지, css 등)이 저장될 디렉토리
+    sourcemap: false, // 소스맵 생성 여부
+    rollupOptions: {
+      input: {
+        main: 'app/index.html', // 엔트리 파일
+      },
     },
   },
 });
