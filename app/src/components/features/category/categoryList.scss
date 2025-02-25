@@ -1,0 +1,28 @@
+nav {
+	width: 100%;
+	.nav-button {
+		display: flex;
+		align-items: center;
+		justify-self: start;
+		border-radius: var(--scale-12);
+		padding: var(--scale-16);
+		font-weight: 600;
+		font-size: 16px;
+		text-align: center;
+		width: 100%;
+		background: rgba(245, 239, 235, 0.16);
+		&.active {
+			background: radial-gradient(circle, rgba(245, 239, 235, 1), var(--grey-100));
+			// border: 0.5px solid #F5EFEB29;
+		}
+	}
+	img {
+		width: 24px;
+		margin-left: var(--scale-4);
+		margin-right: var(--scale-16);
+	}
+	span {
+		font-size: 16px;
+		color: var(--grey-900);
+	}
+}

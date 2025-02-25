@@ -2,12 +2,12 @@ import "./Button.scss";
 import propTypes from 'prop-types';
 
 IconButton.propTypes = {
+	children: propTypes.element,
 	title: propTypes.string,
-	variant: propTypes.string,
 	onClick: propTypes.func,
 	disabled: propTypes.bool
 };
-function IconButton({title, variant, onClick, disabled}) {
+function IconButton({children, title, onClick, disabled}) {
 	return (
 	<>
 		<button
@@ -15,10 +15,10 @@ function IconButton({title, variant, onClick, disabled}) {
 		title={title}
 	  onClick={onClick}
 	  disabled={disabled}
-	  className={`default-button
-	  ${variant === 'primary' ? 'primary' : ''}
-	  ${variant === 'important' ? 'important' : ''}`
-	  }></button>
+	  className="icon-button"
+		>
+			{children}
+		</button>
 	</>
 	)
 }

@@ -45,6 +45,7 @@ class AudioRecorder {
 
 				this.mediaRecorder.start();
 				this.visualizeWaveform();
+				this.monitorAudio();
 
 				setTimeout(() => {
 					if (this.mediaRecorder.state === "recording") {
@@ -87,6 +88,31 @@ class AudioRecorder {
 		this.audioContext.close();
 	  }
 	  cancelAnimationFrame(this.animationFrameId);
+	}
+
+	monitorAudio() {
+    this.audioCheckInterval = setInterval(() => {
+        this.analyser.getByteFrequencyData(this.dataArray);
+
+        const silenceThreshold = 50;
+        if (this.getVolume() < silenceThreshold) {
+            this.silentDuration += 100;
+            if (this.silentDuration >= 500 && this.isRecording) { // 0.5초 이상 묵음
+                this.mediaRecorder.pause();
+                this.isRecording = false;
+            }
+        } else {
+            this.silentDuration = 0;
+            if (!this.isRecording) {
+                this.mediaRecorder.resume();
+                this.isRecording = true;
+            }
+        }
+    }, 100);
+	}
+
+	getVolume() {
+		return this.dataArray.reduce((a, b) => a + b, 0) / this.dataArray.length;
 	}
 
 	async saveToServer(audioBlob) {

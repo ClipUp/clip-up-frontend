@@ -1,11 +1,13 @@
+import Button from "../../ui/button/Button";
+
 const CategoryItem = ({children, active, onClick}) => {
 	return (
-		<span
-			className={`category-item ${active? "active" : ""}`}
+		<button
+			className={`nav-button ${active ? 'active' : ''}`}
 			onClick={onClick}
 		>
 			{children}
-		</span>
+		</button>
 	);
 }
 

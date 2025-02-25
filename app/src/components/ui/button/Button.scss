@@ -1,0 +1,24 @@
+.default-button {
+	border-radius: var(--scale-12);
+	background-color: var(--grey-900);
+	overflow: hidden;
+	padding: 12px;
+	color: var(--white);
+	font-weight: 600;
+	font-size: 16px;
+	text-align: center;
+	width: 100%;
+
+	&.primary {
+		background-color: var(--grey-900);
+	}
+	&.active {
+		background: radial-gradient(circle, rgba(245, 239, 235, 1), rgba(245, 239, 235, 0.16));
+		border: 0.5px solid #F5EFEB29;
+	}
+}
+
+.icon-button {
+	background-color: transparent;
+	overflow: hidden;
+}

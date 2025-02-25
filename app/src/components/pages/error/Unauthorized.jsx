@@ -3,6 +3,7 @@ import SignIn from "../../features/user/SignIn";
 import SignUp from "../../features/user/SignUp";
 import { useModalStore } from "../../../store/modalStore";
 import { useState } from "react";
+import Arrow from "../../../assets/icon/line-arrow-right.svg"
 
 const Unauthorized = () => {
 	const { openModal } = useModalStore();
@@ -25,7 +26,10 @@ const Unauthorized = () => {
 				<Button
 					title="로그인/회원가입"
 					onClick={handleLoginBtn}
-				>로그인/회원가입</Button>
+				>
+					<span>시작하기</span>
+					<img src={Arrow}/>
+				</Button>
 			</section>
 		</>
 	);
