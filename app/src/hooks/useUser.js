@@ -30,6 +30,7 @@ const useAutoSignIn = () => {
     mutationFn: () => userAPI.autoLogin(),
     onSuccess: (data) => {
       setAccessToken(data.data.accessToken);
+      return true;
     },
   });
 };
