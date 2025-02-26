@@ -28,12 +28,7 @@ const CategoryList = () => {
       return setActiveCategory(idx)
     }
     if (await confirm("로그인 하시겠습니까?")) {
-      openModal(<>
-        <SignIn />
-        <Button title="가입" variant="important" onClick={() => {openModal(<SignUp />)}}>
-          가입
-        </Button>
-      </>);
+      openModal(<SignIn />);
     }
   }
 

@@ -1,6 +1,8 @@
 import { useModalStore } from '../../../store/modalStore';
+import IconButton from '../button/IconButton';
 import './Modal.scss';
 import propTypes from 'prop-types';
+import Close from '../../../assets/icon/close.svg'
 
 Modal.propTypes = {
 	children: propTypes.element,
@@ -19,13 +21,12 @@ function Modal({title, variant}) {
 				onClick={(e) => {e.stopPropagation()}}
 			>
 				<h3>{title}</h3>
-        <button
-					type="button"
+        <IconButton
 					title="닫기"
 					onClick={closeModal}
-					className="modal-close">
-          닫기
-        </button>
+				>
+					<img src={Close} />
+				</IconButton>
         {children}
       </div>
     </div>

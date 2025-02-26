@@ -1,58 +1,51 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { noteAPI } from "../../../api/noteApi";
 import NoteItem from "./NoteItem";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./noteList.scss";
+import { useNoteList } from "../../../hooks/useNote";
 
-const NoteListTemplate = () => {
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery({
-    queryKey: ["notes"],
-    queryFn: noteAPI.fetchNoteList,
-    initialPageParam: 1,
-    getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
-  });
-  const noteList = data?.pages.flatMap(page => page.list) || []; 
-  const observer = useRef();
-  const lastNoteRef = useCallback(
-    (node) => {
-      if (isFetchingNextPage) return;
-      if (observer.current) observer.current.disconnect();
-      observer.current = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting && hasNextPage) {
-          fetchNextPage();
-        }
-      });
-      if (node) observer.current.observe(node);
-    },
-    [isFetchingNextPage, hasNextPage]
-  );
+const NoteListTemplate = ({maxPages = Infinity}) => {
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useNoteList(maxPages);
+  const observerRef = useRef(null);
+  const [pageCount, setPageCount] = useState(1);
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+
+  useEffect(() => {
+    if (!observerRef.current || !hasNextPage || pageCount >= maxPages) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          fetchNextPage();
+          setPageCount((prev) => prev + 1);
+        }
+      },
+      { threshold: 1 }
+    );
+
+    observer.observe(observerRef.current);
+    return () => observer.disconnect();
+  }, [fetchNextPage, hasNextPage, maxPages, pageCount]);
+
   const handleResize = () => {
     setWindowHeight(window.innerHeight);
   };
 
   useEffect(() => {
     const element = document.querySelector('.note-list');
+
     if (element) {
       element.style.height = `${windowHeight}px`;
     }
-
-
     window.addEventListener('resize', handleResize);
 
     return () => {
-      // 컴포넌트 언마운트 시 이벤트 리스너 제거
       window.removeEventListener('resize', handleResize);
     };
   }, [windowHeight]);
 
   useEffect(() => {
     const element = document.querySelector('.note-list');
+
     if (element) {
       element.style.height = `${windowHeight}px`;
     }
@@ -61,14 +54,14 @@ const NoteListTemplate = () => {
   return (
     <div className="note-list">
       <ul>
-        {noteList.length === 0 ? (
+        {data?.pages.flat().length === 0 ? (
           <div>데이터가 없습니다.</div>
         ) : (
-          noteList.map((note, index) => (
+          data?.pages.flat().map((note, index) => (
             <NoteItem
               note={note}
               key={note.id}
-              ref={index === noteList.length - 1 ? lastNoteRef : null}
+              ref={index === data?.pages.flat().length - 1 ? observerRef : null}
             />
           ))
         )}

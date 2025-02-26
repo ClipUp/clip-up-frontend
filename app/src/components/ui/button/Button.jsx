@@ -18,6 +18,7 @@ function Button({children, title, variant, onClick, disabled}) {
       disabled={disabled}
       className={`default-button
       ${variant === 'primary' ? 'primary' : ''}
+			${variant === 'primary-light' ? 'primary-light' : ''}
       ${variant === 'secondary' ? 'secondary' : ''}`
       }>{children}</button>
 	</>

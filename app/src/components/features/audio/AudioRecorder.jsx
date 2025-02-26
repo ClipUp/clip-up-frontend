@@ -27,20 +27,19 @@ const AudioRecorder = () => {
     recorderRef.current.stopRecording();
   };
 
-  const handleAudioSave = (audioBlob) => {
+  const handleAudioSave = async (wavBlob) => {
     const bars = document.querySelectorAll("#audioWave rect");
-    const url = URL.createObjectURL(audioBlob);
+    const url = URL.createObjectURL(wavBlob);
     bars.forEach((bar) => {
       bar.setAttribute("fill", "#B0B0B0");
     });
     setAudioUrl(url);
-    // noteMutation.mutate();// TODO mp3
+    await noteMutation.mutateAsync(wavBlob);
   };
 
   const drawWaveform = (dataArray) => {
     const bars = document.querySelectorAll("#audioWave rect");
     const totalBars = bars.length;
-    // const avgVolume = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
     const activeBars = Math.floor((recorderRef.current.getVolume() / 255) * totalBars);
 
     bars.forEach((bar, index) => {

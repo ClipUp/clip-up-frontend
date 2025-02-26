@@ -71,7 +71,7 @@ const Home = () => {
 				)}
 			</section>
 			<section>
-				<NoteListTemplate list={[]}></NoteListTemplate>
+				<NoteListTemplate maxPages={1}></NoteListTemplate>
 			</section>
 		</section>
 	);

@@ -11,17 +11,23 @@
 
 	.modal {
 		background: white;
-		border-radius: 8px;
+		border-radius: var(--scale-16);
 		box-shadow: inset;
 		padding: 20px;
+		padding: 92px 76px;
 		position: relative;
 	}
 
-	.modal-close {
+	.icon-button {
 		position: absolute;
-		width: 20px;
-		height: 20px;
-		right: 5px;
-		top: 5px;
+		width: 24px;
+		height: 24px;
+		right: 30px;
+		top: 30px;
+		background: transparent;
+		padding: 0;
+		img {
+			width: 100%;
+		}
 	}
 }

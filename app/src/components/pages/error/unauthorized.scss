@@ -1,0 +1,48 @@
+#unauthorized_page {
+	width: 100%;
+	background-size: 100% auto;
+	background-repeat: no-repeat;
+	background-position: top;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+
+	.text {
+		background: linear-gradient(to right, var(--primary-900) 10%, var(--grey-900) 70%, var(--secondary-600) 90%);
+		margin-top: 12%;
+		margin-bottom: 32px;
+		background-clip: text;
+		-webkit-background-clip: text;
+		-moz-background-clip: text;
+		-ms-background-clip: text;
+		-o-background-clip: text;
+		color: transparent;
+		.text-s {
+			font-weight: 600;
+			font-size: 16px;
+			line-height: 22.4px;
+			letter-spacing: -1%;
+			text-align: center;
+			> .bold {
+				font-weight: 700;
+			}
+		}
+		.text-xl {
+			font-weight: 700;
+			font-size: 40px;
+			line-height: 56px;
+			letter-spacing: -0.3%;
+			text-align: center;
+		}
+	}
+
+	.primary {
+		width: 141px;
+		padding-top: var(--scale-16);
+		padding-bottom: var(--scale-16);
+
+		svg {
+			margin-left: 6px;
+		}
+	}
+}

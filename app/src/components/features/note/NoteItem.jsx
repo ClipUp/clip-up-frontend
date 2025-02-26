@@ -1,4 +1,7 @@
 import { useNavigate } from 'react-router-dom';
+import Microphone from "../../../assets/icon/microphone.svg"
+import More from "../../../assets/icon/more.svg"
+import IconButton from '../../ui/button/IconButton';
 
 const NoteItem = ({ref, note, onToggle, onClick, onChangeState}) => {
   const {id, title, checked} = note;
@@ -9,19 +12,23 @@ const NoteItem = ({ref, note, onToggle, onClick, onChangeState}) => {
 	}
 
   return (
-	<li ref={ref}>
-		<span>
-			<input type="checkbox" onClick={onToggle} />
-		</span>
-		<span onClick={handleClickNote}>
-			{note.title}
-		</span>
-		<span>
-			<button onClick={onChangeState}>
-				설정
-			</button>
-		</span>
-	</li>
+		<li ref={ref}>
+			<img src={Microphone} />
+			<span onClick={handleClickNote}>
+				{note.title}
+			</span>
+			<span>
+				<span>
+					{note.audioFileDuration}
+				</span>
+				<IconButton title={더보기} onClick={onChangeState}>
+					<img src={More} />
+				</IconButton>
+				<span>
+					{note.creatTime}
+				</span>
+			</span>
+		</li>
   );
 };
 

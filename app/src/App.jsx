@@ -47,7 +47,7 @@ const App = () => {
           </Routes>
       </Main>
       <Footer></Footer>
-      <Modal title="로그인/회원가입"></Modal>
+      <Modal></Modal>
     </BrowserRouter>
   );
 };

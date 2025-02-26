@@ -8,8 +8,7 @@ export const userAPI = {
       credentials: 'include',
       body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error("Failed to create user");
-    return res.json();
+    return await res.json();
   },
 
   autoLogin: async () => {
@@ -19,28 +18,27 @@ export const userAPI = {
       credentials: 'include',
     });
     if (!res.ok) throw new Error("Failed to autoLogin");
-    return res.json();
+    return await res.json();
   },
 
   register: async (data) => {
     const res = await fetch(`${API_BASE_URL}/api/v1/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: 'include',
       body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error("Failed to create user");
-    return res.json();
+    return await res.json();
   },
 
   updateUserPwd: async (data) => {
-    const res = fetchWithAuth("/api/v1/auth/password", {
+    const res = await fetchWithAuth("/api/v1/auth/password", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error("Failed to create user");
-    return res.json();
+    return await res;
   },
 };

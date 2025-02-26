@@ -13,34 +13,23 @@ export const noteAPI = {
 					"Content-Type": "application/json"
 				}
 			});
-			console.log(res);
-			if (!res.ok) throw new Error("Failed to fetch note list");
-			return res;
+			return res.data;
 		} catch(e) {
 			console.log(e);
-			const n = (pageParam - 1) * 10;
-			const notes = Array.from({ length: 10 }, (_, index) => ({
-				id: n + index + 1,
-				title: `회의록${n + index + 1}`,
-				deleted: false,
-				checked: false,
-			}));
-
-			const hasNextPage = pageParam < 5; // 총 5페이지까지 있다고 가정
-			return {
-				list: notes,
-				nextPage: hasNextPage ? pageParam + 1 : null,
-			};
+			return [];
 		}
   },
   createNote: async (data) => {
+		console.log("Audio Blob before append:", data);
+    console.log("Is Audio Blob a Blob?:", data instanceof Blob);
+		const formData = new FormData();
+    formData.append("audioFile", data, "recording.wav")
+
     const res = await fetch(`${API_BASE_URL}/api/v1/meetings`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
       credentials: 'include',
-      body: JSON.stringify(data),
+      body: formData,
     });
-    if (!res.ok) throw new Error("Failed to create user");
     return res.json();
   },
 };

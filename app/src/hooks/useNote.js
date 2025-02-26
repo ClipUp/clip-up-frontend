@@ -1,12 +1,13 @@
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import { noteAPI } from "../api/noteApi";
 
-const useInfiniteNoteList = () => {
+const useNoteList = (maxPages) => {
   return useInfiniteQuery({
     queryKey: ["notes"],
     queryFn: (data) => noteAPI.fetchNoteList(data),
     getNextPageParam: (lastPage, allPages) => {
-      return lastPage.hasNext ? allPages.length + 1 : undefined;
+      if (lastPage.length === 0 || allPages.length >= maxPages) return null;
+      return lastPage[lastPage.length - 1].id;
     },
   });
 };
@@ -17,4 +18,4 @@ const useCreateNote = () => {
   });
 };
 
-export {useInfiniteNoteList, useCreateNote};
+export {useNoteList, useCreateNote};

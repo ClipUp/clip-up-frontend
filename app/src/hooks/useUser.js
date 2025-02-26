@@ -4,7 +4,8 @@ import { useAuthStore } from "../store/userStore";
 
 const useSignUp = () => {
   return useMutation({
-    mutationFn: (data) => userAPI.register(data)
+    mutationFn: (data) => userAPI.register(data),
+    onSuccess: (data) => { return data },
   });
 };
 
@@ -12,10 +13,13 @@ const useSignIn = () => {
   const setAccessToken = useAuthStore((state) => state.setAccessToken);
 
   return useMutation({
-    mutationFn: (data) => userAPI.login(data),
+    mutationFn: async (data) => await userAPI.login(data),
     onSuccess: (data) => {
-      setAccessToken(data.data.accessToken);
-    }
+      if (data.data?.accessToken) {
+        setAccessToken(data.data.accessToken);
+      }
+      return data;
+    },
   });
 };
 
