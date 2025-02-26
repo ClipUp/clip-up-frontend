@@ -26,6 +26,8 @@ const App = () => {
       if (!accessToken && sessionStorage.getItem("RT") !== "N") {
         if (!await autoSiginInMutation.mutateAsync()) {
           sessionStorage.setItem("RT", "N");
+        } else {
+          sessionStorage.setItem("RT", "Y");
         }
       }
     };
