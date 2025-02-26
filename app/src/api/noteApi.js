@@ -1,42 +1,23 @@
 import { API_BASE_URL, fetchWithAuth } from "./fetchUtils";
 
-// export const noteAPI = {
-//   fetchNoteList: async (data) => {
-// 		const res = fetchWithAuth(`/api/v1/note/list?page=${data.page}`, {
-// 			headers: {
-// 				"Content-Type": "application/json"
-// 			}
-// 		});
-// 		// if (!res.ok) throw new Error("Failed to fetch note list");
-//     // return res.json();
-// 		const n = (data.page - 1) * 10;
-// 		return {
-// 		list: [
-// 			{id: n + 1, title: `회의록${n + 1}`, deleted:false, checked: false},
-// 			{id: n + 2, title: `회의록${n + 2}`, deleted:false, checked: false},
-// 			{id: n + 3, title: `회의록${n + 3}`, deleted:false, checked: false},
-// 			{id: n + 4, title: `회의록${n + 4}`, deleted:false, checked: false},
-// 			{id: n + 5, title: `회의록${n + 5}`, deleted:false, checked: false},
-// 			{id: n + 6, title: `회의록${n + 6}`, deleted:false, checked: false},
-// 			{id: n + 7, title: `회의록${n + 7}`, deleted:false, checked: false},
-// 			{id: n + 8, title: `회의록${n + 8}`, deleted:false, checked: false},
-// 			{id: n + 9, title: `회의록${n + 9}`, deleted:false, checked: false},
-// 			{id: n + 10, title: `회의록${n + 10}`, deleted:false, checked: false},
-// 		]};
-// 	}
-// };
-
-export const noteApi = {
-  fetchNoteList: async ({ pageParam = 1 }) => {
+export const noteAPI = {
+  fetchNoteList: async ({ lastMeetingId, limit = 10 }) => {
 		try {
-			const res = fetchWithAuth(`/api/v1/note/list?page=${data.page}`, {
+			const query = new URLSearchParams();
+			let queryStr = "";
+			if (lastMeetingId) query.set("lastMeetingId", lastMeetingId);
+			if (limit) query.set("limit", limit);
+			const querStr = query.toString();
+			const res = await fetchWithAuth(`/api/v1/meetings${queryStr ?? ("?" + queryStr)}`, {
 				headers: {
 					"Content-Type": "application/json"
 				}
 			});
-			// if (!res.ok) throw new Error("Failed to fetch note list");
-			// return res.json();
+			console.log(res);
+			if (!res.ok) throw new Error("Failed to fetch note list");
+			return res;
 		} catch(e) {
+			console.log(e);
 			const n = (pageParam - 1) * 10;
 			const notes = Array.from({ length: 10 }, (_, index) => ({
 				id: n + index + 1,
@@ -51,5 +32,15 @@ export const noteApi = {
 				nextPage: hasNextPage ? pageParam + 1 : null,
 			};
 		}
+  },
+  createNote: async (data) => {
+    const res = await fetch(`${API_BASE_URL}/api/v1/meetings`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: 'include',
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error("Failed to create user");
+    return res.json();
   },
 };

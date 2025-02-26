@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import { noteAPI } from "../api/noteApi";
 
 const useInfiniteNoteList = () => {
@@ -11,4 +11,10 @@ const useInfiniteNoteList = () => {
   });
 };
 
-export default useInfiniteNoteList;
+const useCreateNote = () => {
+  return useMutation({
+    mutationFn: (data) => noteAPI.createNote(data)
+  });
+};
+
+export {useInfiniteNoteList, useCreateNote};

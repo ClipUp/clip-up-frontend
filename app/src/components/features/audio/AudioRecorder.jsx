@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useCreateNote } from "../../../hooks/useNote";
 import AudioRecorderUtil from "../../../utils/audioRecorderUtil";
 
 const AudioRecorder = () => {
@@ -6,6 +7,8 @@ const AudioRecorder = () => {
   const [audioUrl, setAudioUrl] = useState(null);
   // const canvasRef = useRef(null);
   const recorderRef = useRef(null);
+  const noteMutation = useCreateNote();
+
 
   useEffect(() => {
     recorderRef.current = new AudioRecorderUtil(
@@ -31,6 +34,7 @@ const AudioRecorder = () => {
       bar.setAttribute("fill", "#B0B0B0");
     });
     setAudioUrl(url);
+    // noteMutation.mutate();// TODO mp3
   };
 
   const drawWaveform = (dataArray) => {

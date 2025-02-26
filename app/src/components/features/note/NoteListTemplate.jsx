@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { noteApi } from "../../../api/noteApi";
+import { noteAPI } from "../../../api/noteApi";
 import NoteItem from "./NoteItem";
 import { useCallback, useEffect, useRef, useState } from "react";
 import "./noteList.scss";
@@ -12,7 +12,7 @@ const NoteListTemplate = () => {
     isFetchingNextPage,
   } = useInfiniteQuery({
     queryKey: ["notes"],
-    queryFn: noteApi.fetchNoteList,
+    queryFn: noteAPI.fetchNoteList,
     initialPageParam: 1,
     getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
   });

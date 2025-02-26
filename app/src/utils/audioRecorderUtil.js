@@ -39,7 +39,7 @@ class AudioRecorder {
 					const audioBlob = new Blob(this.audioChunks, { type: "audio/webm" });
 					this.onStopRecording(audioBlob);
 					this.stopVisualizeWaveform();
-					await this.saveToServer(audioBlob);
+					// await this.saveToServer(audioBlob);
 					resolve("stopped"); // 녹음 중지
 				};
 
