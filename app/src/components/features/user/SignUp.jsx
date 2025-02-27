@@ -2,7 +2,7 @@ import { useState } from "react";
 import TextInput from '../../ui/textInput/TextInput'
 import Button from '../../ui/button/Button'
 import { useSignIn, useSignUp } from "../../../hooks/useUser";
-// import "./signUp.scss";
+import "./signUp.scss";
 import { useModalStore } from "../../../store/modalStore";
 
 const SignUp = () => {
