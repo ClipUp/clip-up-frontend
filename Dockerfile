@@ -5,6 +5,7 @@ WORKDIR /app
 COPY app/package.json app/package-lock.json ./
 RUN npm install
 COPY app/ ./
+RUN rm -rf node_modules/.vite
 RUN npm run build
 
 FROM nginx:alpine
