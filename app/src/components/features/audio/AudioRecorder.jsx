@@ -30,10 +30,22 @@ const AudioRecorder = () => {
   const handleAudioSave = async (wavBlob) => {
     const bars = document.querySelectorAll("#audioWave rect");
     const url = URL.createObjectURL(wavBlob);
+
     bars.forEach((bar) => {
       bar.setAttribute("fill", "#B0B0B0");
     });
     setAudioUrl(url);
+    // WAV 파일 다운로드 후 직접 실행 테스트
+    const downloadBlob = (blob, filename) => {
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
+
+    downloadBlob(wavBlob, "test.wav");
     await noteMutation.mutateAsync(wavBlob);
   };
 
@@ -85,7 +97,7 @@ const AudioRecorder = () => {
       {audioUrl && (
         <div>
           <h3>녹음된 음성</h3>
-          <audio controls src={audioUrl}></audio>
+          <audio controls type="audio/wav" src={audioUrl}></audio>
         </div>
       )}
     </div>

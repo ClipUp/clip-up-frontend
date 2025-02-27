@@ -13,6 +13,7 @@ import Record from "./components/pages/Record";
 import Modal from "./components/ui/modal/Modal";
 import { useEffect } from "react";
 import { useAutoSignIn } from "./hooks/useUser";
+import DeletedNoteList from './components/pages/DeletedNoteList';
 
 const App = () => {
   const accessToken = useAuthStore((state) => state.accessToken);
@@ -42,8 +43,9 @@ const App = () => {
         <SideBar />
           <Routes>
             <Route path="/" element={routeWithAuth(<Home />)}></Route>
-            <Route path="/note/list/:isDeleted" element={routeWithAuth(<NoteList />)}></Route>
-            <Route path="/note/:noteState" element={routeWithAuth(<Note />)}></Route>
+            <Route path="/note/list/all" element={routeWithAuth(<NoteList />)}></Route>
+            <Route path="/note/list/deleted" element={routeWithAuth(<DeletedNoteList />)}></Route>
+            <Route path="/note/:noteId" element={routeWithAuth(<Note />)}></Route>
             <Route path="/note/new" element={routeWithAuth(<Record />)}></Route>
             <Route path="*" element={<NotFound />}></Route>
           </Routes>

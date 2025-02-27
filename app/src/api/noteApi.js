@@ -1,14 +1,15 @@
 import { API_BASE_URL, fetchWithAuth } from "./fetchUtils";
 
 export const noteAPI = {
-  fetchNoteList: async ({ lastMeetingId, limit = 10 }) => {
+  fetchNoteList: async ({ lastMeetingId, limit = 10, status }) => {
 		try {
+			const path = (status === "all") ? "/api/v1/meetings" : "/api/v1/meetings/trash";
 			const query = new URLSearchParams();
 			let queryStr = "";
 			if (lastMeetingId) query.set("lastMeetingId", lastMeetingId);
 			if (limit) query.set("limit", limit);
 			const querStr = query.toString();
-			const res = await fetchWithAuth(`/api/v1/meetings${queryStr ?? ("?" + queryStr)}`, {
+			const res = await fetchWithAuth(`${path}${queryStr ?? ("?" + queryStr)}`, {
 				headers: {
 					"Content-Type": "application/json"
 				}
@@ -19,17 +20,55 @@ export const noteAPI = {
 			return [];
 		}
   },
-  createNote: async ({data, accessToken}) => {
+  createNote: async ({ data }) => {
 		const formData = new FormData();
     formData.append("audioFile", data, "recording.wav")
 
-    const res = await fetch(`${API_BASE_URL}/api/v1/meetings`, {
+    const res = await fetchWithAuth("/api/v1/meetings", {
       method: "POST",
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-			},
       body: formData,
     });
-    return await res.json();
+    return await res;
   },
+	getNote: async ({ meetingId }) => {
+    const res = await fetchWithAuth(`/api/v1/meetings/${meetingId}`, {
+			headers: {
+				"Content-Type": "application/json"
+			}
+    });
+    return await res;
+  },
+	deleteNote: async ({ meetingIds }) => {
+		const res = await fetchWithAuth(`/api/v1/meetings`, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ meetingIds }),
+		});
+
+		return await res;
+	},
+	cancleDeleteNote: async ({ meetingIds }) => {
+		const res = await fetchWithAuth(`/api/v1/meetings/trash`, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ meetingIds }),
+		});
+
+		return await res;
+	},
+	editNote: async ({ meetingIds, title }) => {
+		const res = await fetchWithAuth(`/api/v1/meetings/${meetingIds}`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ title }),
+		});
+
+		return await res;
+	},
 };

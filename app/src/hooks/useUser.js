@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { userAPI } from "../api/userApi";
 import { useAuthStore } from "../store/userStore";
 
@@ -11,12 +11,13 @@ const useSignUp = () => {
 
 const useSignIn = () => {
   const setAccessToken = useAuthStore((state) => state.setAccessToken);
-
+  const setUserProfile = useAuthStore((state) => state.setUserProfile);
   return useMutation({
     mutationFn: async (data) => await userAPI.login(data),
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       if (data.data?.accessToken) {
         setAccessToken(data.data.accessToken);
+        setUserProfile(await userAPI.getUser());
       }
       return data;
     },
@@ -40,11 +41,26 @@ const useAutoSignIn = () => {
   });
 };
 
+const useUser = () => {
+  const accessToken = useAuthStore((state) => state.accessToken);
+
+  return useQuery({
+    queryKey: ['user', accessToken],
+    queryFn: () => userAPI.getUser(),
+    select: (response) => response.data,
+  });
+};
+
 const useUpdateUserPwd = () => {
+  const queryClient = useQueryClient();
+
 	const mutation = useMutation({
 		mutationFn: (data) => userAPI.updateUserPwd(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['user']);
+    },
 	});
   return mutation;
-}
+};
 
-export {useSignUp, useSignIn, useAutoSignIn, useUpdateUserPwd};
+export {useSignUp, useSignIn, useAutoSignIn, useUser, useUpdateUserPwd};

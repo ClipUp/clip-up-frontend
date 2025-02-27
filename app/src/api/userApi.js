@@ -31,13 +31,22 @@ export const userAPI = {
     return await res.json();
   },
 
-  updateUserPwd: async (data) => {
+  getUser: async () => {
+    const res = await fetchWithAuth(`/api/v1/users`, {
+			headers: {
+				"Content-Type": "application/json"
+			}
+    });
+    return await res;
+  },
+
+  updateUserPwd: async ({originalPassword, newPassword}) => {
     const res = await fetchWithAuth("/api/v1/auth/password", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({originalPassword, newPassword}),
     });
     return await res;
   },

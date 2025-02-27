@@ -2,11 +2,14 @@ import Button from '../ui/button/Button';
 import { useRef, useState } from 'react';
 import NoteListTemplate from '../features/note/NoteListTemplate';
 import { useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../../store/userStore';
+import { useNoteList } from '../../hooks/useNote';
 
 const Home = () => {
 	const navigate = useNavigate();
 	const fileInputRef = useRef(null);
   const [uploadProgress, setUploadProgress] = useState(0);
+	const accessToken = useAuthStore((state) => state.accessToken);
 
   const handleButtonClick = () => {
     fileInputRef.current.click();
@@ -15,11 +18,11 @@ const Home = () => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       const formData = new FormData();
-      formData.append('file', selectedFile);
+      formData.append('audioFile', selectedFile);
 
       const xhr = new XMLHttpRequest();
-      xhr.open('POST', 'https://server.clip-up.kr/upload', true);
-
+      xhr.open('POST', 'https://server.clip-up.kr/api/v1/meetings', true);
+			xhr.setRequestHeader('Authorization', `Bearer ${accessToken}`);
       // 프로그레스 이벤트 리스너
       xhr.upload.onprogress = (event) => {
         if (event.lengthComputable) {
@@ -28,7 +31,7 @@ const Home = () => {
         }
       };
       xhr.onload = () => {
-        if (xhr.status === 200) {
+        if (xhr.status === 201) {
           console.log('파일 업로드 성공:', xhr.response);
           setUploadProgress(0);
         } else {
@@ -51,6 +54,7 @@ const Home = () => {
 				<Button title="녹음" onClick={handleRecordBtn}>녹음</Button>
 				<Button title="파일업로드" onClick={handleButtonClick}>파일업로드</Button>
 				<input
+					id="audioFile"
 					type="file"
 					ref={fileInputRef}
 					onChange={handleFileChange}
@@ -71,7 +75,7 @@ const Home = () => {
 				)}
 			</section>
 			<section>
-				<NoteListTemplate maxPages={1}></NoteListTemplate>
+				<NoteListTemplate maxPages={1} useNoteList={useNoteList}></NoteListTemplate>
 			</section>
 		</section>
 	);

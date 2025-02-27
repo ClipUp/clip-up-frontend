@@ -15,6 +15,7 @@ function TextInput({value, placeholder, type, error, onChange}) {
 			value={value}
 			placeholder={placeholder}
 			onChange={onChange}
+			className={ error ? "error" : "" }
 		/>
 		<p className="confirm-text">{error}</p>
 	</div>

@@ -30,20 +30,20 @@ const fetchWithAuth = async (path, options) => {
     }
 
     const headers = {
-      ...options.headers,
+      ...(options.headers || {}),
       Authorization: `Bearer ${accessToken}`,
     };
     const response = await fetch(`${API_BASE_URL}${path}`, { ...options, headers });
     if (!response.ok) {
       if (response.status === 401) {
-      throw new Error("Unauthorized");
+        throw new Error("Unauthorized");
       }
       throw new Error(`fetchWithAuth() > ${path}: ${response.status}`);
     }
     return response.json();
   }
 
-  return fetchWithAutoRetry(apiCall);
+  return await fetchWithAutoRetry(apiCall);
 };
 
 export {API_BASE_URL, fetchWithAuth};

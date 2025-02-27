@@ -47,7 +47,7 @@ class AudioRecorder {
 
         this.mediaRecorder.start();
         this.visualizeWaveform();
-        this.monitorAudio();
+        // this.monitorAudio();  // 공백 제거
 
         setTimeout(() => {
           if (this.mediaRecorder.state === "recording") {
@@ -64,62 +64,63 @@ class AudioRecorder {
 
   async convertToWav(blob) {
     const arrayBuffer = await blob.arrayBuffer();
-    const audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
 
-    const wavBlob = this.audioBufferToWav(audioBuffer); // Blob으로 변환된 WAV 파일
-    console.log("WAV Blob:", wavBlob);
-    console.log("Is WAV Blob a Blob?:", wavBlob instanceof Blob); // true여야 합니다.
-    return wavBlob; // WAV Blob 반환
-	}
+    try {
+      const audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
+      const wavBlob = this.audioBufferToWav(audioBuffer);
+      return wavBlob;
+    } catch (err) {
+      console.error("decodeAudioData 오류:", err);
+      return null;
+    }
+  }
 
-  audioBufferToWav(buffer) {
-    const numOfChannels = buffer.numberOfChannels;
-    const length = buffer.length * numOfChannels * 2 + 44; // WAV 헤더 크기
-    const bufferView = new Uint8Array(length);
-    const wavView = new DataView(bufferView.buffer);
+
+  audioBufferToWav(audioBuffer) {
+    const numOfChannels = audioBuffer.numberOfChannels;
+    const sampleRate = audioBuffer.sampleRate;
+    const numFrames = audioBuffer.length;
+
+    // WAV 파일 헤더 포함 크기 계산
+    const bufferSize = 44 + numFrames * numOfChannels * 2;
+    const wavBuffer = new Uint8Array(bufferSize);
+    const view = new DataView(wavBuffer.buffer);
 
     let offset = 0;
 
     // WAV 파일 헤더
-    const writeString = (str) => {
-        for (let i = 0; i < str.length; i++) {
-            wavView.setUint8(offset + i, str.charCodeAt(i));
-        }
-        offset += str.length;
+    const writeString = (s) => {
+      for (let i = 0; i < s.length; i++) {
+        view.setUint8(offset++, s.charCodeAt(i));
+      }
     };
 
-    // RIFF 헤더
-    writeString('RIFF');
-    wavView.setUint32(offset, length - 8, true);
-    offset += 4;
-    writeString('WAVE');
-    writeString('fmt ');
-    wavView.setUint32(offset, 16, true); // Subchunk1Size
-    wavView.setUint16(offset + 4, 1, true); // AudioFormat
-    wavView.setUint16(offset + 6, numOfChannels, true); // NumChannels
-    wavView.setUint32(offset + 8, buffer.sampleRate, true); // SampleRate
-    wavView.setUint32(offset + 12, buffer.sampleRate * numOfChannels * 2, true); // ByteRate
-    wavView.setUint16(offset + 16, numOfChannels * 2, true); // BlockAlign
-    wavView.setUint16(offset + 18, 16, true); // BitsPerSample
-    writeString('data');
-    wavView.setUint32(offset, length - offset - 4, true);
-    offset += 4;
+    writeString("RIFF");
+    view.setUint32(offset, bufferSize - 8, true); offset += 4;
+    writeString("WAVE");
+    writeString("fmt ");
+    view.setUint32(offset, 16, true); offset += 4;
+    view.setUint16(offset, 1, true); offset += 2; // PCM 포맷
+    view.setUint16(offset, numOfChannels, true); offset += 2;
+    view.setUint32(offset, sampleRate, true); offset += 4;
+    view.setUint32(offset, sampleRate * numOfChannels * 2, true); offset += 4;
+    view.setUint16(offset, numOfChannels * 2, true); offset += 2;
+    view.setUint16(offset, 16, true); offset += 2; // 16-bit PCM
+    writeString("data");
+    view.setUint32(offset, numFrames * numOfChannels * 2, true); offset += 4;
 
-    // PCM 데이터
+    // PCM 데이터 추가
     for (let channel = 0; channel < numOfChannels; channel++) {
-        const channelData = buffer.getChannelData(channel);
-        for (let i = 0; i < channelData.length; i++) {
-            const sample = Math.max(-1, Math.min(1, channelData[i]));
-            const intSample = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
-            wavView.setInt16(offset, intSample, true);
-            offset += 2;
-        }
+      const channelData = audioBuffer.getChannelData(channel);
+      for (let i = 0; i < numFrames; i++) {
+        const sample = Math.max(-1, Math.min(1, channelData[i]));
+        view.setInt16(offset, sample * 0x7FFF, true);
+        offset += 2;
+      }
     }
 
-    // Blob으로 변환하여 반환
-    return new Blob([bufferView], { type: 'audio/wav' });
-	}
-
+    return new Blob([wavBuffer], { type: "audio/wav" });
+  }
 
   visualizeWaveform() {
     const draw = () => {

@@ -1,9 +1,8 @@
 import NoteItem from "./NoteItem";
 import { useEffect, useRef, useState } from "react";
 import "./noteList.scss";
-import { useNoteList } from "../../../hooks/useNote";
 
-const NoteListTemplate = ({maxPages = Infinity}) => {
+const NoteListTemplate = ({maxPages = Infinity, useNoteList}) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useNoteList(maxPages);
   const observerRef = useRef(null);
   const [pageCount, setPageCount] = useState(1);
@@ -24,7 +23,7 @@ const NoteListTemplate = ({maxPages = Infinity}) => {
 
     observer.observe(observerRef.current);
     return () => observer.disconnect();
-  }, [fetchNextPage, hasNextPage, maxPages, pageCount]);
+  }, [fetchNextPage, hasNextPage, maxPages, status, pageCount]);
 
   const handleResize = () => {
     setWindowHeight(window.innerHeight);

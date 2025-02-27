@@ -11,7 +11,10 @@ nav {
 		text-align: center;
 		width: 100%;
 		background: rgba(245, 239, 235, 0.16);
+		color: var(--grey-500);
+
 		&.active {
+			color: var(--grey-900);
 			background: radial-gradient(circle, rgba(245, 239, 235, 1), var(--grey-100));
 			// border: 0.5px solid #F5EFEB29;
 		}
@@ -23,6 +26,5 @@ nav {
 	}
 	span {
 		font-size: 16px;
-		color: var(--grey-900);
 	}
 }

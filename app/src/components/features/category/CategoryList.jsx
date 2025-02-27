@@ -4,18 +4,19 @@ import { useAuthStore } from "../../../store/userStore";
 import { useNavigate } from "react-router-dom";
 import { useModalStore } from "../../../store/modalStore";
 import SignIn from "../user/SignIn";
-import Button from "../../ui/button/Button";
-import SignUp from "../user/SignUp";
 import Home from '../../../assets/icon/home.svg';
 import Archive from '../../../assets/icon/archive.svg';
 import Trash from '../../../assets/icon/trash.svg';
+import HomeActive from '../../../assets/icon/home-active.svg';
+import ArchiveActive from '../../../assets/icon/archive-active.svg';
+import TrashActive from '../../../assets/icon/trash-active.svg';
 import "./categoryList.scss";
 
 const DEFAULT_CATEGORY = 0;
 const CATEGORIES = [
-  {title:"홈", path:"/", icon: Home},
-  {title:"회의록", path:"/note/list/all", icon: Archive},
-  {title:"휴지통", path:"/note/list/deleted", icon: Trash}
+  {title:"홈", path:"/", icon: [Home, HomeActive]},
+  {title:"회의록", path:"/note/list/all", icon: [Archive, ArchiveActive]},
+  {title:"휴지통", path:"/note/list/deleted", icon: [Trash, TrashActive]}
 ];
 const CategoryList = () => {
   const navigate = useNavigate();
@@ -27,9 +28,7 @@ const CategoryList = () => {
       navigate(CATEGORIES[idx].path);
       return setActiveCategory(idx)
     }
-    if (await confirm("로그인 하시겠습니까?")) {
-      openModal(<SignIn />);
-    }
+    openModal(<SignIn />);
   }
 
   return (
@@ -42,7 +41,7 @@ const CategoryList = () => {
               active={activeCategory === idx}
               onClick={() => handleClickCategory(idx)}
             >
-              <img src={category.icon}/>
+              <img src={category.icon[activeCategory === idx ? 1 : 0]}/>
               <span>{category.title}</span>
             </CategoryItem>
           </li>

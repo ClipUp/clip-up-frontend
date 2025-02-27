@@ -21,7 +21,7 @@ const NoteItem = ({ref, note, onToggle, onClick, onChangeState}) => {
 				<span>
 					{note.audioFileDuration}
 				</span>
-				<IconButton title={더보기} onClick={onChangeState}>
+				<IconButton title="더보기" onClick={onChangeState}>
 					<img src={More} />
 				</IconButton>
 				<span>

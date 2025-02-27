@@ -1,12 +1,10 @@
-import { useParams } from 'react-router-dom';
 import NoteListTemplate from '../features/note/NoteListTemplate';
+import { useNoteList } from '../../hooks/useNote';
 
 const NoteList = () => {
-	const { noteState } = useParams();
-
 	return (
 		<section>
-			<NoteListTemplate />
+			<NoteListTemplate useNoteList={useNoteList} />
 		</section>
 	);
 }

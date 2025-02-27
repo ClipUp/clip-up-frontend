@@ -1,12 +1,13 @@
 import { create } from "zustand";
-import { devtools } from 'zustand/middleware';
+import { devtools } from "zustand/middleware";
 
 export const useAuthStore = create(
-  devtools(
-    (set) => ({
-      accessToken: null,
-      setAccessToken: (token) => set({ accessToken: token }),
-      logout: () => set({ accessToken: null }),
-    })
-  )
+  devtools((set) => ({
+    accessToken: null,
+    setAccessToken: (token) => set({ accessToken: token }),
+    logout: () => set({ accessToken: null }),
+
+    userProfile: null,
+    setUserProfile: (profile) => set({ userProfile: profile }),
+  }))
 );

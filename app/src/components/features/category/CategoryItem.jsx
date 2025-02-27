@@ -1,5 +1,3 @@
-import Button from "../../ui/button/Button";
-
 const CategoryItem = ({children, active, onClick}) => {
 	return (
 		<button
