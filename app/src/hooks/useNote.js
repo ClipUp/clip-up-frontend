@@ -1,5 +1,6 @@
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import { noteAPI } from "../api/noteApi";
+import { useAuthStore } from "../store/userStore";
 
 const useNoteList = (maxPages) => {
   return useInfiniteQuery({
@@ -13,8 +14,9 @@ const useNoteList = (maxPages) => {
 };
 
 const useCreateNote = () => {
+  const accessToken = useAuthStore((state) => state.accessToken);
   return useMutation({
-    mutationFn: (data) => noteAPI.createNote(data)
+    mutationFn: (data) => noteAPI.createNote({data, accessToken})
   });
 };
 

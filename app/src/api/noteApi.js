@@ -13,23 +13,23 @@ export const noteAPI = {
 					"Content-Type": "application/json"
 				}
 			});
-			return res.data;
+			return await res.data;
 		} catch(e) {
 			console.log(e);
 			return [];
 		}
   },
-  createNote: async (data) => {
-		console.log("Audio Blob before append:", data);
-    console.log("Is Audio Blob a Blob?:", data instanceof Blob);
+  createNote: async ({data, accessToken}) => {
 		const formData = new FormData();
     formData.append("audioFile", data, "recording.wav")
 
     const res = await fetch(`${API_BASE_URL}/api/v1/meetings`, {
       method: "POST",
-      credentials: 'include',
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+			},
       body: formData,
     });
-    return res.json();
+    return await res.json();
   },
 };
