@@ -3,7 +3,7 @@ import TextInput from '../../ui/textInput/TextInput'
 import Button from '../../ui/button/Button'
 import { useSignIn } from "../../../hooks/useUser";
 import Logo from "../../../assets/clip_up_logo.svg"
-import "./signUp.scss";
+import "./SignUp.scss";
 import { useModalStore } from "../../../store/modalStore";
 import SignUp from "./SignUp";
 
