@@ -1,0 +1,61 @@
+.record-section {
+	width: 100%;
+	display: flex;
+	gap: var(--scale-16);
+	margin-bottom: 36px;
+
+	div {
+		height: 184px;
+		border-radius: 28px;
+		display: flex;
+		flex-direction: column;
+		align-items: start;
+		justify-content: space-between;
+		padding: 28px 24px;
+		box-sizing: border-box;
+		> span {
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+			h4 {
+				margin: 0;
+				font-weight: 700;
+				font-size: 24px;
+				line-height: 33.6px;
+				letter-spacing: -1%;
+			}
+			p {
+				margin: 0;
+				font-weight: 500;
+				font-size: 16px;
+				line-height: 24px;
+				letter-spacing: 0%;
+				color: var(--grey-600);
+			}
+		}
+		> button {
+			width: 130px;
+		}
+	}
+	.record-button {
+		flex-grow: 0.55;
+		background-color: transparent;
+		background-size: auto 100%;
+		background-repeat: no-repeat;
+		background-position: top;
+
+		h4 {
+			background: linear-gradient(90deg, var(--grey-900) 0%, var(--primary-900) 100%);
+			background-clip: text;
+			-webkit-background-clip: text;
+			-moz-background-clip: text;
+			-ms-background-clip: text;
+			-o-background-clip: text;
+			color: transparent;
+		}
+	}
+	.upload-button {
+		flex-grow: 0.45;
+		background-color: var(--grey-100);
+	}
+}

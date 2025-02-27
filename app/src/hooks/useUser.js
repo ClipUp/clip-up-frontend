@@ -26,13 +26,17 @@ const useSignIn = () => {
 
 const useAutoSignIn = () => {
   const setAccessToken = useAuthStore((state) => state.setAccessToken);
+  const setUserProfile = useAuthStore((state) => state.setUserProfile);
 
   return useMutation({
     mutationFn: () => userAPI.autoLogin(),
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       try {
-        setAccessToken(data.data.accessToken);
-        return true;
+        if (data.data?.accessToken) {
+          setAccessToken(data.data.accessToken);
+          setUserProfile(await userAPI.getUser());
+        }
+        return data;
       } catch(e) {
         console.log(e);
         return false;

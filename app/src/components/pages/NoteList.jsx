@@ -4,7 +4,7 @@ import { useNoteList } from '../../hooks/useNote';
 const NoteList = () => {
 	return (
 		<section>
-			<NoteListTemplate useNoteList={useNoteList} />
+			<NoteListTemplate title="전체 회의록" useNoteList={useNoteList} />
 		</section>
 	);
 }

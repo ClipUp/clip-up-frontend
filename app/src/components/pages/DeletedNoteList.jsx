@@ -5,7 +5,7 @@ const DeletedNoteList = () => {
 
 	return (
 		<section>
-			<NoteListTemplate useNoteList={useDeletedNoteList}/>
+			<NoteListTemplate title="휴지통" useNoteList={useDeletedNoteList}/>
 		</section>
 	);
 }
