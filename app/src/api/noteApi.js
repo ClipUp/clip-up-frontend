@@ -2,23 +2,29 @@ import { API_BASE_URL, fetchWithAuth } from "./fetchUtils";
 
 export const noteAPI = {
   fetchNoteList: async ({ lastMeetingId, limit = 10, status }) => {
-		try {
-			const path = (status === "all") ? "/api/v1/meetings" : "/api/v1/meetings/trash";
-			const query = new URLSearchParams();
-			let queryStr = "";
-			if (lastMeetingId) query.set("lastMeetingId", lastMeetingId);
-			if (limit) query.set("limit", limit);
-			const querStr = query.toString();
-			const res = await fetchWithAuth(`${path}${queryStr ?? ("?" + queryStr)}`, {
-				headers: {
-					"Content-Type": "application/json"
-				}
-			});
-			return await res.data;
-		} catch(e) {
-			console.log(e);
-			return [];
-		}
+    try {
+      const path = (status === "all") ? "/api/v1/meetings" : "/api/v1/meetings/trash";
+      const query = new URLSearchParams();
+
+      if (lastMeetingId) {
+        query.set("lastMeetingId", lastMeetingId);
+      }
+      if (limit) {
+        query.set("limit", limit);
+      }
+
+      const queryStr = query.toString();
+      const res = await fetchWithAuth(`${path}?${queryStr}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      return res.data;
+    } catch (e) {
+      console.log(e);
+      return [];
+    }
   },
   createNote: async ({ data }) => {
 		const formData = new FormData();

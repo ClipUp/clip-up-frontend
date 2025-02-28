@@ -2,25 +2,48 @@ import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tansta
 import { noteAPI } from "../api/noteApi";
 import { useAuthStore } from "../store/userStore";
 
-const useNoteList = (maxPages) => {
+const useRecentNoteList = ({ pageLimit = 1}) => {
   return useInfiniteQuery({
-    queryKey: ["notes"],
-    queryFn: (data) => noteAPI.fetchNoteList({...data, status: "all"}),
-    getNextPageParam: (lastPage, allPages) => {
-      if (lastPage.length === 0 || allPages.length >= maxPages) return null;
-      return lastPage[lastPage.length - 1].id;
+    queryKey: ["notes", "recent"],
+    queryFn: async ({ pageParam = null }) => {
+      const response = await noteAPI.fetchNoteList({
+        lastMeetingId: pageParam,
+        status: 'all',
+        limit: 10,
+      });
+      return response;
     },
+    getNextPageParam: (lastPage, allPages) => (allPages.length >= pageLimit || !lastPage.length ? undefined : lastPage[lastPage.length - 1].id),
   });
 };
 
-const useDeletedNoteList = (maxPages) => {
+const useNoteList = (pageLimit) => {
   return useInfiniteQuery({
-    queryKey: ["notes"],
-    queryFn: (data) => noteAPI.fetchNoteList({...data, status: "deleted"}),
-    getNextPageParam: (lastPage, allPages) => {
-      if (lastPage.length === 0 || allPages.length >= maxPages) return null;
-      return lastPage[lastPage.length - 1].id;
+    queryKey: ["notes", "all"],
+    queryFn: async ({ pageParam = null }) => {
+      const response = await noteAPI.fetchNoteList({
+        lastMeetingId: pageParam,
+        status: 'all',
+        limit: 10,
+      });
+      return response;
     },
+    getNextPageParam: (lastPage) => (!lastPage.length ? undefined : lastPage[lastPage.length - 1].id),
+  });
+};
+
+const useDeletedNoteList = (pageLimit) => {
+  return useInfiniteQuery({
+    queryKey: ["notes", "deleted"],
+    queryFn: async ({ pageParam = null }) => {
+      const response = await noteAPI.fetchNoteList({
+        lastMeetingId: pageParam,
+        status: 'deleted',
+        limit: 10,
+      });
+      return response;
+    },
+    getNextPageParam: (lastPage) => (!lastPage.length ? undefined : lastPage[lastPage.length - 1].id),
   });
 };
 
@@ -57,4 +80,4 @@ const useEditNote = () => {
   });
 };
 
-export {useNoteList, useCreateNote, useDeletedNoteList, useNote, useEditNote};
+export {useRecentNoteList, useNoteList, useDeletedNoteList, useCreateNote, useNote, useEditNote};

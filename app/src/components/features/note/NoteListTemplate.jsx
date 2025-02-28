@@ -1,46 +1,49 @@
+import { useCallback, useRef } from "react";
 import NoteItem from "./NoteItem";
-import { useEffect, useRef, useState } from "react";
 import "./noteList.scss";
 
-const NoteListTemplate = ({maxPages = Infinity, useNoteList, empty, title, height}) => {
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useNoteList(maxPages);
-  const observerRef = useRef(null);
-  const [pageCount, setPageCount] = useState(1);
+const NoteListTemplate = ({title, height, pageLimit, useNoteList, empty}) => {
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useNoteList({pageLimit});
 
-  useEffect(() => {
-    if (!observerRef.current || !hasNextPage || pageCount >= maxPages) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
+  const observer = useRef();
+  const lastMeetingRef = useCallback(
+    (node) => {
+      if (isFetchingNextPage) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasNextPage) {
           fetchNextPage();
-          setPageCount((prev) => prev + 1);
         }
-      },
-      { threshold: 1 }
-    );
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isFetchingNextPage, hasNextPage, fetchNextPage]
+  );
 
-    observer.observe(observerRef.current);
-    return () => observer.disconnect();
-  }, [fetchNextPage, hasNextPage, maxPages, pageCount]);
+  if (status === 'loading') return <p>Loading...</p>;
+  if (status === 'error') return <p>Error loading meetings.</p>;
 
   return (
     <div className="note-list-card">
       <h5>{title}</h5>
-      <ul className="note-list" style={{height: height}}>
-        {data?.pages.flat().length === 0 ? (
+      <ul className="note-list" style={{ height: height }}>
+      {
+        (!data?.pages || data?.pages?.flat().length === 0) ? (
           empty
         ) : (
-          data?.pages.flat().map((note, index) => (
-            <NoteItem
-              note={note}
-              key={note.id}
-              ref={index === data?.pages.flat().length - 1 ? observerRef : null}
-            />
+          data?.pages?.map((page, pageIndex) => (
+            page?.map((note, index) => (
+              <NoteItem
+                note={note}
+                key={note.id}
+                ref={index === page.length - 1 ? lastMeetingRef : null}
+              />
+            ))
           ))
-        )}
+        )
+      }
+      {/* {pageLimit > 0 && isFetchingNextPage && <p>더보기</p>} */}
       </ul>
-      {isFetchingNextPage && <div>로딩 중...</div>}
     </div>
   );
 };
