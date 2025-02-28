@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CategoryItem from "./CategoryItem";
 import { useAuthStore } from "../../../store/userStore";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useModalStore } from "../../../store/modalStore";
 import SignIn from "../user/SignIn";
 import Home from '../../../assets/icon/home.svg';
@@ -20,15 +20,26 @@ const CATEGORIES = [
 ];
 const CategoryList = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [activeCategory, setActiveCategory] = useState(DEFAULT_CATEGORY); // 기본 선택값 설정
   const accessToken = useAuthStore((state) => state.accessToken);
   const { openModal } = useModalStore();
-  const handleClickCategory = async (idx) => {
+
+  useEffect(() => {
+    const currentIdx = CATEGORIES.findIndex(category => category.path === location.pathname);
+    if (currentIdx !== -1) {
+      setActiveCategory(currentIdx);
+    }
+  }, [location.pathname]);
+
+  const handleClickCategory = async (event, idx) => {
+    event.preventDefault();
     if (accessToken || idx === DEFAULT_CATEGORY) {
       navigate(CATEGORIES[idx].path);
       return setActiveCategory(idx)
     }
     openModal(<SignIn />);
+    return location.pathname;
   }
 
   return (
@@ -36,14 +47,14 @@ const CategoryList = () => {
       <ul>
         {CATEGORIES.map((category, idx) => (
           <li key={idx}>
-            <CategoryItem
-              linkTo={category.path}
-              active={activeCategory === idx}
-              onClick={() => handleClickCategory(idx)}
+            <NavLink
+              to={category.path}
+              className={`nav-button ${activeCategory === idx ? 'active' : ''}`}
+              onClick={(e) => handleClickCategory(e, idx)}
             >
               <img src={category.icon[activeCategory === idx ? 1 : 0]}/>
               <span>{category.title}</span>
-            </CategoryItem>
+            </NavLink>
           </li>
         ))}
       </ul>

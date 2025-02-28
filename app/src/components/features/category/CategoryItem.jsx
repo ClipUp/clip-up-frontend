@@ -1,11 +1,21 @@
-const CategoryItem = ({children, active, onClick}) => {
+import { NavLink, useNavigate } from "react-router-dom";
+
+const CategoryItem = ({children, active, onClick, to}) => {
+	const navigate = useNavigate();
+
+	const handleClick = (event) => {
+			event.preventDefault();
+			onClick();
+	};
+
 	return (
-		<button
+		<NavLink
 			className={`nav-button ${active ? 'active' : ''}`}
-			onClick={onClick}
+			onClick={handleClick}
+			to={to}
 		>
 			{children}
-		</button>
+		</NavLink >
 	);
 }
 
