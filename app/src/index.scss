@@ -97,3 +97,9 @@ p {
     background-color: var(--grey-50);
   }
 }
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: var(--grey-900);
+    background-color: var(--grey-50);
+  }
+}

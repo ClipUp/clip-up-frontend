@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "./assets/fonts/woff2"
 import './assets/fonts/pretendard.css';
 import './index.scss';
 import './App.scss';
