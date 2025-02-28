@@ -1,15 +1,33 @@
 import { useModalStore } from "../../../store/modalStore";
 import { useAuthStore } from "../../../store/userStore";
 import Button from "../../ui/button/Button";
-import IconButton from "../../ui/button/IconButton";
+import ArrowDown from "../../../assets/icon/arrow-down.svg";
+import Pen from "../../../assets/icon/pen.svg";
+import Logout from "../../../assets/icon/log-out.svg"
 import SignIn from "./SignIn";
 import "./profileCard.scss";
+import { ContextMenuButton, ContextMenuItem } from "../../ui/modal/ContextMenu";
+import EditProfile from "./editProfile";
+import { useLogout } from "../../../hooks/useUser";
 
 const ProfileCard = () => {
 	const userProfile = useAuthStore((state) => state.userProfile);
 	const accessToken = useAuthStore((state) => state.accessToken);
 	const { openModal } = useModalStore();
+	const logoutMutation = useLogout();
 
+	const handleLogout = async () => {
+		try {
+    	const res = await logoutMutation.mutateAsync();
+
+			if (res.status !== "OK") throw res;
+		} catch (e) {
+			console.log(e);
+			alert("로그아웃에 실패했습니다");
+		}
+  };
+
+	useLogout
 	if (!accessToken || !userProfile) {
 		return (
 			<Button
@@ -28,11 +46,10 @@ const ProfileCard = () => {
 			<div className="user-data">
 				<span className="username-group">
 					<h6 className="username">{userProfile.data.username}</h6>
-					<IconButton title="더보기">
-						<svg className="more-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<path fillRule="evenodd" clipRule="evenodd" d="M11.9988 14.3498L18.0463 8.17634C18.4945 7.71941 19.2173 7.71941 19.6655 8.17634C19.8796 8.39406 20 8.69103 20 9.00078C20 9.31053 19.8796 9.6075 19.6655 9.82522L12.8096 16.8231C12.3619 17.2815 11.6381 17.2815 11.1904 16.8231L4.33452 9.82551C4.12042 9.6075 4 9.31053 4 9.00078C4 8.69103 4.12042 8.39406 4.33452 8.17605C4.78276 7.71941 5.50559 7.71941 5.95369 8.17663L11.9988 14.3498Z" fill="var(--grey-500)"/>
-						</svg>
-					</IconButton>
+				<ContextMenuButton id="profileMenu" imageUrl={ArrowDown} menuList={[
+          <ContextMenuItem key="edit-profile" title="개인정보 수정" imageUrl={Pen} onClick={() => {openModal(<EditProfile />)}} />,
+          <ContextMenuItem key="logout" title="로그아웃" imageUrl={Logout} onClick={handleLogout} />,
+        ]}></ContextMenuButton>
 				</span>
 				<div className="email">{userProfile.data.email}</div>
 			</div>

@@ -1,15 +1,17 @@
 #unauthorized_page {
 	width: 100%;
-	background-color: transparent;
-	background-size: 100% auto;
-	background-repeat: no-repeat;
-	background-position: top;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-
+	> div {
+		min-width: 1024px;
+		background-color: transparent;
+		background-size: 100% auto;
+		background-repeat: no-repeat;
+		background-position: top;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
 	.text {
-		background: linear-gradient(to right, var(--primary-900) 10%, var(--grey-900) 70%, var(--secondary-600) 90%);
+		background: linear-gradient(92.26deg, var(--primary-900) -13.84%, var(--grey-900) 75.15%, var(--secondary-600) 99.53%);
 		margin-top: 12%;
 		margin-bottom: 32px;
 		background-clip: text;

@@ -94,10 +94,10 @@ const SignUp = () => {
 	<div className="sign-up-form">
 		<h3>회원가입</h3>
 		<span className="input-group">
-			<TextInput className="email" placeholder="이메일" type="text" value={email} error={emailError} onChange={(e) => handleEmailInput(e)} onKeyDown={handleKeyDown}></TextInput>
-			<TextInput className="username" placeholder="이름" type="text" value={username} onChange={(e) => setUsername(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
-			<TextInput className="password" placeholder="비밀번호" type="password" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
-			<TextInput className="password2" placeholder="비밀번호 확인" type="password" value={password2} error={passwordError} onChange={(e) => setPassword2(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
+			<TextInput name="email" placeholder="이메일" type="text" value={email} error={emailError} onChange={(e) => handleEmailInput(e)} onKeyDown={handleKeyDown}></TextInput>
+			<TextInput name="username" placeholder="이름" type="text" value={username} onChange={(e) => setUsername(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
+			<TextInput name="password" placeholder="비밀번호" type="password" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
+			<TextInput name="password2" placeholder="비밀번호 확인" type="password" value={password2} error={passwordError} onChange={(e) => setPassword2(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
 	  </span>
 		<Button title="가입하기" variant="important" onClick={handleRegist}>가입하기
 		</Button>

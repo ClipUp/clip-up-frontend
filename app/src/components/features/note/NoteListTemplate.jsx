@@ -2,9 +2,8 @@ import { useCallback, useRef } from "react";
 import NoteItem from "./NoteItem";
 import "./noteList.scss";
 
-const NoteListTemplate = ({title, height, pageLimit, useNoteList, empty}) => {
+const NoteListTemplate = ({title, height, pageLimit, useNoteList, empty, menuIdList}) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useNoteList({pageLimit});
-
   const observer = useRef();
   const lastMeetingRef = useCallback(
     (node) => {
@@ -20,15 +19,15 @@ const NoteListTemplate = ({title, height, pageLimit, useNoteList, empty}) => {
     [isFetchingNextPage, hasNextPage, fetchNextPage]
   );
 
-  if (status === 'loading') return <p>Loading...</p>;
-  if (status === 'error') return <p>Error loading meetings.</p>;
+  // if (status === 'loading') return <p>Loading...</p>;
+  // if (status === 'error') return <p>Error loading meetings.</p>;
 
   return (
     <div className="note-list-card">
       <h5>{title}</h5>
       <ul className="note-list" style={{ height: height }}>
       {
-        (!data?.pages || data?.pages?.flat().length === 0) ? (
+        (status === 'error' || !data?.pages || data?.pages?.flat().length === 0) ? (
           empty
         ) : (
           data?.pages?.map((page, pageIndex) => (
@@ -36,6 +35,7 @@ const NoteListTemplate = ({title, height, pageLimit, useNoteList, empty}) => {
               <NoteItem
                 note={note}
                 key={note.id}
+                menuIdList={menuIdList}
                 ref={index === page.length - 1 ? lastMeetingRef : null}
               />
             ))

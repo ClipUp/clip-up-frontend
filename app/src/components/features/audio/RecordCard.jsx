@@ -32,7 +32,7 @@ const RecordCard = () => {
       };
       xhr.onload = () => {
         if (xhr.status === 201) {
-          console.log('파일 업로드 성공:', xhr.response);
+          console.log('파일 업로드 성공');
           setUploadProgress(0);
         } else {
           console.error('파일 업로드 실패:', xhr.statusText);
@@ -69,8 +69,8 @@ const RecordCard = () => {
 				type="file"
 				ref={fileInputRef}
 				onChange={handleFileChange}
-				accept="*/*" // "audio/mpeg" MP3 파일 형식만 허용
-				style={{ display: 'none' }} // input 요소 숨기기
+				accept="audio/mp3, audio/wav, audio/m4a, audio/x-m4a"
+				style={{ display: 'none' }}
 			/>
 		</section>
 		{uploadProgress > 0 && (

@@ -11,6 +11,7 @@ import { useAuthStore } from "./store/userStore";
 import Unauthorized from "./components/pages/error/Unauthorized";
 import Record from "./components/pages/Record";
 import Modal from "./components/ui/modal/Modal";
+import { ContextMenu } from "./components/ui/modal/ContextMenu";
 import { useEffect } from "react";
 import { useAutoSignIn } from "./hooks/useUser";
 import DeletedNoteList from './components/pages/DeletedNoteList';
@@ -25,11 +26,7 @@ const App = () => {
   useEffect(() => {
     const fetchToken = async () => {
       if (!accessToken && sessionStorage.getItem("RT") !== "N") {
-        if (!await autoSiginInMutation.mutateAsync()) {
-          sessionStorage.setItem("RT", "N");
-        } else {
-          sessionStorage.setItem("RT", "Y");
-        }
+        await autoSiginInMutation.mutateAsync();
       }
     };
 
@@ -51,7 +48,8 @@ const App = () => {
           </Routes>
       </Main>
       <Footer></Footer>
-      <Modal></Modal>
+      <ContextMenu />
+      <Modal />
     </BrowserRouter>
   );
 };

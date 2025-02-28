@@ -31,6 +31,16 @@ export const userAPI = {
     return await res.json();
   },
 
+  logout: async () => {
+    const res = await fetchWithAuth(`/api/v1/auth/logout`, {
+      method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			}
+    });
+    return await res;
+  },
+
   getUser: async () => {
     const res = await fetchWithAuth(`/api/v1/users`, {
 			headers: {

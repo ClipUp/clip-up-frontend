@@ -66,8 +66,8 @@ export const noteAPI = {
 
 		return await res;
 	},
-	editNote: async ({ meetingIds, title }) => {
-		const res = await fetchWithAuth(`/api/v1/meetings/${meetingIds}`, {
+	editNote: async ({ meetingId, title }) => {
+		const res = await fetchWithAuth(`/api/v1/meetings/${meetingId}`, {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",

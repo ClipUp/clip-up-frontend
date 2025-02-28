@@ -24,7 +24,11 @@
 		}
 		&.error {
 			background: var(--primary-50);
-			border: 2px solid #FF5757
+			border: 2px solid #FF5757;
+		}
+		&:disabled {
+			background-color: var(--grey-200);
+			border: 1px solid var(--Grey-Scale-500, var(--grey-500));
 		}
 	}
 	p {

@@ -12,6 +12,7 @@ const DeletedNoteList = () => {
 				useNoteList={useDeletedNoteList}
 				height={window.innerHeight - 230}
 				empty={<NoticeCard title="휴지통이 비어있습니다" />}
+				menuIdList={["cancle_delete"]}
 			/>
 		</section>
 	);

@@ -15,6 +15,7 @@ const NoteList = () => {
 				title="전체 회의록"
 				height={window.innerHeight - 230}
 				useNoteList={useNoteList}
+				menuIdList={["edit", "delete"]}
 				empty={
 					<NoticeCard
 						imageUrl={DocumentImage}

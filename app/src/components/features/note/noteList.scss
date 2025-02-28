@@ -40,6 +40,7 @@
 		.list-title {
 			color: var(--grey-900);
 			display: flex;
+			align-items: center;
 			gap: 18.5px;
 
 			.list-icon {
@@ -54,6 +55,21 @@
 					width: 15px;
 				}
 			}
+			span[contentEditable=true] {
+				color: var(--grey-900);
+				width: fit-content;
+				font-weight: 500;
+				font-size: 16px;
+				line-height: 34px;
+				letter-spacing: 0%;
+				border: 2px solid var(--Secondary-600, #B2E7CC);
+				height: 32px;
+				border-radius: 8px;
+				padding: 4px 12px;
+				&:focus {
+					outline: none;
+				}
+			}
 		}
 		.list-info {
 			color: var(--grey-600);
@@ -63,8 +79,11 @@
 			justify-content: end;
 			.list-date {
 				width: 160px;
-				margin: 0 48px;
+				margin-left: 48px;
 				text-align: justify;
+			}
+			.context-menu-button {
+				margin-left: 48px;
 			}
 		}
 	}

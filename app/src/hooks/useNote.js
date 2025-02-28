@@ -63,21 +63,47 @@ const useNote = (meetingId) => {
   });
 };
 
-const useEditNote = () => {
+const useDeleteNote = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
-    mutationFn: async ({ meetingIds, title }) => {
-      queryClient.setQueryData(['note', meetingIds], (oldData) => {
-        if (!oldData) return oldData;
-        return { ...oldData, title };
-      });
-      return await noteAPI.editNote({ meetingIds, title });
-    },
+    mutationFn: (data) => noteAPI.deleteNote(data),
     onSuccess: () => {
-      queryClient.invalidateQueries(['notes']);
+      queryClient.invalidateQueries(["notes", "recent"]);
+      queryClient.invalidateQueries(["notes", "all"]);
+      queryClient.invalidateQueries(["notes", "deleted"]);
     },
   });
 };
 
-export {useRecentNoteList, useNoteList, useDeletedNoteList, useCreateNote, useNote, useEditNote};
+const useCancleDeleteNote = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data) => noteAPI.cancleDeleteNote(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["notes", "recent"]);
+      queryClient.invalidateQueries(["notes", "all"]);
+      queryClient.invalidateQueries(["notes", "deleted"]);
+    },
+  });
+};
+
+const useEditNote = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ meetingId, title }) => {
+      // queryClient.setQueryData(['note', meetingId], (oldData) => {
+      //   if (!oldData) return oldData;
+      //   return { ...oldData, title };
+      // });
+      return await noteAPI.editNote({ meetingId, title });
+    },
+    onSuccess: () => {
+      // queryClient.invalidateQueries(['note', meetingId]);
+      queryClient.invalidateQueries(["notes", "recent"]);
+      queryClient.invalidateQueries(["notes", "all"]);
+    },
+  });
+};
+
+export {useRecentNoteList, useNoteList, useDeletedNoteList, useCreateNote, useDeleteNote, useCancleDeleteNote, useNote, useEditNote};

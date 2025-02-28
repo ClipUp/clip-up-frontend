@@ -18,6 +18,7 @@ const useSignIn = () => {
       if (data.data?.accessToken) {
         setAccessToken(data.data.accessToken);
         setUserProfile(await userAPI.getUser());
+        sessionStorage.setItem("RT", "Y");
       }
       return data;
     },
@@ -35,6 +36,29 @@ const useAutoSignIn = () => {
         if (data.data?.accessToken) {
           setAccessToken(data.data.accessToken);
           setUserProfile(await userAPI.getUser());
+          sessionStorage.setItem("RT", "Y");
+        }
+        return data;
+      } catch(e) {
+        console.log(e);
+        return false;
+      }
+    },
+  });
+};
+
+const useLogout = () => {
+  const setAccessToken = useAuthStore((state) => state.setAccessToken);
+  const setUserProfile = useAuthStore((state) => state.setUserProfile);
+
+  return useMutation({
+    mutationFn: () => userAPI.logout(),
+    onSuccess: async (data) => {
+      try {
+        if (data.status === "OK") {
+          setAccessToken(null);
+          setUserProfile(null);
+          sessionStorage.setItem("RT", "N");
         }
         return data;
       } catch(e) {
@@ -57,14 +81,15 @@ const useUser = () => {
 
 const useUpdateUserPwd = () => {
   const queryClient = useQueryClient();
+  const accessToken = useAuthStore((state) => state.accessToken);
 
 	const mutation = useMutation({
 		mutationFn: (data) => userAPI.updateUserPwd(data),
     onSuccess: () => {
-      queryClient.invalidateQueries(['user']);
+      queryClient.invalidateQueries(['user', accessToken]);
     },
 	});
   return mutation;
 };
 
-export {useSignUp, useSignIn, useAutoSignIn, useUser, useUpdateUserPwd};
+export {useSignUp, useSignIn, useAutoSignIn, useLogout, useUser, useUpdateUserPwd};

@@ -82,8 +82,8 @@ const SignIn = () => {
       <img src={Logo} />
       <p>회의록 요약이 필요한 당신을 위한 파트너, 클립업</p>
       <span className="input-group">
-        <TextInput className="email" placeholder="이메일" type="text" value={email} error={emailError} onChange={(e) => handleEmailInput(e)} onKeyDown={handleKeyDown}></TextInput>
-        <TextInput className="password" placeholder="비밀번호" type="password" value={password} error={passwordError} onChange={(e) => setPassword(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
+        <TextInput name="email" placeholder="이메일" type="text" value={email} error={emailError} onChange={(e) => handleEmailInput(e)} onKeyDown={handleKeyDown}></TextInput>
+        <TextInput name="password" placeholder="비밀번호" type="password" value={password} error={passwordError} onChange={(e) => setPassword(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
       </span>
       <Button title="로그인" onClick={handleLogin}>
         로그인

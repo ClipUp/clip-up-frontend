@@ -8,9 +8,10 @@ TextInput.propTypes = {
 	placeholder: propTypes.string,
 	error: propTypes.string,
 	onChange: propTypes.func,
-	onKeyDown: propTypes.func
+	onKeyDown: propTypes.func,
+	disabled: propTypes.bool
 };
-function TextInput({className, value, placeholder, type, error, onChange, onKeyDown}) {
+function TextInput({name, value, placeholder, type, error, onChange, onKeyDown, disabled = false}) {
   return (
 	<div className="default-input">
 	  <input
@@ -19,7 +20,9 @@ function TextInput({className, value, placeholder, type, error, onChange, onKeyD
 			placeholder={placeholder}
 			onChange={onChange}
 			onKeyDown={onKeyDown}
-			className={ `${className} ${error ? "error" : ""}`}
+			className={ `${name} ${error ? "error" : ""}`}
+			name={name}
+			disabled={disabled}
 		/>
 		<p className="confirm-text">{error}</p>
 	</div>
