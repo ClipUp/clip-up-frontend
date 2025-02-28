@@ -10,6 +10,7 @@ const NoteDetail = ({ noteId }) => {
 		return text.replace(/(🔹|✅)/g, '\n$1');
 	};
 	const MeetingNotes = ({ text }) => {
+		if (!text) return <div></div>;
 		const formattedText = formatText(text)
 			.split("\n")
 			.map((line, index) => (
@@ -38,7 +39,7 @@ const NoteDetail = ({ noteId }) => {
 					<h5>스크립트</h5>
 					<div className="note-scroll">
 						<div>
-							{data.script.map((line, index)=> (
+							{data.script?.map((line, index)=> (
 								<p key={index}>
 									<span className="note-speaker-group">
 										<span className="speaker">화자{line.speaker}</span>
