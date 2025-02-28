@@ -12,6 +12,9 @@ class AudioRecorder {
     this.animationFrameId = null;
     this.silentDuration = 0; // 묵음 지속 시간
     this.isRecording = true; // 녹음 상태
+    this.isPaused = false; // 일시정지 상태
+    this.recordingStartTime = null; // 현재 녹음 세션의 시작 시간
+    this.elapsedTime = 0; // 누적 녹음 시간 (ms)
   }
 
   async startRecording() {
@@ -36,6 +39,12 @@ class AudioRecorder {
         }
       };
 
+      // 녹음 시작 시점과 누적 시간 초기화
+      this.recordingStartTime = Date.now();
+      this.elapsedTime = 0;
+      this.isPaused = false;
+      this.isRecording = true;
+
       return new Promise((resolve) => {
         this.mediaRecorder.onstop = async () => {
           const audioBlob = new Blob(this.audioChunks, { type: "audio/webm" });
@@ -47,10 +56,11 @@ class AudioRecorder {
 
         this.mediaRecorder.start();
         this.visualizeWaveform();
-        // this.monitorAudio();  // 공백 제거
 
         setTimeout(() => {
           if (this.mediaRecorder.state === "recording") {
+            // 자동 종료 전까지의 시간 업데이트
+            this.elapsedTime += Date.now() - this.recordingStartTime;
             this.mediaRecorder.stop();
             resolve("max"); // 녹음 자동 종료
           }
@@ -75,20 +85,17 @@ class AudioRecorder {
     }
   }
 
-
   audioBufferToWav(audioBuffer) {
     const numOfChannels = audioBuffer.numberOfChannels;
     const sampleRate = audioBuffer.sampleRate;
     const numFrames = audioBuffer.length;
 
-    // WAV 파일 헤더 포함 크기 계산
     const bufferSize = 44 + numFrames * numOfChannels * 2;
     const wavBuffer = new Uint8Array(bufferSize);
     const view = new DataView(wavBuffer.buffer);
 
     let offset = 0;
 
-    // WAV 파일 헤더
     const writeString = (s) => {
       for (let i = 0; i < s.length; i++) {
         view.setUint8(offset++, s.charCodeAt(i));
@@ -109,7 +116,6 @@ class AudioRecorder {
     writeString("data");
     view.setUint32(offset, numFrames * numOfChannels * 2, true); offset += 4;
 
-    // PCM 데이터 추가
     for (let channel = 0; channel < numOfChannels; channel++) {
       const channelData = audioBuffer.getChannelData(channel);
       for (let i = 0; i < numFrames; i++) {
@@ -138,39 +144,68 @@ class AudioRecorder {
     }
   }
 
+  pauseRecording() {
+    if (this.mediaRecorder && this.mediaRecorder.state === "recording") {
+      // 현재까지의 녹음 시간 저장
+      this.elapsedTime += Date.now() - this.recordingStartTime;
+      this.recordingStartTime = null;
+      this.mediaRecorder.pause();
+      this.isPaused = true;
+      this.stopVisualizeWaveform();
+    }
+  }
+
+  resumeRecording() {
+    if (this.mediaRecorder && this.mediaRecorder.state === "paused") {
+      this.mediaRecorder.resume();
+      this.recordingStartTime = Date.now();
+      this.isPaused = false;
+      this.visualizeWaveform();
+    }
+  }
+
   stopRecording() {
     if (this.mediaRecorder && this.mediaRecorder.state === "recording") {
+      this.elapsedTime += Date.now() - this.recordingStartTime;
+      this.recordingStartTime = null;
       this.mediaRecorder.stop();
     }
     if (this.stream) {
       this.stream.getTracks().forEach((track) => track.stop());
     }
-    if (this.audioContext) {
+    if (this.audioContext && this.audioContext.state !== 'closed') {
       this.audioContext.close();
     }
     cancelAnimationFrame(this.animationFrameId);
   }
 
+  getRecordingTime() {
+    if (this.recordingStartTime === null) {
+      return this.elapsedTime;
+    }
+    return this.elapsedTime + (Date.now() - this.recordingStartTime);
+  }
+
   monitorAudio() {
     this.audioCheckInterval = setInterval(() => {
-        this.analyser.getByteFrequencyData(this.dataArray);
+      this.analyser.getByteFrequencyData(this.dataArray);
 
-        const silenceThreshold = 50;
-        if (this.getVolume() < silenceThreshold) {
-            this.silentDuration += 100;
-            if (this.silentDuration >= 500 && this.isRecording) { // 0.5초 이상 묵음
-                this.mediaRecorder.pause();
-                this.isRecording = false;
-            }
-        } else {
-            this.silentDuration = 0;
-            if (!this.isRecording && this.mediaRecorder.state === "paused") {
-                this.mediaRecorder.resume(); // 상태가 paused일 때만 resume
-                this.isRecording = true;
-            }
+      const silenceThreshold = 50;
+      if (this.getVolume() < silenceThreshold) {
+        this.silentDuration += 100;
+        if (this.silentDuration >= 500 && this.isRecording) { // 0.5초 이상 묵음
+          this.mediaRecorder.pause();
+          this.isRecording = false;
         }
+      } else {
+        this.silentDuration = 0;
+        if (!this.isRecording && this.mediaRecorder.state === "paused") {
+          this.mediaRecorder.resume(); // paused 상태일 때만 resume
+          this.isRecording = true;
+        }
+      }
     }, 100);
-	}
+  }
 
   getVolume() {
     return this.dataArray.reduce((a, b) => a + b, 0) / this.dataArray.length;

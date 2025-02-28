@@ -2,7 +2,7 @@ import NoteItem from "./NoteItem";
 import { useEffect, useRef, useState } from "react";
 import "./noteList.scss";
 
-const NoteListTemplate = ({maxPages = Infinity, useNoteList, title, height}) => {
+const NoteListTemplate = ({maxPages = Infinity, useNoteList, empty, title, height}) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useNoteList(maxPages);
   const observerRef = useRef(null);
   const [pageCount, setPageCount] = useState(1);
@@ -29,7 +29,7 @@ const NoteListTemplate = ({maxPages = Infinity, useNoteList, title, height}) => 
       <h5>{title}</h5>
       <ul className="note-list" style={{height: height}}>
         {data?.pages.flat().length === 0 ? (
-          <div>데이터가 없습니다.</div>
+          empty
         ) : (
           data?.pages.flat().map((note, index) => (
             <NoteItem

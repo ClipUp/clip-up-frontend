@@ -49,7 +49,7 @@ const RecordCard = () => {
 	}
 	return (
 		<>
-		<section className="record-section">
+		<section className="create-note-card">
 			<div className="record-button" style={{ backgroundImage: `url(${RecordBtnImg})` }}>
 				<span>
 					<h4>클립업과 함께 회의를 시작해보세요</h4>
