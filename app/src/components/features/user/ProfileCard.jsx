@@ -7,7 +7,7 @@ import Logout from "../../../assets/icon/log-out.svg"
 import SignIn from "./SignIn";
 import "./profileCard.scss";
 import { ContextMenuButton, ContextMenuItem } from "../../ui/modal/ContextMenu";
-import EditProfile from "./editProfile";
+import EditProfile from "./EditProfile";
 import { useLogout } from "../../../hooks/useUser";
 
 const ProfileCard = () => {
