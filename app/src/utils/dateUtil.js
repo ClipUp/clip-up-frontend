@@ -15,15 +15,11 @@ const getFormatDate = (timestamp) => {
   return formattedDate.replace(/(\d{1,2})\.\s([오전|오후])/, '$1 $2');
 }
 
-const formatUnixTimeUTC = (unixTime) => {
-  if (!unixTime) return "00:00";
-
-  const date = new Date(unixTime * 1000);
-  const hours = date.getUTCHours();
-  const minutes = date.getUTCMinutes();
-
-  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+const formatTime = (ms) => {
+  const totalSeconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 };
 
-
-export { getFormatDate, formatUnixTimeUTC };
+export { getFormatDate, formatTime };

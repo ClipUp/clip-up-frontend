@@ -1,7 +1,7 @@
 import { useNote } from "../../../hooks/useNote";
 import AudioController from "../audio/AudioController";
 import Calendar from "../../../assets/icon/calendar.svg";
-import {getFormatDate, formatUnixTimeUTC} from "../../../utils/dateUtil"
+import {getFormatDate, formatTime} from "../../../utils/dateUtil"
 import "./noteDetail.scss"
 
 const NoteDetail = ({ noteId }) => {
@@ -42,7 +42,7 @@ const NoteDetail = ({ noteId }) => {
 								<p key={index}>
 									<span className="note-speaker-group">
 										<span className="speaker">화자{line.speaker}</span>
-										<span className="start-time">{formatUnixTimeUTC(line.startTime)}</span>
+										<span className="start-time">{formatTime(line.startTime)}</span>
 									</span>
 									<span className="word">
 										{line.text}
