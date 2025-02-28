@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import Microphone from "../../../assets/icon/microphone.svg"
 import More from "../../../assets/icon/more.svg"
 import IconButton from '../../ui/button/IconButton';
+import {getFormatDate} from "../../../utils/dateUtil"
 
 const NoteItem = ({ref, note, onToggle, onClick, onChangeState}) => {
   // const {id, title, checked} = note;
@@ -9,19 +10,6 @@ const NoteItem = ({ref, note, onToggle, onClick, onChangeState}) => {
 	const handleClickNote = async () => {
 		if (onClick) await onClick();
 		navigate(`/note/${note.id}`);
-	}
-	const getFormattedDate = (timestamp) => {
-		const date = new Date(timestamp);
-		const formattedDate = new Intl.DateTimeFormat('ko-KR', {
-			year: 'numeric',
-			month: 'numeric',
-			day: 'numeric',
-			hour: 'numeric',
-			minute: 'numeric',
-			hour12: true
-		}).format(date)
-
-		return formattedDate.replace(/(\d{1,2})\.\s([오전|오후])/, '$1 $2');
 	}
 
   return (
@@ -39,7 +27,7 @@ const NoteItem = ({ref, note, onToggle, onClick, onChangeState}) => {
 					{note.audioFileDuration}분
 				</span>
 				<span className="list-date">
-					{getFormattedDate(note.creatTime)}
+					{getFormatDate(note.creatTime)}
 				</span>
 				<IconButton title="더보기" onClick={onChangeState}>
 					<img src={More} />

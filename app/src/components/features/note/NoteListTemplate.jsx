@@ -2,11 +2,10 @@ import NoteItem from "./NoteItem";
 import { useEffect, useRef, useState } from "react";
 import "./noteList.scss";
 
-const NoteListTemplate = ({maxPages = Infinity, useNoteList, title}) => {
+const NoteListTemplate = ({maxPages = Infinity, useNoteList, title, height}) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useNoteList(maxPages);
   const observerRef = useRef(null);
   const [pageCount, setPageCount] = useState(1);
-  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
 
   useEffect(() => {
     if (!observerRef.current || !hasNextPage || pageCount >= maxPages) return;
@@ -23,37 +22,12 @@ const NoteListTemplate = ({maxPages = Infinity, useNoteList, title}) => {
 
     observer.observe(observerRef.current);
     return () => observer.disconnect();
-  }, [fetchNextPage, hasNextPage, maxPages, status, pageCount]);
-
-  const handleResize = () => {
-    setWindowHeight(window.innerHeight);
-  };
-
-  useEffect(() => {
-    const element = document.querySelector('.note-list');
-
-    if (element) {
-      element.style.height = `${windowHeight}px`;
-    }
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [windowHeight]);
-
-  useEffect(() => {
-    const element = document.querySelector('.note-list');
-
-    if (element) {
-      element.style.height = `${windowHeight}px`;
-    }
-  }, [windowHeight]);
+  }, [fetchNextPage, hasNextPage, maxPages, pageCount]);
 
   return (
     <div className="note-list-card">
       <h5>{title}</h5>
-      <ul className="note-list">
+      <ul className="note-list" style={{height: height}}>
         {data?.pages.flat().length === 0 ? (
           <div>데이터가 없습니다.</div>
         ) : (
