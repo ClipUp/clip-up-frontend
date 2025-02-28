@@ -28,6 +28,10 @@ const SignIn = () => {
     if (validateEmail(email)) {
       setEmailError("");
     } else {
+      const inputElement = document.querySelector(".email");
+			if (inputElement) {
+				inputElement.focus();
+			}
       setEmailError("이메일을 입력해주세요.");
     }
   }
@@ -37,15 +41,40 @@ const SignIn = () => {
   };
 
   const confrimPassword = (status) => {
+    if (status === "OK") {
+      setPasswordError("");
+      return true;
+    }
+    const inputElement = document.querySelector(".password");
+    if (inputElement) {
+      inputElement.focus();
+    }
     if (status === "UNAUTHORIZED") {
       setPasswordError("비밀번호가 일치하지 않습니다.");
-      return false;
     } else if (status === "NOT_FOUND") {
       setPasswordError("존재하지 않는 사용자입니다.");
-      return false;
     }
-    setPasswordError("");
-    return true;
+    return false;
+  };
+
+  const handleLogin = async () => {
+    if (!validateEmail(email)) {
+      confirmEmail();
+    }
+    const res = await handleSignIn();
+
+    if (!confrimPassword(res.status)) {
+      return;
+    } else {
+      closeModal();
+    }
+  }
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleLogin();
+    }
   };
 
   return (
@@ -53,21 +82,10 @@ const SignIn = () => {
       <img src={Logo} />
       <p>회의록 요약이 필요한 당신을 위한 파트너, 클립업</p>
       <span className="input-group">
-        <TextInput placeholder="이메일" type="text" value={email} error={emailError} onChange={(e) => handleEmailInput(e)}></TextInput>
-        <TextInput placeholder="비밀번호" type="password" value={password} error={passwordError} onChange={(e) => setPassword(e.target.value)}></TextInput>
+        <TextInput className="email" placeholder="이메일" type="text" value={email} error={emailError} onChange={(e) => handleEmailInput(e)} onKeyDown={handleKeyDown}></TextInput>
+        <TextInput className="password" placeholder="비밀번호" type="password" value={password} error={passwordError} onChange={(e) => setPassword(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
       </span>
-      <Button title="로그인" onClick={async () => {
-        if (!validateEmail(email)) {
-          confirmEmail();
-        }
-        const res = await handleSignIn();
-
-        if (!confrimPassword(res.status)) {
-          return;
-        } else {
-          closeModal();
-        }
-      }}>
+      <Button title="로그인" onClick={handleLogin}>
         로그인
       </Button>
       <Button title="회원가입" variant="primary-light" onClick={() => {openModal(<SignUp />)}}>

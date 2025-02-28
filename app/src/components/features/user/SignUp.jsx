@@ -33,6 +33,10 @@ const SignUp = () => {
     if (validateEmail(email)) {
       setEmailError("");
     } else {
+			const inputElement = document.querySelector(".email");
+			if (inputElement) {
+				inputElement.focus();
+			}
       setEmailError("이메일을 입력해주세요.");
     }
   }
@@ -42,6 +46,10 @@ const SignUp = () => {
   };
 	const confrimRegistedEmail = (status) => {
     if (status === "CONFLICT") {
+			const inputElement = document.querySelector(".email");
+			if (inputElement) {
+				inputElement.focus();
+			}
       setEmailError("이미 사용 중인 이메일입니다.");
       return false;
     }
@@ -52,8 +60,33 @@ const SignUp = () => {
       setPasswordError("");
 			return true;
     } else {
+			const inputElement = document.querySelector(".password");
+			if (inputElement) {
+				inputElement.focus();
+			}
       setPasswordError("비밀번호가 일치하지 않습니다.");
 			return false;
+    }
+  };
+
+	const handleRegist = async () => {
+		if (!validateEmail(email)) {
+			return confirmEmail();
+		} else if (!confirmPasswordSecondary()) {
+			return;
+		}
+		const res = await handleSignUp();
+		if (!confrimRegistedEmail(res.status)) {
+			return;
+		}
+		await handleSignIn()
+		closeModal();
+	}
+
+	const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleRegist();
     }
   };
 
@@ -61,24 +94,12 @@ const SignUp = () => {
 	<div className="sign-up-form">
 		<h3>회원가입</h3>
 		<span className="input-group">
-			<TextInput placeholder="이메일" type="text" value={email} error={emailError} onChange={(e) => handleEmailInput(e)}></TextInput>
-			<TextInput placeholder="이름" type="text" value={username} onChange={(e) => setUsername(e.target.value)}></TextInput>
-			<TextInput placeholder="비밀번호" type="password" value={password} onChange={(e) => setPassword(e.target.value)}></TextInput>
-			<TextInput placeholder="비밀번호 확인" type="password" value={password2} error={passwordError} onChange={(e) => setPassword2(e.target.value)}></TextInput>
+			<TextInput className="email" placeholder="이메일" type="text" value={email} error={emailError} onChange={(e) => handleEmailInput(e)} onKeyDown={handleKeyDown}></TextInput>
+			<TextInput className="username" placeholder="이름" type="text" value={username} onChange={(e) => setUsername(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
+			<TextInput className="password" placeholder="비밀번호" type="password" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
+			<TextInput className="password2" placeholder="비밀번호 확인" type="password" value={password2} error={passwordError} onChange={(e) => setPassword2(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
 	  </span>
-		<Button title="가입하기" variant="important" onClick={async () => {
-			if (!validateEmail(email)) {
-				return confirmEmail();
-			} else if (!confirmPasswordSecondary()) {
-				return;
-			}
-			const res = await handleSignUp();
-			if (!confrimRegistedEmail(res.status)) {
-				return;
-			}
-			await handleSignIn()
-			closeModal();
-		}}>가입하기
+		<Button title="가입하기" variant="important" onClick={handleRegist}>가입하기
 		</Button>
 	</div>
   );
