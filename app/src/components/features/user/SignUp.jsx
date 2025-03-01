@@ -3,7 +3,7 @@ import TextInput from '../../ui/textInput/TextInput'
 import Button from '../../ui/button/Button'
 import { useSignIn, useSignUp } from "../../../hooks/useUser";
 import "./signIn.scss";
-import { useModalStore } from "../../../store/modalStore";
+import { useModalStore, useToastStore } from "../../../store/modalStore";
 
 const SignUp = () => {
   const [username, setUsername] = useState("");
@@ -15,6 +15,7 @@ const SignUp = () => {
 	const { closeModal } = useModalStore();
   const signUpMutation = useSignUp();
 	const signInMutation = useSignIn();
+	const addToast = useToastStore((state) => state.addToast);
 
   const validateEmail = () => {
 	const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
@@ -69,6 +70,14 @@ const SignUp = () => {
     }
   };
 
+	const confirmSignIn = (status) => {
+		if (status === "OK") {
+			addToast("가입이 완료되었습니다. 지금 바로 시작해 보세요!");
+		} else {
+			addToast("일시적인 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+		}
+	}
+
 	const handleRegist = async () => {
 		if (!validateEmail(email)) {
 			return confirmEmail();
@@ -79,7 +88,7 @@ const SignUp = () => {
 		if (!confrimRegistedEmail(res.status)) {
 			return;
 		}
-		await handleSignIn()
+		confirmSignIn(await handleSignIn());
 		closeModal();
 	}
 
@@ -99,7 +108,8 @@ const SignUp = () => {
 			<TextInput name="password" placeholder="비밀번호" type="password" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
 			<TextInput name="password2" placeholder="비밀번호 확인" type="password" value={password2} error={passwordError} onChange={(e) => setPassword2(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
 	  </span>
-		<Button title="가입하기" variant="important" onClick={handleRegist}>가입하기
+		<Button title="가입하기" variant="important" onClick={handleRegist}>
+			가입하기
 		</Button>
 	</div>
   );

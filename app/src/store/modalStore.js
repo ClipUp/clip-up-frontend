@@ -7,6 +7,26 @@ const useModalStore = create((set) => ({
   closeModal: () => set({ isOpen: false, children: null }),
 }));
 
+const useConfirmStore = create((set) => ({
+  isOpen: false,
+  title: "",
+  children: null,
+  confirmText: "확인",
+  cancelText: "취소",
+  variant: "primary",
+  resolve: null,
+
+  showConfirm: ({ title, children, confirmText, cancelText, variant = "primary" }) =>
+    new Promise((resolve) => {
+      set({ isOpen: true, title, children, confirmText, cancelText, variant, resolve });
+    }),
+
+  closeConfirm: (result) =>
+    set((state) => {
+      if (state.resolve) state.resolve(result);
+      return { isOpen: false, title:"", children: null, confirmText: "확인", cancelText: "취소", variant: "primary", resolve: null };
+    }),
+}));
 
 const useContextMenuStore = create((set) => ({
   contextMenu: {
@@ -19,4 +39,18 @@ const useContextMenuStore = create((set) => ({
   closeContextMenu: () => set({ contextMenu: { isOpen: false, position: { x: 0, y: 0 }, id: null } }),
 }));
 
-export { useModalStore, useContextMenuStore };
+const useToastStore = create((set) => ({
+  toastMessages: [],
+  addToast: (message) => {
+    set((state) => ({
+      toastMessages: [...state.toastMessages, message],
+    }));
+    setTimeout(() => {
+      set((state) => ({
+        toastMessages: state.toastMessages.slice(1),
+      }));
+    }, 3000);
+  },
+}));
+
+export { useModalStore, useConfirmStore, useContextMenuStore, useToastStore };

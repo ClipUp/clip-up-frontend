@@ -3,7 +3,7 @@ import TextInput from '../../ui/textInput/TextInput'
 import Button from '../../ui/button/Button'
 import { useUpdateUserPwd } from "../../../hooks/useUser";
 import "./signIn.scss";
-import { useModalStore } from "../../../store/modalStore";
+import { useModalStore, useToastStore } from "../../../store/modalStore";
 import { useAuthStore } from "../../../store/userStore";
 
 const EditProfile = () => {
@@ -14,6 +14,7 @@ const EditProfile = () => {
 	const [passwordError, setPasswordError] = useState("");
 	const { closeModal } = useModalStore();
   const updateUserPwdMutation = useUpdateUserPwd();
+	const addToast = useToastStore((state) => state.addToast);
 
 	const handleUpdatePwd = async () => {
     return await updateUserPwdMutation.mutateAsync({originalPassword: originalPassword, newPassword: password});
@@ -32,20 +33,20 @@ const EditProfile = () => {
 			return false;
     }
   };
-
+	const confirmEdit = (status) => {
+		if (status === "OK") {
+			addToast("개인정보 수정이 완료되었습니다.");
+		} else {
+			addToast("일시적인 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+		}
+	}
 	const handleRegist = async () => {
 		if (!confirmPasswordSecondary()) {
 			return;
 		}
-		try {
-			await handleUpdatePwd();
-		} catch (e) {
-			console.log(e);
-			alert("비밀번호 변경에 실패했습니다");
-		}
+		confirmEdit(await handleUpdatePwd());
 		closeModal();
 	}
-
 	const handleKeyDown = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();

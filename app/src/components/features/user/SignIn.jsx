@@ -4,7 +4,7 @@ import Button from '../../ui/button/Button'
 import { useSignIn } from "../../../hooks/useUser";
 import Logo from "../../../assets/clip_up_logo.svg"
 import "./signIn.scss";
-import { useModalStore } from "../../../store/modalStore";
+import { useModalStore, useToastStore } from "../../../store/modalStore";
 import SignUp from "./SignUp";
 
 const SignIn = () => {
@@ -14,6 +14,7 @@ const SignIn = () => {
   const [passwordError, setPasswordError] = useState("");
   const signInMutation = useSignIn();
   const { openModal, closeModal } = useModalStore();
+  const addToast = useToastStore((state) => state.addToast);
 
   const validateEmail = () => {
     const emailRegex = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/;
@@ -57,6 +58,14 @@ const SignIn = () => {
     return false;
   };
 
+  const confirmSignIn = (status) => {
+		if (status === "OK") {
+			addToast("로그인이 완료되었습니다.");
+		} else {
+			addToast("일시적인 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+		}
+	}
+
   const handleLogin = async () => {
     if (!validateEmail(email)) {
       confirmEmail();
@@ -66,6 +75,7 @@ const SignIn = () => {
     if (!confrimPassword(res.status)) {
       return;
     } else {
+      confirmSignIn(res.status);
       closeModal();
     }
   }

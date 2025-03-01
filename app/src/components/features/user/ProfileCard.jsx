@@ -1,4 +1,4 @@
-import { useModalStore } from "../../../store/modalStore";
+import { useConfirmStore, useModalStore, useToastStore } from "../../../store/modalStore";
 import { useAuthStore } from "../../../store/userStore";
 import Button from "../../ui/button/Button";
 import ArrowDown from "../../../assets/icon/arrow-down.svg";
@@ -14,20 +14,29 @@ const ProfileCard = () => {
 	const userProfile = useAuthStore((state) => state.userProfile);
 	const accessToken = useAuthStore((state) => state.accessToken);
 	const { openModal } = useModalStore();
+	const { showConfirm } = useConfirmStore();
 	const logoutMutation = useLogout();
+	const addToast = useToastStore((state) => state.addToast);
 
-	const handleLogout = async () => {
-		try {
-    	const res = await logoutMutation.mutateAsync();
-
-			if (res.status !== "OK") throw res;
-		} catch (e) {
-			console.log(e);
-			alert("로그아웃에 실패했습니다");
+	const confirmLogout = (status) => {
+		if (status === "OK") {
+			addToast("로그아웃이 완료되었습니다.");
+		} else {
+			addToast("일시적인 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
 		}
+	}
+	const handleLogout = async () => {
+		if (!await showConfirm({
+			title: "로그아웃",
+			children: <p>로그아웃 하시겠습니까?</p>,
+			confirmText: "확인",
+			cancelText: "취소"
+		})) {
+			return;
+		}
+		confirmLogout(await logoutMutation.mutateAsync());
   };
 
-	useLogout
 	if (!accessToken || !userProfile) {
 		return (
 			<Button

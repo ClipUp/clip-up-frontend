@@ -1,6 +1,6 @@
 import { useModalStore } from '../../../store/modalStore';
 import IconButton from '../button/IconButton';
-import './Modal.scss';
+import './modal.scss';
 import propTypes from 'prop-types';
 import Close from '../../../assets/icon/close.svg'
 

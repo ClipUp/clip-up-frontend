@@ -26,7 +26,7 @@ const fetchWithAuth = async (path, options) => {
 	const accessToken = useAuthStore.getState().accessToken;
   const apiCall = async () => {
     if (!accessToken) {
-      throw new Error("Unauthorized");
+      return ({status: "UNAUTHORIZED", message: "인증에 실패하였습니다."});
     }
 
     const headers = {
@@ -34,12 +34,7 @@ const fetchWithAuth = async (path, options) => {
       Authorization: `Bearer ${accessToken}`,
     };
     const response = await fetch(`${API_BASE_URL}${path}`, { ...options, headers });
-    if (!response.ok) {
-      if (response.status === 401) {
-        throw new Error("Unauthorized");
-      }
-      throw new Error(`fetchWithAuth() > ${path}: ${response.status}`);
-    }
+
     return response.json();
   }
 

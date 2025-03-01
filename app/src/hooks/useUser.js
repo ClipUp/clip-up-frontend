@@ -63,7 +63,7 @@ const useLogout = () => {
         return data;
       } catch(e) {
         console.log(e);
-        return false;
+        return {status: "ERROR", message: "일시적인 오류"};
       }
     },
   });

@@ -15,6 +15,8 @@ import { ContextMenu } from "./components/ui/modal/ContextMenu";
 import { useEffect } from "react";
 import { useAutoSignIn } from "./hooks/useUser";
 import DeletedNoteList from './components/pages/DeletedNoteList';
+import Toast from './components/ui/modal/Toast';
+import Confirm from './components/ui/modal/Confirm';
 
 const App = () => {
   const accessToken = useAuthStore((state) => state.accessToken);
@@ -50,6 +52,8 @@ const App = () => {
       <Footer></Footer>
       <ContextMenu />
       <Modal />
+      <Confirm />
+      <Toast />
     </BrowserRouter>
   );
 };

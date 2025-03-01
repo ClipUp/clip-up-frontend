@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import CategoryItem from "./CategoryItem";
 import { useAuthStore } from "../../../store/userStore";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useModalStore } from "../../../store/modalStore";
