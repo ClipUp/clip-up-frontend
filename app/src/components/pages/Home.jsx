@@ -3,7 +3,7 @@ import { useRecentNoteList } from '../../hooks/useNote';
 import RecordCard from '../features/audio/RecordCard';
 import Button from '../ui/button/Button';
 import NoticeCard from '../features/note/NoticeCard';
-import DocumentImage from "../../assets/img/document.png"
+import DocumentImage from "../../assets/img/document.webp"
 import { useNavigate } from 'react-router-dom';
 import "./home.scss";
 

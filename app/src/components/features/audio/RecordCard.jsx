@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../../store/userStore';
-import RecordBtnImg from "../../../assets/img/record_button.png"
+import RecordBtnImg from "../../../assets/img/record_button.webp"
 import Button from "../../ui/button/Button"
 import "./recordCard.scss"
 import { useProgressAlertStore, useToastStore } from '../../../store/modalStore';

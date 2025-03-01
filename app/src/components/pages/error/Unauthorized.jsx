@@ -1,7 +1,7 @@
 import Button from "../../ui/button/Button";
 import SignIn from "../../features/user/SignIn";
 import { useModalStore } from "../../../store/modalStore";
-import Landing from "../../../assets/img/landing.png"
+import Landing from "../../../assets/img/landing.webp"
 import "./unauthorized.scss"
 
 const Unauthorized = () => {

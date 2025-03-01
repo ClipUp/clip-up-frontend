@@ -1,6 +1,6 @@
 import AudioRecorder from "../features/audio/AudioRecorder";
 import NoticeCard from "../features/note/NoticeCard";
-import VolumeImage from "../../assets/img/volume.png"
+import VolumeImage from "../../assets/img/volume.webp"
 import "./record.scss"
 
 const Record = () => {

@@ -2,7 +2,7 @@ import NoteListTemplate from '../features/note/NoteListTemplate';
 import { useNoteList } from '../../hooks/useNote';
 import NoticeCard from '../features/note/NoticeCard';
 import Button from '../ui/button/Button';
-import DocumentImage from "../../assets/img/document.png"
+import DocumentImage from "../../assets/img/document.webp"
 import { useNavigate } from 'react-router-dom';
 
 const NoteList = () => {
