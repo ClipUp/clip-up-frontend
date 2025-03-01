@@ -35,10 +35,6 @@ const SignUp = () => {
       setEmailError("");
 			return true;
     } else {
-			const inputElement = document.querySelector(".email");
-			if (inputElement) {
-				inputElement.focus();
-			}
       setEmailError("이메일을 입력해주세요.");
 			return false;
     }
@@ -94,10 +90,6 @@ const SignUp = () => {
   };
 	const handleSignUpError = (status) => {
     if (status === "CONFLICT") {
-			const inputElement = document.querySelector(".email");
-			if (inputElement) {
-				inputElement.focus();
-			}
       setEmailError("이미 사용 중인 이메일입니다.");
       return false;
     }
