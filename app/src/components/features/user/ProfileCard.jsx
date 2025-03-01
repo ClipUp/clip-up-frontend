@@ -33,7 +33,8 @@ const ProfileCard = () => {
 		})) {
 			return;
 		}
-		confirmLogout(await logoutMutation.mutateAsync());
+		const res = await logoutMutation.mutateAsync();
+		confirmLogout(res.status);
   };
 
 	if (!accessToken || !userProfile?.data?.username) {

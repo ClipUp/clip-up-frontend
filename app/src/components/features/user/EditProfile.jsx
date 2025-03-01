@@ -44,7 +44,8 @@ const EditProfile = () => {
 		if (!confirmPasswordSecondary()) {
 			return;
 		}
-		confirmEdit(await handleUpdatePwd());
+		const res = await handleUpdatePwd();
+		confirmEdit(res.status);
 		closeModal();
 	}
 	const handleKeyDown = (event) => {
@@ -69,7 +70,7 @@ const EditProfile = () => {
 				<label htmlFor="password2">새 비밀번호 확인</label>
 				<TextInput name="password2" placeholder="새 비밀번호를 한 번 더 입력해주세요" type="password" value={password2} error={passwordError} onChange={(e) => setPassword2(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
 			</span>
-			<Button title="가입하기" variant="important" onClick={handleRegist}>가입하기</Button>
+			<Button title="가입하기" variant="important" onClick={handleRegist}>확인</Button>
 		</div>
   );
 };
