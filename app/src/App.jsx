@@ -11,7 +11,7 @@ import { useAuthStore } from "./store/userStore";
 import Unauthorized from "./components/pages/error/Unauthorized";
 import Record from "./components/pages/Record";
 import Modal from "./components/ui/modal/Modal";
-import { ContextMenu } from "./components/ui/modal/ContextMenu";
+import { ContextMenu, ProfileContextMenu } from "./components/ui/modal/ContextMenu";
 import { useEffect } from "react";
 import { useAutoSignIn } from "./hooks/useUser";
 import DeletedNoteList from './components/pages/DeletedNoteList';
@@ -52,6 +52,7 @@ const App = () => {
       </Main>
       <Footer></Footer>
       <ContextMenu />
+      <ProfileContextMenu />
       <Modal />
       <Confirm />
       <ProgressAlert />

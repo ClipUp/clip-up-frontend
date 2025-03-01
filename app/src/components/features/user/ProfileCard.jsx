@@ -7,7 +7,7 @@ import Pen from "../../../assets/icon/pen.svg";
 import Logout from "../../../assets/icon/log-out.svg"
 import SignIn from "./SignIn";
 import "./profileCard.scss";
-import { ContextMenuButton, ContextMenuItem } from "../../ui/modal/ContextMenu";
+import { ProfileContextMenuButton, ProfileContextMenuItem } from "../../ui/modal/ContextMenu";
 import EditProfile from "./EditProfile";
 import { useLogout } from "../../../hooks/useUser";
 
@@ -58,10 +58,10 @@ const ProfileCard = () => {
 			<div className="user-data">
 				<span className="username-group">
 					<h6 className="username">{userProfile.data.username}</h6>
-				<ContextMenuButton id="profileMenu" imageUrl={ArrowDown} closeImageUrl={ArrowUp} menuList={[
-          <ContextMenuItem key="edit-profile" title="개인정보 수정" imageUrl={Pen} onClick={() => {openModal(<EditProfile />)}} />,
-          <ContextMenuItem key="logout" title="로그아웃" imageUrl={Logout} onClick={handleLogout} />,
-        ]}></ContextMenuButton>
+				<ProfileContextMenuButton id="profileMenu" imageUrl={ArrowDown} closeImageUrl={ArrowUp} menuList={[
+          <ProfileContextMenuItem key="edit-profile" title="개인정보 수정" imageUrl={Pen} onClick={() => {openModal(<EditProfile />)}} />,
+          <ProfileContextMenuItem key="logout" title="로그아웃" imageUrl={Logout} onClick={handleLogout} />,
+        ]}></ProfileContextMenuButton>
 				</span>
 				<div className="email">{userProfile.data.email}</div>
 			</div>

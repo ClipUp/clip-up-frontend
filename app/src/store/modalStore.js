@@ -65,6 +65,17 @@ const useContextMenuStore = create((set) => ({
   closeContextMenu: () => set({ contextMenu: { isOpen: false, position: { x: 0, y: 0 }, id: null } }),
 }));
 
+const useProfileContextMenuStore = create((set) => ({
+  contextMenu: {
+    isOpen: false,
+    position: { x: 0, y: 0 },
+    id: null,
+    menuList: [],
+  },
+  openContextMenu: (id, x, y, menuList) => set({ contextMenu: { isOpen: true, position: { x, y }, id, menuList } }),
+  closeContextMenu: () => set({ contextMenu: { isOpen: false, position: { x: 0, y: 0 }, id: null } }),
+}));
+
 const useToastStore = create((set) => ({
   toastMessages: [],
   addToast: (message) => {
@@ -79,4 +90,4 @@ const useToastStore = create((set) => ({
   },
 }));
 
-export { useModalStore, useConfirmStore, useProgressAlertStore, useContextMenuStore, useToastStore };
+export { useModalStore, useConfirmStore, useProgressAlertStore, useContextMenuStore, useProfileContextMenuStore, useToastStore };
