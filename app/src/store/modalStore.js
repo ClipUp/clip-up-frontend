@@ -28,6 +28,32 @@ const useConfirmStore = create((set) => ({
     }),
 }));
 
+const useProgressAlertStore = create((set) => ({
+  isOpen: false,
+  title: "",
+  progress: 0,
+  confirmText: "확인",
+  cancelText: "취소",
+  variant: "primary",
+  resolve: null,
+
+  setProgress: (progress) =>
+    set((state) => {
+      return { ...state, progress };
+    }),
+
+  showProgress: ({ title, confirmText, cancelText, variant = "primary" }) =>
+    new Promise((resolve) => {
+      set({ isOpen: true, title, confirmText, cancelText, variant, resolve });
+    }),
+
+  closeProgress: (result) =>
+    set((state) => {
+      if (state.resolve) state.resolve(result);
+      return { isOpen: false, title: "", progress: 0, confirmText: "확인", cancelText: "취소", variant: "primary", resolve: null };
+    }),
+}));
+
 const useContextMenuStore = create((set) => ({
   contextMenu: {
     isOpen: false,
@@ -53,4 +79,4 @@ const useToastStore = create((set) => ({
   },
 }));
 
-export { useModalStore, useConfirmStore, useContextMenuStore, useToastStore };
+export { useModalStore, useConfirmStore, useProgressAlertStore, useContextMenuStore, useToastStore };

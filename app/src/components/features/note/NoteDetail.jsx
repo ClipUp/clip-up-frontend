@@ -1,11 +1,15 @@
-import { useNote } from "../../../hooks/useNote";
+import { useEditNote, useNote } from "../../../hooks/useNote";
 import AudioController from "../audio/AudioController";
 import Calendar from "../../../assets/icon/calendar.svg";
 import {getFormatDate, formatTime} from "../../../utils/dateUtil"
 import "./noteDetail.scss"
+import { useToastStore } from "../../../store/modalStore";
 
 const NoteDetail = ({ noteId }) => {
   const { data, isLoading, error } = useNote(noteId);
+	const addToast = useToastStore((state) => state.addToast);
+	const editMutation = useEditNote();
+
 	const formatText = (text) => {
 		return text.replace(/(🔹|✅)/g, '\n$1');
 	};
@@ -22,13 +26,58 @@ const NoteDetail = ({ noteId }) => {
 		return <div>{formattedText}</div>;
 	};
 
+	const handleEdit = (id) => {
+		const $title = document.querySelector(`.title-text-${id}`);
+		const originTitle = $title.innerHTML;
+
+		if ($title) {
+			$title.contentEditable = "true";
+			$title.focus();
+			const handleClick = (event) => {
+				event.stopPropagation();
+			}
+			const handleOutsideClick = (event) => {
+				if (!$title.contains(event.target)) {
+					saveChanges();
+				}
+			};
+			const handleKeyDown = (event) => {
+				if (event.key === "Enter") {
+					event.preventDefault(); // 줄바꿈 방지
+					saveChanges();
+				}
+			};
+			const saveChanges = async () => {
+				$title.contentEditable = "false";
+				document.removeEventListener("click", handleOutsideClick);
+				$title.removeEventListener("keydown", handleKeyDown);
+				$title.removeEventListener("keydown", handleClick);
+
+				if ($title.innerHTML === originTitle) return;
+				const res = await editMutation.mutateAsync({meetingId: id, title: $title.innerHTML});
+
+				if (res.status !== "OK") {
+					$title.innerHTML = originTitle;
+				} else {
+					addToast("일시적인 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+				}
+			};
+
+			setTimeout(() => {
+				document.addEventListener("click", handleOutsideClick);
+				$title.addEventListener("keydown", handleKeyDown);
+				$title.addEventListener("click", handleClick);
+			}, 0);
+		}
+	};
+
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div className="note-detail">
 			<div className="title-group">
-				<h3>{data.title}</h3>
+				<h3 className={`title-text-${data.id}`} onClick={() => { handleEdit(data.id) }}>{data.title}</h3>
 				<span>
 					<img src={Calendar} />
 					<span>{getFormatDate(data.createTime)}</span>

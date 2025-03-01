@@ -10,6 +10,18 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	h3[contentEditable=true] {
+		color: var(--grey-900);
+		width: fit-content;
+		border: 2px solid var(--Secondary-600, #B2E7CC);
+		height: 47px;
+		line-height: 45px;
+		border-radius: 8px;
+		padding: 4px 12px;
+		&:focus {
+			outline: none;
+		}
+	}
 	> span {
 		color: var(--grey-600);
 		font-weight: 500;

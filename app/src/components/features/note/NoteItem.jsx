@@ -8,9 +8,12 @@ import Rotate from "../../../assets/icon/rotate-left.svg"
 import { useCancleDeleteNote, useDeleteNote, useEditNote } from '../../../hooks/useNote';
 import { ContextMenuButton, ContextMenuItem } from '../../ui/modal/ContextMenu';
 import { getFormatDate } from "../../../utils/dateUtil";
+import { useConfirmStore, useToastStore } from '../../../store/modalStore';
 
 const NoteItem = ({ ref, note, onClick, menuIdList = [] }) => {
   // const {id, title, checked} = note;
+	const { showConfirm } = useConfirmStore();
+	const addToast = useToastStore((state) => state.addToast);
 	const deleteMutation = useDeleteNote();
 	const cancleDeleteMutation = useCancleDeleteNote();
 	const editMutation = useEditNote();
@@ -49,8 +52,11 @@ const NoteItem = ({ ref, note, onClick, menuIdList = [] }) => {
 				if ($title.innerHTML === originTitle) return;
 				const res = await editMutation.mutateAsync({meetingId: id, title: $title.innerHTML});
 
+				console.log(res);
 				if (res.status !== "OK") {
 					$title.innerHTML = originTitle;
+				} else {
+					addToast("일시적인 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
 				}
 			};
 
@@ -62,18 +68,24 @@ const NoteItem = ({ ref, note, onClick, menuIdList = [] }) => {
 		}
 	};
 	const handleDelete = async (meetingIds) => {
-		if (await confirm("삭제하시겠습니까?")) {
+		if (await showConfirm({
+			title: "회의록을 삭제 하시겠습니까?",
+			children: <p>삭제된 회의록은 휴지통으로 이동합니다.</p>,
+			confirmText: "삭제하기",
+			cancelText: "취소",
+			variant: "important"
+		})) {
 			const list = [];
 			list.push(meetingIds);
 			await deleteMutation.mutateAsync({meetingIds: list});
+			addToast("회의록이 휴지통으로 이동되었습니다.");
 		}
 	}
 	const handleCancleDelete = async (meetingIds) => {
-		if (await confirm("복원하시겠습니까?")) {
-			const list = [];
-			list.push(meetingIds);
-			await cancleDeleteMutation.mutateAsync({meetingIds: list});
-		}
+		const list = [];
+		list.push(meetingIds);
+		await cancleDeleteMutation.mutateAsync({meetingIds: list});
+		addToast("회의록 복원이 완료되었습니다.");
 	}
 	const menuList = (id) => {
     const list = [];

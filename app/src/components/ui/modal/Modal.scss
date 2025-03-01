@@ -16,17 +16,7 @@
 		padding: 20px;
 		padding: 92px 76px;
 		position: relative;
-
-		.modal-content {
-
-		}
-		.modal-buttons {
-			width: 100%;
-			align-items: center;
-			justify-content: end;
-		}
 	}
-
 	.icon-button {
 		position: absolute;
 		width: 24px;
@@ -39,6 +29,55 @@
 			width: 100%;
 		}
 	}
+
+	.confirm {
+		min-width: 551px;
+		padding: 40px;
+		border-radius: var(--scale-16);
+		box-shadow: inset;
+		background-color: var(--white);
+		.confirm-title {
+			font-size: 24px;
+			font-weight: 700;
+		}
+		.confirm-content {
+			width: 100%;
+			height: fit-content;
+			display: flex;
+		}
+		.confirm-button-group {
+			width: 100%;
+			margin-top: 32px;
+			display: flex;
+			align-items: center;
+			justify-content: end;
+			font-size: 16px;
+
+			> .confirm-content {
+				font-size: 14px;
+				color: var(--grey-600);
+				margin-top: 16px;
+			}
+
+			> button {
+				width: fit-content;
+				border-radius: var(--scale-12);
+				padding: 12px 20px;
+				margin-left: 8px;
+				font-weight: 600;
+				color: var(--white);
+				background-color: var(--grey-700);
+			}
+			&.primary > .confirm-button {
+				color: var(--grey-900);
+				background-color: var(--primary-100);
+			}
+			&.important > .confirm-button {
+				color: var(--white);
+				background-color:#F34D4D;
+			}
+		}
+	}
 }
 
 .toast-card {
@@ -49,6 +88,7 @@
 	z-index: 100;
 	display: flex;
 	flex-direction: column;
+	margin-top: 16px;
 	.toast-message {
 		font-weight: 600;
 		font-size: 18px;

@@ -33,9 +33,13 @@ const fetchWithAuth = async (path, options) => {
       ...(options.headers || {}),
       Authorization: `Bearer ${accessToken}`,
     };
-    const response = await fetch(`${API_BASE_URL}${path}`, { ...options, headers });
+    try {
+      const res = await fetch(`${API_BASE_URL}${path}`, { ...options, headers });
 
-    return response.json();
+      return res.json();
+    } catch (e) {
+      return e;
+    }
   }
 
   return await fetchWithAutoRetry(apiCall);

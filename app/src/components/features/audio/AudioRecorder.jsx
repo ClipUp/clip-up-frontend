@@ -3,19 +3,26 @@ import { useCreateNote } from "../../../hooks/useNote";
 import AudioRecorderUtil from "../../../utils/audioRecorderUtil";
 import Microphone from "../../../assets/icon/microphone-circle.svg"
 import {formatTimeHHmmSS} from "../../../utils/dateUtil"
+import ProgressBar from "./ProgressBar";
 import "./audioRecorder.scss"
 import Stop from "../../../assets/icon/stop.svg";
 import Pause from "../../../assets/icon/pause.svg";
 import Start from "../../../assets/icon/start.svg";
+import { useNavigate } from "react-router-dom";
+import { useProgressAlertStore, useToastStore } from "../../../store/modalStore";
 
 
 const AudioRecorder = () => {
   const [isRecording, setIsRecording] = useState(false);
+  const cancelAPIRef = useRef(null);
   // const [audioUrl, setAudioUrl] = useState(null);
   // const canvasRef = useRef(null);
   const recorderRef = useRef(null);
   const noteMutation = useCreateNote();
   const [recordingTime, setRecordingTime] = useState(0);
+  const addToast = useToastStore((state) => state.addToast);
+  const navigate = useNavigate();
+  const { showProgress, closeProgress, setProgress } = useProgressAlertStore();
 
   useEffect(() => {
     recorderRef.current = new AudioRecorderUtil(
@@ -56,24 +63,57 @@ const AudioRecorder = () => {
   };
 
   const handleAudioSave = async (wavBlob) => {
-    const bars = document.querySelectorAll("#audioWave rect");
-    // const url = URL.createObjectURL(wavBlob);
+    const updateProgress = () => {
+      let currentProgress = 0;
+      const interval = setInterval(() => {
+        if (currentProgress < 90) {
+          currentProgress += 1;
+          setProgress(currentProgress);
+        } else {
+          clearInterval(interval);
+        }
+      }, 1000);
+      return interval;
+    };
 
-    // setAudioUrl(url);
-    bars.forEach((bar) => {
-      bar.setAttribute("fill", "#B0B0B0");
+    showProgress({
+      title: "회의록 생성 중",
+      confirmText: "닫기",
+    }).then((res) => {
+      if (res) {
+        handleCancel();
+        addToast("회의록을 생성하고 있습니다. 잠시만 기다려주세요.");
+      }
     });
-    // const downloadBlob = (blob, filename) => {
-    //   const link = document.createElement("a");
-    //   link.href = URL.createObjectURL(blob);
-    //   link.download = filename;
-    //   document.body.appendChild(link);
-    //   link.click();
-    //   document.body.removeChild(link);
-    // };
 
-    // downloadBlob(wavBlob, "test.wav");
-    await noteMutation.mutateAsync(wavBlob);
+    // 프로그레스 업데이트 시작
+    const progressInterval = updateProgress();
+    cancelAPIRef.current = () => {
+      clearInterval(progressInterval); // 진행 중단
+      closeProgress(false); // 다이얼로그 닫기
+    };
+
+    try {
+      const res = await noteMutation.mutateAsync(wavBlob);
+      if (res.status === "CREATED") {
+        addToast("회의록 생성이 완료되었습니다.");
+      } else {
+        addToast("일시적인 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+      }
+      setProgress(100);
+    } catch (e) {
+      console.log(e);
+      addToast("일시적인 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+    }
+    handleCancel();
+    closeProgress(false);
+    navigate("/");
+  };
+
+  const handleCancel = () => {
+    if (cancelAPIRef.current) {
+      cancelAPIRef.current();
+    }
   };
 
   const drawWaveform = (dataArray) => {

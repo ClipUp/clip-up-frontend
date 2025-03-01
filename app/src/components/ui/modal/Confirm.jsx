@@ -1,21 +1,24 @@
 import { useConfirmStore } from "../../../store/modalStore";
+import "./modal.scss";
 
 const Confirm = () => {
-  const { isOpen, title, children, confirmText, cancelText, closeDialog, variant } = useConfirmStore();
+  const { isOpen, title, children, confirmText, cancelText, closeConfirm, variant } = useConfirmStore();
 
   if (!isOpen) return null;
 
   return (
-    <div className={`modal-overlay
-			${variant === 'primary' ? 'primary' : ''}
-			${variant === 'important' ? 'important' : ''}`
-		}>
-      <div className=".modal">
-				<div className="modal-title">{title}</div>
-        <div className="modal-content">{children}</div>
-        <div className="modal-buttons">
-          { confirmText && <button onClick={() => closeDialog(true)}>{confirmText}</button> }
-          { cancelText && <button onClick={() => closeDialog(false)}>{cancelText}</button> }
+    <div className="modal-overlay">
+      <div className="confirm">
+				<h4 className="confirm-title">{title}</h4>
+				{(children !== null && children !== undefined) && (
+					<div className="confirm-content">{children}</div>
+				)}
+        <div className={`confirm-button-group
+				${variant === 'primary' ? 'primary' : ''}
+				${variant === 'important' ? 'important' : ''}`
+				}>
+          { confirmText && <button className="confirm-button" onClick={() => closeConfirm(true)}>{confirmText}</button> }
+          { cancelText && <button className="cancle-button" onClick={() => closeConfirm(false)}>{cancelText}</button> }
         </div>
       </div>
     </div>

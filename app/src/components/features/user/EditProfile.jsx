@@ -55,22 +55,22 @@ const EditProfile = () => {
   };
 
   return (
-	<div className="sign-up-form">
-		<h3>개인 정보 수정</h3>
-		<span className="input-group">
-			<label htmlFor="email">이메일</label>
-			<TextInput name="email" placeholder="이메일" type="text" value={userProfile.data.email} disabled={true}></TextInput>
-			<label htmlFor="username">이름</label>
-			<TextInput name="username" placeholder="이름" type="text" value={userProfile.data.username} disabled={true}></TextInput>
-			<label htmlFor="password">기존 비밀번호</label>
-			<TextInput name="password" placeholder="기존 비밀번호를 입력해주세요" type="password" value={originalPassword} onChange={(e) => setOriginalPassword(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
-			<label htmlFor="password">비밀번호 변경</label>
-			<TextInput name="password" placeholder="새 비밀번호를 입력해주세요" type="password" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
-			<label htmlFor="password2">새 비밀번호 확인</label>
-			<TextInput name="password2" placeholder="새 비밀번호를 한 번 더 입력해주세요" type="password" value={password2} error={passwordError} onChange={(e) => setPassword2(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
-	  </span>
-		<Button title="가입하기" variant="important" onClick={handleRegist}>가입하기</Button>
-	</div>
+		<div className="sign-up-form">
+			<h3>개인 정보 수정</h3>
+			<span className="input-group">
+				<label htmlFor="email">이메일</label>
+				<TextInput name="email" placeholder="이메일" type="text" value={userProfile.data.email} disabled={true}></TextInput>
+				<label htmlFor="username">이름</label>
+				<TextInput name="username" placeholder="이름" type="text" value={userProfile.data.username} disabled={true}></TextInput>
+				<label htmlFor="password">기존 비밀번호</label>
+				<TextInput name="password" placeholder="기존 비밀번호를 입력해주세요" type="password" value={originalPassword} onChange={(e) => setOriginalPassword(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
+				<label htmlFor="password">비밀번호 변경</label>
+				<TextInput name="password" placeholder="새 비밀번호를 입력해주세요" type="password" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
+				<label htmlFor="password2">새 비밀번호 확인</label>
+				<TextInput name="password2" placeholder="새 비밀번호를 한 번 더 입력해주세요" type="password" value={password2} error={passwordError} onChange={(e) => setPassword2(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
+			</span>
+			<Button title="가입하기" variant="important" onClick={handleRegist}>가입하기</Button>
+		</div>
   );
 };
 

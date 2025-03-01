@@ -72,7 +72,7 @@ const ContextMenuButton = ({ id, imageUrl, menuList }) => {
 
 	return (
 		<button title="설정 버튼" className="context-menu-button" onClick={handleClick}>
-			<img src={imageUrl} alt="설정 버튼" style={{ width: '24px', height: '24px' }} />
+			<img src={imageUrl} alt="설정 버튼" />
 		</button>
 	);
 };

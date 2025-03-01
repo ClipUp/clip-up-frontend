@@ -52,7 +52,7 @@ export const userAPI = {
 
   updateUserPwd: async ({originalPassword, newPassword}) => {
     const res = await fetchWithAuth("/api/v1/auth/password", {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },

@@ -27,8 +27,7 @@ const ProfileCard = () => {
 	}
 	const handleLogout = async () => {
 		if (!await showConfirm({
-			title: "로그아웃",
-			children: <p>로그아웃 하시겠습니까?</p>,
+			title: "로그아웃 하시겠습니까?",
 			confirmText: "확인",
 			cancelText: "취소"
 		})) {
@@ -37,7 +36,7 @@ const ProfileCard = () => {
 		confirmLogout(await logoutMutation.mutateAsync());
   };
 
-	if (!accessToken || !userProfile) {
+	if (!accessToken || !userProfile?.data?.username) {
 		return (
 			<Button
 				title="로그인"

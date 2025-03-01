@@ -91,18 +91,19 @@ const useEditNote = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ meetingId, title }) => {
+    mutationFn: ({ meetingId, title }) => {
       // queryClient.setQueryData(['note', meetingId], (oldData) => {
       //   if (!oldData) return oldData;
       //   return { ...oldData, title };
       // });
-      return await noteAPI.editNote({ meetingId, title });
+      return noteAPI.editNote({ meetingId, title });
     },
     onSuccess: () => {
       // queryClient.invalidateQueries(['note', meetingId]);
       queryClient.invalidateQueries(["notes", "recent"]);
       queryClient.invalidateQueries(["notes", "all"]);
     },
+    select: (response) => response.data,
   });
 };
 
