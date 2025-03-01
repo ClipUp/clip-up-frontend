@@ -59,7 +59,7 @@ const ContextMenu = () => {
   );
 };
 
-const ContextMenuButton = ({ id, imageUrl, menuList }) => {
+const ContextMenuButton = ({ id, imageUrl, closeImageUrl, menuList }) => {
   const { openContextMenu, closeContextMenu, contextMenu } = useContextMenuStore((state) => state);
 
   const handleClick = (e) => {
@@ -71,12 +71,12 @@ const ContextMenuButton = ({ id, imageUrl, menuList }) => {
     const buttonRect = e.target.getBoundingClientRect();
     const { top, left, width } = buttonRect;
 
-    openContextMenu(id, left + width, top + buttonRect.height, menuList);
+    openContextMenu(id, left, top + buttonRect.height, menuList);
   };
 
 	return (
 		<button title="설정 버튼" className="context-menu-button" onClick={handleClick}>
-			<img src={imageUrl} alt="설정 버튼" />
+			<img src={closeImageUrl && contextMenu.isOpen ? closeImageUrl : imageUrl} alt="설정 버튼" />
 		</button>
 	);
 };

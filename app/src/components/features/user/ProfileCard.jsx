@@ -2,6 +2,7 @@ import { useConfirmStore, useModalStore, useToastStore } from "../../../store/mo
 import { useAuthStore } from "../../../store/userStore";
 import Button from "../../ui/button/Button";
 import ArrowDown from "../../../assets/icon/arrow-down.svg";
+import ArrowUp from "../../../assets/icon/arrow.svg";
 import Pen from "../../../assets/icon/pen.svg";
 import Logout from "../../../assets/icon/log-out.svg"
 import SignIn from "./SignIn";
@@ -57,7 +58,7 @@ const ProfileCard = () => {
 			<div className="user-data">
 				<span className="username-group">
 					<h6 className="username">{userProfile.data.username}</h6>
-				<ContextMenuButton id="profileMenu" imageUrl={ArrowDown} menuList={[
+				<ContextMenuButton id="profileMenu" imageUrl={ArrowDown} closeImageUrl={ArrowUp} menuList={[
           <ContextMenuItem key="edit-profile" title="개인정보 수정" imageUrl={Pen} onClick={() => {openModal(<EditProfile />)}} />,
           <ContextMenuItem key="logout" title="로그아웃" imageUrl={Logout} onClick={handleLogout} />,
         ]}></ContextMenuButton>
