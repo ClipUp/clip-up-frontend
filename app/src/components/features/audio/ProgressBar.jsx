@@ -4,7 +4,6 @@ import "./progressBar.scss"
 const ProgressBar = () => {
   const { progress } = useProgressAlertStore();
 
-  console.log(progress);
   return (
     <div className="progress-bar">
       <div
