@@ -60,10 +60,14 @@ const ContextMenu = () => {
 };
 
 const ContextMenuButton = ({ id, imageUrl, menuList }) => {
-  const openContextMenu = useContextMenuStore((state) => state.openContextMenu);
+  const { openContextMenu, closeContextMenu, contextMenu } = useContextMenuStore((state) => state);
 
   const handleClick = (e) => {
 		e.stopPropagation();
+
+    if (contextMenu.isOpen) {
+      return closeContextMenu();
+    }
     const buttonRect = e.target.getBoundingClientRect();
     const { top, left, width } = buttonRect;
 
