@@ -52,13 +52,22 @@ const NoteDetail = ({ noteId }) => {
 				document.removeEventListener("click", handleOutsideClick);
 				$title.removeEventListener("keydown", handleKeyDown);
 				$title.removeEventListener("click", handleClick);
-
+				console.log($title.innerHTML.length)
 				if ($title.innerHTML === originTitle) return;
+				if ($title.innerHTML.length < 2 || $title.innerHTML.length > 40) {
+					$title.innerHTML = originTitle;
+					addToast("제목은 2-40자까지 입력할 수 있습니다.");
+					return;
+				}
 				const res = await editMutation.mutateAsync({meetingId: id, title: $title.innerHTML});
 
 				if (res.status !== "OK") {
 					$title.innerHTML = originTitle;
-					addToast("일시적인 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+					if (res.status === "BAD_REQUEST") {
+						addToast("제목은 2-40자까지 입력할 수 있습니다.");
+					} else {
+						addToast("일시적인 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
+					}
 				}
 			};
 
