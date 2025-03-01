@@ -13,6 +13,7 @@ nav {
 		background: rgba(245, 239, 235, 0.16);
 		color: var(--grey-500);
 		text-decoration: none;
+		box-sizing: border-box;
 
 		&.active {
 			color: var(--grey-900);

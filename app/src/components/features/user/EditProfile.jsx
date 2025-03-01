@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextInput from '../../ui/textInput/TextInput'
 import Button from '../../ui/button/Button'
 import { useUpdateUserPwd } from "../../../hooks/useUser";
@@ -11,29 +11,76 @@ const EditProfile = () => {
 	const [originalPassword, setOriginalPassword] = useState("");
   const [password, setPassword] = useState("");
 	const [password2, setPassword2] = useState("");
+	const [originalPasswordError, setOriginalPasswordError] = useState("");
 	const [passwordError, setPasswordError] = useState("");
+	const [passwordError2, setPasswordError2] = useState("");
+	const [disabled, setDisabled] = useState(false);
 	const { closeModal } = useModalStore();
   const updateUserPwdMutation = useUpdateUserPwd();
 	const addToast = useToastStore((state) => state.addToast);
 
-	const handleUpdatePwd = async () => {
-    return await updateUserPwdMutation.mutateAsync({originalPassword: originalPassword, newPassword: password});
-  };
+	useEffect(() => {
+		setDisabled(true);
+		if (!confirmInputs({originalPassword, password, password2})) return;
+		setDisabled(false);
+	}, [originalPassword, password, password2]);
 
-	const confirmPasswordSecondary = () => {
+	const confirmOriginalPassword = (originalPassword) => {
+		if (originalPassword && originalPassword.length > 0) {
+			setOriginalPasswordError("");
+			return true;
+		}
+		setOriginalPasswordError("기존 비밀번호를 입력해주세요.");
+		return false;
+	}
+	const confirmPassword = (password) => {
+		const hasAlphabet = /[a-zA-Z]/.test(password);
+		const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>_\\-]/.test(password);
+
+		if (!password || password.length < 8 || !hasAlphabet || !hasSpecialChar) {
+			setPasswordError("비밀번호는 최소 8자 이상이며, 영문, 숫자, 특수문자를 포함해야 합니다.");
+			return false;
+    } else if (password === originalPassword) {
+			setPasswordError("기존 비밀번호와 다른 비밀번호를 입력해주세요.");
+			return false;
+		}
+		setPasswordError("");
+		return true;
+	};
+	const confirmPasswordSecondary = (password2) => {
     if (password === password2) {
-      setPasswordError("");
+      setPasswordError2("");
 			return true;
     } else {
-			const inputElement = document.querySelector(".password");
-			if (inputElement) {
-				inputElement.focus();
-			}
-      setPasswordError("비밀번호가 일치하지 않습니다.");
+      setPasswordError2("변경할 비밀번호와 일치하지 않습니다.");
 			return false;
     }
   };
-	const confirmEdit = (status) => {
+	const confirmInputs = ({ originalPassword, password, password2}) => {
+		if (!confirmOriginalPassword(originalPassword)) return false;
+		if (!confirmPassword(password)) return false;
+		if (!confirmPasswordSecondary(password2)) return false;
+
+		return true;
+	}
+
+	const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleRegist();
+    }
+  };
+	const handleEditError = (status) => {
+    if (status === "UNAUTHORIZED") {
+      setOriginalPasswordError("비밀번호가 일치하지 않습니다.");
+			return false;
+		}
+    return true;
+  };
+	const handleUpdatePwd = async () => {
+    return await updateUserPwdMutation.mutateAsync({originalPassword: originalPassword, newPassword: password});
+  };
+	const toastEditResult = (status) => {
 		if (status === "OK") {
 			addToast("개인정보 수정이 완료되었습니다.");
 		} else {
@@ -41,19 +88,13 @@ const EditProfile = () => {
 		}
 	}
 	const handleRegist = async () => {
-		if (!confirmPasswordSecondary()) {
-			return;
-		}
+		if (!confirmInputs({originalPassword, password, password2})) return;
+
 		const res = await handleUpdatePwd();
-		confirmEdit(res.status);
+		if (!handleEditError(res.status)) return;
+		toastEditResult(res.status);
 		closeModal();
 	}
-	const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      handleRegist();
-    }
-  };
 
   return (
 		<div className="sign-up-form">
@@ -63,14 +104,22 @@ const EditProfile = () => {
 				<TextInput name="email" placeholder="이메일" type="text" value={userProfile.data.email} disabled={true}></TextInput>
 				<label htmlFor="username">이름</label>
 				<TextInput name="username" placeholder="이름" type="text" value={userProfile.data.username} disabled={true}></TextInput>
-				<label htmlFor="password">기존 비밀번호</label>
-				<TextInput name="password" placeholder="기존 비밀번호를 입력해주세요" type="password" value={originalPassword} onChange={(e) => setOriginalPassword(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
+				<label htmlFor="originPassword">기존 비밀번호</label>
+				<TextInput
+					name="originPassword" placeholder="기존 비밀번호를 입력해주세요" type="password" value={originalPassword} error={originalPasswordError}
+					onChange={(e) => setOriginalPassword(e.target.value)} onKeyDown={handleKeyDown}
+				/>
 				<label htmlFor="password">비밀번호 변경</label>
-				<TextInput name="password" placeholder="새 비밀번호를 입력해주세요" type="password" value={password} onChange={(e) => setPassword(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
+				<TextInput
+					name="password" placeholder="새 비밀번호를 입력해주세요" type="password" value={password} error={passwordError}
+					onChange={(e) => setPassword(e.target.value)} onKeyDown={handleKeyDown}
+				/>
 				<label htmlFor="password2">새 비밀번호 확인</label>
-				<TextInput name="password2" placeholder="새 비밀번호를 한 번 더 입력해주세요" type="password" value={password2} error={passwordError} onChange={(e) => setPassword2(e.target.value)} onKeyDown={handleKeyDown}></TextInput>
-			</span>
-			<Button title="가입하기" variant="important" onClick={handleRegist}>확인</Button>
+				<TextInput
+					name="password2" placeholder="새 비밀번호를 한 번 더 입력해주세요" type="password" value={password2} error={passwordError2}
+					onChange={(e) => setPassword2(e.target.value)} onKeyDown={handleKeyDown}
+				/>			</span>
+			<Button title="가입하기" variant="important" onClick={handleRegist} disabled={disabled}>확인</Button>
 		</div>
   );
 };
