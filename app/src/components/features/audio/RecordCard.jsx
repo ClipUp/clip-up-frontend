@@ -5,6 +5,7 @@ import RecordBtnImg from "../../../assets/img/record_button.webp"
 import Button from "../../ui/button/Button"
 import "./recordCard.scss"
 import { useProgressAlertStore, useToastStore } from '../../../store/modalStore';
+import { useQueryClient } from '@tanstack/react-query';
 
 const RecordCard = () => {
 	const navigate = useNavigate();
@@ -13,6 +14,7 @@ const RecordCard = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
 	const accessToken = useAuthStore((state) => state.accessToken);
 	const addToast = useToastStore((state) => state.addToast);
+	const queryClient = useQueryClient();
 	const { showProgress, closeProgress, setProgress } = useProgressAlertStore();
 
 	const handleButtonClick = () => {
@@ -49,6 +51,8 @@ const RecordCard = () => {
       };
       xhr.onload = () => {
         if (xhr.status === 201) {
+					queryClient.invalidateQueries(["notes", "recent"]);
+					queryClient.invalidateQueries(["notes", "all"]);
           addToast("회의록 생성이 완료되었습니다.");
           setProgress(100);
         } else {
