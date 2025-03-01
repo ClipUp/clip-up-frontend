@@ -18,7 +18,7 @@ const useSignIn = () => {
       if (data.data?.accessToken) {
         setAccessToken(data.data.accessToken);
         setUserProfile(await userAPI.getUser());
-        sessionStorage.setItem("RT", "Y");
+        localStorage.setItem("RT", "Y");
       }
       return data;
     },
@@ -36,7 +36,7 @@ const useAutoSignIn = () => {
         if (data.data?.accessToken) {
           setAccessToken(data.data.accessToken);
           setUserProfile(await userAPI.getUser());
-          sessionStorage.setItem("RT", "Y");
+          localStorage.setItem("RT", "Y");
         }
         return data;
       } catch(e) {
@@ -58,7 +58,7 @@ const useLogout = () => {
         if (data.status === "OK") {
           setAccessToken(null);
           setUserProfile(null);
-          sessionStorage.setItem("RT", "N");
+          localStorage.setItem("RT", "N");
         }
         return data;
       } catch(e) {

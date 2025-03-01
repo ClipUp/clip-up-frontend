@@ -28,7 +28,7 @@ const App = () => {
   const autoSiginInMutation = useAutoSignIn();
   useEffect(() => {
     const fetchToken = async () => {
-      if (!accessToken && sessionStorage.getItem("RT") !== "N") {
+      if (!accessToken && localStorage.getItem("RT") !== "N") {
         await autoSiginInMutation.mutateAsync();
       }
     };
