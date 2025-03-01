@@ -51,14 +51,13 @@ const NoteDetail = ({ noteId }) => {
 				$title.contentEditable = "false";
 				document.removeEventListener("click", handleOutsideClick);
 				$title.removeEventListener("keydown", handleKeyDown);
-				$title.removeEventListener("keydown", handleClick);
+				$title.removeEventListener("click", handleClick);
 
 				if ($title.innerHTML === originTitle) return;
 				const res = await editMutation.mutateAsync({meetingId: id, title: $title.innerHTML});
 
 				if (res.status !== "OK") {
 					$title.innerHTML = originTitle;
-				} else {
 					addToast("일시적인 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
 				}
 			};

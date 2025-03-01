@@ -92,10 +92,11 @@ const useEditNote = () => {
 
   return useMutation({
     mutationFn: ({ meetingId, title }) => noteAPI.editNote({ meetingId, title }),
-    onSuccess: () => {
+    onSuccess: (data) => {
       // queryClient.invalidateQueries(['note', meetingId]);
       queryClient.invalidateQueries(["notes", "recent"]);
       queryClient.invalidateQueries(["notes", "all"]);
+      return data;
     },
   });
 };
