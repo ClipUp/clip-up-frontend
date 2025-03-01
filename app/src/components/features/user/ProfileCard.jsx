@@ -39,11 +39,11 @@ const ProfileCard = () => {
 
 	if (!accessToken || !userProfile?.data?.username) {
 		return (
-			<section className="profile-section">
-			<Button
-				title="로그인"
-				onClick={() => {openModal(<SignIn />)}}
-			>로그인</Button>
+			<section className="empty-profile-section">
+				<Button
+					title="로그인"
+					onClick={() => {openModal(<SignIn />)}}
+				>로그인</Button>
 			</section>
 		)
 	}
