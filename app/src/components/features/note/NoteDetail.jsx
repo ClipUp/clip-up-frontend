@@ -52,7 +52,7 @@ const NoteDetail = ({ noteId }) => {
 				document.removeEventListener("click", handleOutsideClick);
 				$title.removeEventListener("keydown", handleKeyDown);
 				$title.removeEventListener("click", handleClick);
-				console.log($title.innerHTML.length)
+
 				if ($title.innerHTML === originTitle) return;
 				if ($title.innerHTML.length < 2 || $title.innerHTML.length > 40) {
 					$title.innerHTML = originTitle;
