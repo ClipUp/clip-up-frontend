@@ -45,13 +45,14 @@
 		border-radius: 3px;
 		overflow: hidden;
 		margin: 0;
+		cursor: pointer;
 	}
 	.progress-fill {
 		height: 100%;
 		background: var(--grey-900);
 		transform-origin: left center;  /* 왼쪽 끝에서부터 크기 변경 */
 		transform: scaleX(0);  /* 초기값을 0으로 설정 */
-		transition: transform 0.3s ease-out;
+		// transition: transform 0.3s ease-out;
 	}
 	.progress-time {
 		color: var(--grey-700);

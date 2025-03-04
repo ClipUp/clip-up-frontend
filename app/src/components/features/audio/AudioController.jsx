@@ -5,9 +5,11 @@ import Start from "../../../assets/icon/start.svg";
 
 const AudioController = ({ audioUrl }) => {
   const audioRef = useRef(null);
+  const progressBarRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -16,8 +18,8 @@ const AudioController = ({ audioUrl }) => {
       const updateTime = () => setCurrentTime(audio.currentTime);
       const updateDuration = () => setDuration(audio.duration);
       const handleEnd = () => {
-        setCurrentTime(audio.duration); // 오디오 끝나면 currentTime을 마지막 시간으로 설정
-        setIsPlaying(false); // 오디오 끝나면 멈춤 상태로 설정
+        setCurrentTime(audio.duration);
+        setIsPlaying(false);
       };
 
       audio.addEventListener("timeupdate", updateTime);
@@ -32,6 +34,20 @@ const AudioController = ({ audioUrl }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (isDragging) {
+      window.addEventListener("mousemove", handleProgressMouseMove);
+      window.addEventListener("mouseup", handleProgressMouseUp);
+    } else {
+      window.removeEventListener("mousemove", handleProgressMouseMove);
+      window.removeEventListener("mouseup", handleProgressMouseUp);
+    }
+    return () => {
+      window.removeEventListener("mousemove", handleProgressMouseMove);
+      window.removeEventListener("mouseup", handleProgressMouseUp);
+    };
+  }, [isDragging]);
+
   const togglePlay = () => {
     if (!audioRef.current) return;
     if (isPlaying) {
@@ -39,15 +55,42 @@ const AudioController = ({ audioUrl }) => {
     } else {
       audioRef.current.play();
     }
-    setIsPlaying((prev) => !prev); // 현재 상태를 반전시켜서 재생/멈춤을 토글
+    setIsPlaying((prev) => !prev);
   };
 
-  const seek = (offset) => {
+  const skip = (offset) => {
     if (!audioRef.current) return;
     audioRef.current.currentTime = Math.min(
       Math.max(audioRef.current.currentTime + offset, 0),
       duration
     );
+  };
+
+  const seek = (clientX) => {
+    if (!progressBarRef.current || !audioRef.current) return;
+
+    const rect = progressBarRef.current.getBoundingClientRect();
+    const clickX = clientX - rect.left;
+    const newProgress = Math.max(0, Math.min(clickX / rect.width, 1));
+
+    audioRef.current.currentTime = newProgress * audioRef.current.duration;
+    progressBarRef.current.querySelector(".progress-fill").style.transform = `scaleX(${newProgress})`;
+  };
+
+  const handleProgressMouseDown = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+    seek(e.clientX);
+  };
+
+  const handleProgressMouseMove = (e) => {
+    if (isDragging) {
+      seek(e.pageX);
+    }
+  };
+
+  const handleProgressMouseUp = () => {
+    setIsDragging(false);
   };
 
   const formatTime = (time) => {
@@ -62,12 +105,14 @@ const AudioController = ({ audioUrl }) => {
       <div className="audio-controller">
         <audio ref={audioRef} src={audioUrl} />
         <div className="progress-group">
-          <div className="progress-bar">
+          <div
+            ref={progressBarRef}
+            className="progress-bar"
+            onMouseDown={handleProgressMouseDown}
+          >
             <div
               className="progress-fill"
-              style={{
-                transform: `scaleX(${duration > 0 ? currentTime / duration : 0})`,
-              }}
+              style={{transform: `scaleX(${duration > 0 ? currentTime / duration : 0})`,}}
             />
           </div>
           <div className="progress-time">
@@ -76,12 +121,12 @@ const AudioController = ({ audioUrl }) => {
           </div>
         </div>
         <div className="controller-group">
-          <button className="seek-backward" onClick={() => seek(-5)}>
+          <button className="seek-backward" onClick={() => skip(-5)}>
           </button>
           <button className="toggle-play" onClick={togglePlay}>
             {isPlaying ? <img src={Pause} /> : <img src={Start} />}
           </button>
-          <button className="seek-forward" onClick={() => seek(5)}>
+          <button className="seek-forward" onClick={() => skip(5)}>
           </button>
         </div>
       </div>
