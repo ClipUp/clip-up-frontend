@@ -26,9 +26,10 @@ export const noteAPI = {
       return [];
     }
   },
-  createNote: async ({ data }) => {
+  createNote: async ({ audioFile, audioFileDuration }) => {
 		const formData = new FormData();
-    formData.append("audioFile", data, "recording.wav")
+    formData.append("audioFile", audioFile, "recording.wav");
+		formData.append("audioFileDuration", audioFileDuration);
 
     const res = await fetchWithAuth("/api/v1/meetings", {
       method: "POST",

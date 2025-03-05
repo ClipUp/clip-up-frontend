@@ -17,14 +17,26 @@ const RecordCard = () => {
 	const queryClient = useQueryClient();
 	const { showSpinner, closeSpinner } = useSpinnerAlertStore();
 
+	const getAudioFileDuration = (file) => {
+		return new Promise((resolve) => {
+			const audio = new Audio();
+			audio.src = URL.createObjectURL(file);
+
+			audio.onloadedmetadata = () => {
+				const audioFileDuration = Math.floor(audio.duration / 60);
+				resolve(audioFileDuration); // duration 값을 Promise로 반환
+			};
+		});
+	};
 	const handleButtonClick = () => {
     fileInputRef.current.click();
   };
-	const handleFileChange = (event) => {
+	const handleFileChange = async (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
       const formData = new FormData();
       formData.append('audioFile', selectedFile);
+			formData.append('audioFileDuration', await getAudioFileDuration(selectedFile));
 
 			showSpinner({
 				title: "회의록 생성 중",

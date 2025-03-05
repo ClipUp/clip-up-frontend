@@ -48,9 +48,8 @@ const useDeletedNoteList = (pageLimit) => {
 };
 
 const useCreateNote = () => {
-  const accessToken = useAuthStore((state) => state.accessToken);
   return useMutation({
-    mutationFn: (data) => noteAPI.createNote({data, accessToken})
+    mutationFn: (data) => noteAPI.createNote(data)
   });
 };
 

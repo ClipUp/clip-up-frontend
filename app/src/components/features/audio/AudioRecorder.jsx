@@ -79,7 +79,7 @@ const AudioRecorder = () => {
     };
 
     try {
-      const res = await noteMutation.mutateAsync(wavBlob);
+      const res = await noteMutation.mutateAsync({audioFile: wavBlob, audioFileDuration: Math.floor(recordingTime / 60)});
       if (res.status === "CREATED") {
         addToast("회의록 생성이 완료되었습니다.");
       } else {
