@@ -17,7 +17,6 @@ import { useAutoSignIn } from "./hooks/useUser";
 import DeletedNoteList from './components/pages/DeletedNoteList';
 import Toast from './components/ui/modal/Toast';
 import Confirm from './components/ui/modal/Confirm';
-import ProgressAlert from './components/ui/modal/ProgressAlert';
 
 const App = () => {
   const accessToken = useAuthStore((state) => state.accessToken);
@@ -55,7 +54,6 @@ const App = () => {
       <ProfileContextMenu />
       <Modal />
       <Confirm />
-      <ProgressAlert />
       <Toast />
     </BrowserRouter>
   );

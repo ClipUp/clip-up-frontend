@@ -54,6 +54,27 @@ const useProgressAlertStore = create((set) => ({
     }),
 }));
 
+const useSpinnerAlertStore = create((set) => ({
+  isOpen: false,
+  title: "",
+  progress: 0,
+  confirmText: "확인",
+  cancelText: "취소",
+  variant: "primary",
+  resolve: null,
+
+  showSpinner: ({ title, confirmText, cancelText, variant = "primary" }) =>
+    new Promise((resolve) => {
+      set({ isOpen: true, title, confirmText, cancelText, variant, resolve });
+    }),
+
+  closeSpinner: (result) =>
+    set((state) => {
+      if (state.resolve) state.resolve(result);
+      return { isOpen: false, title: "", progress: 0, confirmText: "확인", cancelText: "취소", variant: "primary", resolve: null };
+    }),
+}));
+
 const useContextMenuStore = create((set) => ({
   contextMenu: {
     isOpen: false,
@@ -90,4 +111,4 @@ const useToastStore = create((set) => ({
   },
 }));
 
-export { useModalStore, useConfirmStore, useProgressAlertStore, useContextMenuStore, useProfileContextMenuStore, useToastStore };
+export { useModalStore, useConfirmStore, useProgressAlertStore, useSpinnerAlertStore, useContextMenuStore, useProfileContextMenuStore, useToastStore };

@@ -36,6 +36,12 @@
 		border-radius: var(--scale-16);
 		box-shadow: inset;
 		background-color: var(--white);
+		&.spinner {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
 		.confirm-title {
 			font-size: 24px;
 			font-weight: 700;
@@ -76,6 +82,10 @@
 				color: var(--white);
 				background-color:#F34D4D;
 			}
+		}
+		.spin-lottie {
+			width: 180px;
+			height: 180px;
 		}
 	}
 }

@@ -9,20 +9,20 @@ import Stop from "../../../assets/icon/stop.svg";
 import Pause from "../../../assets/icon/pause.svg";
 import Start from "../../../assets/icon/start.svg";
 import { useNavigate } from "react-router-dom";
-import { useProgressAlertStore, useToastStore } from "../../../store/modalStore";
+import { useSpinnerAlertStore, useToastStore } from "../../../store/modalStore";
+import { SpinnerAlert } from "../../ui/modal/ProgressAlert";
 
 
 const AudioRecorder = () => {
   const [isRecording, setIsRecording] = useState(false);
   const cancelAPIRef = useRef(null);
   // const [audioUrl, setAudioUrl] = useState(null);
-  // const canvasRef = useRef(null);
   const recorderRef = useRef(null);
   const noteMutation = useCreateNote();
   const [recordingTime, setRecordingTime] = useState(0);
   const addToast = useToastStore((state) => state.addToast);
   const navigate = useNavigate();
-  const { showProgress, closeProgress, setProgress } = useProgressAlertStore();
+  const { showSpinner, closeSpinner } = useSpinnerAlertStore();
 
   useEffect(() => {
     recorderRef.current = new AudioRecorderUtil(
@@ -63,20 +63,7 @@ const AudioRecorder = () => {
   };
 
   const handleAudioSave = async (wavBlob) => {
-    const updateProgress = () => {
-      let currentProgress = 0;
-      const interval = setInterval(() => {
-        if (currentProgress < 90) {
-          currentProgress += 1;
-          setProgress(currentProgress);
-        } else {
-          clearInterval(interval);
-        }
-      }, 1000);
-      return interval;
-    };
-
-    showProgress({
+    showSpinner({
       title: "회의록 생성 중",
       confirmText: "닫기",
     }).then((res) => {
@@ -87,10 +74,8 @@ const AudioRecorder = () => {
     });
 
     // 프로그레스 업데이트 시작
-    const progressInterval = updateProgress();
     cancelAPIRef.current = () => {
-      clearInterval(progressInterval); // 진행 중단
-      closeProgress(false); // 다이얼로그 닫기
+      closeSpinner(false); // 다이얼로그 닫기
     };
 
     try {
@@ -100,13 +85,12 @@ const AudioRecorder = () => {
       } else {
         addToast("일시적인 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
       }
-      setProgress(100);
     } catch (e) {
       console.log(e);
       addToast("일시적인 오류가 발생하였습니다. 잠시 후 다시 시도해주세요.");
     }
     handleCancel();
-    closeProgress(false);
+    closeSpinner(false);
     navigate("/");
   };
 
@@ -131,6 +115,7 @@ const AudioRecorder = () => {
   };
 
   return (
+    <>
     <div className="audio-recorder-card">
       <div className="gradient"></div>
       <div className="audio-recorder">
@@ -171,6 +156,8 @@ const AudioRecorder = () => {
         </div>
       </div>
     </div>
+    <SpinnerAlert />
+    </>
   );
 };
 
