@@ -78,4 +78,14 @@ export const noteAPI = {
 
 		return await res;
 	},
+	sendAiChat: async ({ meetingId, question, sessionId }) => {
+    const res = await fetchWithAuth(`/api/v1/meetings/${meetingId}/chat`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			body: JSON.stringify({ question, sessionId }),
+    });
+    return await res;
+  },
 };

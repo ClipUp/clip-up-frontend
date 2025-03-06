@@ -4,8 +4,11 @@ import Calendar from "../../../assets/icon/calendar.svg";
 import {getFormatDate, formatTime} from "../../../utils/dateUtil"
 import "./noteDetail.scss"
 import { useToastStore } from "../../../store/modalStore";
+import { useState } from "react";
+import { ChatButton, ChatRoom } from "../chatbot/ChatRoom";
 
 const NoteDetail = ({ noteId }) => {
+	const [isChatOpen, setIsChatOpen] = useState(false);
   const { data, isLoading, error } = useNote(noteId);
 	const addToast = useToastStore((state) => state.addToast);
 	const editMutation = useEditNote();
@@ -109,17 +112,26 @@ const NoteDetail = ({ noteId }) => {
 							))}
 						</div>
 					</div>
+					<AudioController audioUrl={data.audioFileUrl}></AudioController>
 				</article>
 				<article className="summary">
-					<h5>자동 요약</h5>
-					<div className="note-scroll">
-						<div>
-							<MeetingNotes text={data.minutes} />
-						</div>
-					</div>
+					<span className="summary-title">
+						<h5>자동 요약</h5>
+						<ChatButton isOpen={isChatOpen} setIsOpen={setIsChatOpen} />
+					</span>
+					{
+					!isChatOpen ? (
+							<div className="note-scroll">
+								<div>
+									<MeetingNotes text={data.minutes} />
+								</div>
+							</div>
+						) : (
+							<ChatRoom noteId={noteId}></ChatRoom>
+						)
+					}
 				</article>
 			</section>
-      <AudioController audioUrl={data.audioFileUrl}></AudioController>
     </div>
   );
 };

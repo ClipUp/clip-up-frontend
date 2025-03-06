@@ -100,4 +100,10 @@ const useEditNote = () => {
   });
 };
 
-export {useRecentNoteList, useNoteList, useDeletedNoteList, useCreateNote, useDeleteNote, useCancleDeleteNote, useNote, useEditNote};
+const useSendAiChat = () => {
+  return useMutation({
+    mutationFn: ({ meetingId, question, sessionId }) => noteAPI.sendAiChat({ meetingId, question, sessionId }),
+  });
+}
+
+export {useRecentNoteList, useNoteList, useDeletedNoteList, useCreateNote, useDeleteNote, useCancleDeleteNote, useNote, useEditNote, useSendAiChat};
