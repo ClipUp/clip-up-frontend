@@ -2,8 +2,10 @@ import { useState } from "react"
 import AiChat  from "../../../assets/icon/ai_chat.svg"
 import ChatSend  from "../../../assets/icon/chat_send.svg"
 import AiProfile  from "../../../assets/icon/chat_ai_profile.svg"
+import ChatLoading  from "../../../assets/lottie/chat_loading.json"
 import "./chatRoom.scss"
 import { useSendAiChat } from "../../../hooks/useNote"
+import Lottie from "lottie-react"
 
 const ChatButton = ({isOpen, setIsOpen}) => {
 	return (
@@ -50,8 +52,7 @@ const GuideBubble = ({children, onClick}) => {
 
 const ChatRoom = ({noteId}) => {
 	const guideQ = [
-		{message: "이번 회의의 핵심 결론이 뭐야?"},
-		{message: "내가 해야 할 일만 뽑아서 정리해줘"},
+		{message: "To-Do list 정리해줘"},
 		{message: "이 회의 요약을 좀 더 짧게 해줘"}
 	];
 	const [chatList, setChatList] = useState([
@@ -90,7 +91,9 @@ const ChatRoom = ({noteId}) => {
 					}
 					{
 						loading && (
-							<ChatBubble senderProfile={AiProfile}>작성중...</ChatBubble>
+							<ChatBubble senderProfile={AiProfile}>
+								<Lottie className="loading-lottie" animationData={ChatLoading} loop={true} autoplay />
+							</ChatBubble>
 						)
 					}
 					{
@@ -106,7 +109,7 @@ const ChatRoom = ({noteId}) => {
 				</div>
 			</div>
 			<div className="chat-input-group">
-				<input placeholder="무엇이든 물어보세요" value={message}
+				<input placeholder={loading ? "AI가 답변을 생성 중입니다..." : "무엇이든 물어보세요"} value={message}
 					onChange={(e) => setMessage(e.target.value)}
 					onKeyDown={handleKeyDown}
 					disabled={loading}
