@@ -20,9 +20,11 @@ const EditProfile = () => {
 	const addToast = useToastStore((state) => state.addToast);
 
 	useEffect(() => {
-		setDisabled(true);
-		if (!confirmInputs({originalPassword, password, password2})) return;
-		setDisabled(false);
+		if (originalPassword === "" && password === "" && password2 === "") {
+      setDisabled(true);
+      return;
+    }
+		setDisabled(!confirmInputs({originalPassword, password, password2}));
 	}, [originalPassword, password, password2]);
 
 	const confirmOriginalPassword = (originalPassword) => {

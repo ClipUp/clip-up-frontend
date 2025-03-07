@@ -18,9 +18,11 @@ const SignIn = () => {
 	const addToast = useToastStore((state) => state.addToast);
 
 	useEffect(() => {
-		setDisabled(true);
-		if (!confirmInputs({email, password})) return;
-		setDisabled(false);
+    if (email === "" && password === "") {
+      setDisabled(true);
+      return;
+    }
+		setDisabled(!confirmInputs({email, password}));
   }, [email, password]);
 
   const validateEmail = () => {
@@ -32,10 +34,6 @@ const SignIn = () => {
       setEmailError("");
 			return true;
     } else {
-			const inputElement = document.querySelector(".email");
-			if (inputElement) {
-				inputElement.focus();
-			}
       setEmailError("이메일을 입력해주세요.");
 			return false;
     }

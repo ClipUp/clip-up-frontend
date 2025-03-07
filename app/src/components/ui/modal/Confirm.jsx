@@ -17,8 +17,8 @@ const Confirm = () => {
 				${variant === 'primary' ? 'primary' : ''}
 				${variant === 'important' ? 'important' : ''}`
 				}>
-          { confirmText && <button className="confirm-button" onClick={() => closeConfirm(true)}>{confirmText}</button> }
           { cancelText && <button className="cancle-button" onClick={() => closeConfirm(false)}>{cancelText}</button> }
+          { confirmText && <button className="confirm-button" onClick={() => closeConfirm(true)}>{confirmText}</button> }
         </div>
       </div>
     </div>

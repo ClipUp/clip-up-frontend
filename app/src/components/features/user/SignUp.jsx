@@ -21,9 +21,11 @@ const SignUp = () => {
 	const addToast = useToastStore((state) => state.addToast);
 
 	useEffect(() => {
-		setDisabled(true);
-		if (!confirmInputs({email, username, password, password2})) return;
-		setDisabled(false);
+		if (email === "" && username === "" && password === "" && password2 === "") {
+      setDisabled(true);
+      return;
+    }
+		setDisabled(!confirmInputs({email, username, password, password2}));
   }, [email, username, password, password2]);
 
   const validateEmail = () => {
