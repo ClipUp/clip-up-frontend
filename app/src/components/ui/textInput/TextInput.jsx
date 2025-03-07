@@ -11,7 +11,7 @@ TextInput.propTypes = {
 	onKeyDown: propTypes.func,
 	disabled: propTypes.bool
 };
-function TextInput({name, value, placeholder, type, error, onChange, onKeyDown, disabled = false}) {
+function TextInput({name, value, placeholder, type, error, onChange, onKeyDown, onFocus, onBlur, disabled = false}) {
   return (
 	<div className="default-input">
 	  <input
@@ -20,6 +20,8 @@ function TextInput({name, value, placeholder, type, error, onChange, onKeyDown, 
 			placeholder={placeholder}
 			onChange={onChange}
 			onKeyDown={onKeyDown}
+			onFocus={onFocus}
+			onBlur={onBlur}
 			className={ `${name} ${error ? "error" : ""}`}
 			name={name}
 			disabled={disabled}

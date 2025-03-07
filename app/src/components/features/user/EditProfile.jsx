@@ -14,13 +14,16 @@ const EditProfile = () => {
 	const [originalPasswordError, setOriginalPasswordError] = useState("");
 	const [passwordError, setPasswordError] = useState("");
 	const [passwordError2, setPasswordError2] = useState("");
-	const [disabled, setDisabled] = useState(false);
+	const [focusedInputs, setFocusedInputs] = useState(null);
+	const [disabled, setDisabled] = useState(true);
 	const { closeModal } = useModalStore();
   const updateUserPwdMutation = useUpdateUserPwd();
 	const addToast = useToastStore((state) => state.addToast);
 
 	useEffect(() => {
-		if (originalPassword === "" && password === "" && password2 === "") {
+		if (focusedInputs === "originalPassword" && originalPassword === "" ||
+			focusedInputs === "password" && password === "" ||
+			focusedInputs === "password2" && password2 === "") {
       setDisabled(true);
       return;
     }
@@ -59,11 +62,11 @@ const EditProfile = () => {
     }
   };
 	const confirmInputs = ({ originalPassword, password, password2}) => {
-		if (!confirmOriginalPassword(originalPassword)) return false;
-		if (!confirmPassword(password)) return false;
-		if (!confirmPasswordSecondary(password2)) return false;
+		if (focusedInputs === "originalPassword" && !confirmOriginalPassword(originalPassword)) return false;
+		if (focusedInputs === "password" && !confirmPassword(password)) return false;
+		if (focusedInputs === "password2" && !confirmPasswordSecondary(password2)) return false;
 
-		return true;
+		return !originalPasswordError && !passwordError && !passwordError2;
 	}
 
 	const handleKeyDown = (event) => {
@@ -109,17 +112,23 @@ const EditProfile = () => {
 				<label htmlFor="originPassword">기존 비밀번호</label>
 				<TextInput
 					name="originPassword" placeholder="기존 비밀번호를 입력해주세요" type="password" value={originalPassword} error={originalPasswordError}
-					onChange={(e) => setOriginalPassword(e.target.value)} onKeyDown={handleKeyDown}
+					onChange={(e) => setOriginalPassword(e.target.value)}
+					onKeyDown={handleKeyDown}
+					onFocus={() => setFocusedInputs("originPassword")}
 				/>
 				<label htmlFor="password">비밀번호 변경</label>
 				<TextInput
 					name="password" placeholder="새 비밀번호를 입력해주세요" type="password" value={password} error={passwordError}
-					onChange={(e) => setPassword(e.target.value)} onKeyDown={handleKeyDown}
+					onChange={(e) => setPassword(e.target.value)}
+					onKeyDown={handleKeyDown}
+					onFocus={() => setFocusedInputs("password")}
 				/>
 				<label htmlFor="password2">새 비밀번호 확인</label>
 				<TextInput
 					name="password2" placeholder="새 비밀번호를 한 번 더 입력해주세요" type="password" value={password2} error={passwordError2}
-					onChange={(e) => setPassword2(e.target.value)} onKeyDown={handleKeyDown}
+					onChange={(e) => setPassword2(e.target.value)}
+					onKeyDown={handleKeyDown}
+					onFocus={() => setFocusedInputs("password2")}
 				/>			</span>
 			<Button title="가입하기" variant="important" onClick={handleRegist} disabled={disabled}>확인</Button>
 		</div>

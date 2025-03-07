@@ -13,12 +13,14 @@ const SignIn = () => {
 	const [password, setPassword] = useState("");
 	const [emailError, setEmailError] = useState("");
 	const [passwordError, setPasswordError] = useState("");
-	const [disabled, setDisabled] = useState(false);
+  const [focusedInputs, setFocusedInputs] = useState(null);
+	const [disabled, setDisabled] = useState(true);
 	const signInMutation = useSignIn();
 	const addToast = useToastStore((state) => state.addToast);
 
 	useEffect(() => {
-    if (email === "" && password === "") {
+    if (focusedInputs === "email" && email === "" ||
+      focusedInputs === "password" && password === "") {
       setDisabled(true);
       return;
     }
@@ -57,10 +59,11 @@ const SignIn = () => {
     // }
   };
 	const confirmInputs = ({email, password}) => {
-		if (!confirmEmail(email)) return false;
-		if (!confirmPassword(password)) return false;
+    console.log(focusedInputs);
+		if (focusedInputs === "email" && !confirmEmail(email)) return false;
+		if (focusedInputs === "password" && !confirmPassword(password)) return false;
 
-		return true;
+		return !emailError && !passwordError;
 	}
   const handleSignInError = (status) => {
     if (status === "UNAUTHORIZED") {
@@ -104,11 +107,15 @@ const SignIn = () => {
       <span className="input-group">
         <TextInput
           name="email" placeholder="이메일" type="text" value={email} error={emailError}
-          onChange={(e) => setEmail(e.target.value)} onKeyDown={handleKeyDown}
+          onChange={(e) => setEmail(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onFocus={() => setFocusedInputs("email")}
         />
         <TextInput
           name="password" placeholder="비밀번호" type="password" value={password} error={passwordError}
-          onChange={(e) => setPassword(e.target.value)} onKeyDown={handleKeyDown}
+          onChange={(e) => setPassword(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onFocus={() => setFocusedInputs("password")}
         />
       </span>
       <Button title="로그인" onClick={handleRegist} disabled={disabled}>
