@@ -13,14 +13,13 @@ const SignIn = () => {
 	const [password, setPassword] = useState("");
 	const [emailError, setEmailError] = useState("");
 	const [passwordError, setPasswordError] = useState("");
-  const [focusedInputs, setFocusedInputs] = useState(null);
 	const [disabled, setDisabled] = useState(true);
 	const signInMutation = useSignIn();
 	const addToast = useToastStore((state) => state.addToast);
+  const [isComposing, setIsComposing] = useState(false);
 
 	useEffect(() => {
-    if (focusedInputs === "email" && email === "" ||
-      focusedInputs === "password" && password === "") {
+    if (email === "" || password === "") {
       setDisabled(true);
       return;
     }
@@ -59,11 +58,10 @@ const SignIn = () => {
     // }
   };
 	const confirmInputs = ({email, password}) => {
-    console.log(focusedInputs);
-		if (focusedInputs === "email" && !confirmEmail(email)) return false;
-		if (focusedInputs === "password" && !confirmPassword(password)) return false;
+		if (!confirmEmail(email)) return false;
+		if (!confirmPassword(password)) return false;
 
-		return !emailError && !passwordError;
+		return true;
 	}
   const handleSignInError = (status) => {
     if (status === "UNAUTHORIZED") {
@@ -76,7 +74,7 @@ const SignIn = () => {
     return false;
   }
 	const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && !disabled && !isComposing) {
       event.preventDefault();
       handleRegist();
     }
@@ -109,13 +107,15 @@ const SignIn = () => {
           name="email" placeholder="이메일" type="text" value={email} error={emailError}
           onChange={(e) => setEmail(e.target.value)}
           onKeyDown={handleKeyDown}
-          onFocus={() => setFocusedInputs("email")}
+          onCompositionStart={() => setIsComposing(true)}
+					onCompositionEnd={() => setIsComposing(false)}
         />
         <TextInput
           name="password" placeholder="비밀번호" type="password" value={password} error={passwordError}
           onChange={(e) => setPassword(e.target.value)}
           onKeyDown={handleKeyDown}
-          onFocus={() => setFocusedInputs("password")}
+          onCompositionStart={() => setIsComposing(true)}
+					onCompositionEnd={() => setIsComposing(false)}
         />
       </span>
       <Button title="로그인" onClick={handleRegist} disabled={disabled}>

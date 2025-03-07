@@ -14,18 +14,15 @@ const SignUp = () => {
 	const [emailError, setEmailError] = useState("");
 	const [passwordError, setPasswordError] = useState("");
 	const [passwordError2, setPasswordError2] = useState("");
-	const [focusedInputs, setFocusedInputs] = useState(null);
 	const [disabled, setDisabled] = useState(true);
+	const [isComposing, setIsComposing] = useState(false);
 	const { closeModal } = useModalStore();
   const signUpMutation = useSignUp();
 	const signInMutation = useSignIn();
 	const addToast = useToastStore((state) => state.addToast);
 
 	useEffect(() => {
-		if (focusedInputs === "email" && email === "" ||
-			focusedInputs === "username" && username === "" ||
-			focusedInputs === "password" && password === "" ||
-			focusedInputs === "password2" && password2 === "") {
+		if (email === "" || username === "" || password === "" || password2 === "") {
       setDisabled(true);
       return;
     }
@@ -75,15 +72,15 @@ const SignUp = () => {
     }
   };
 	const confirmInputs = ({email, username, password, password2}) => {
-		if (focusedInputs === "email" && !confirmEmail(email)) return false;
-		if (focusedInputs === "username" && !confirmUsername(username)) return false;
-		if (focusedInputs === "password" && !confirmPassword(password)) return false;
-		if (focusedInputs === "password2" && !confirmPasswordSecondary(password2)) return false;
+		if (!confirmEmail(email)) return false;
+		if (!confirmUsername(username)) return false;
+		if (!confirmPassword(password)) return false;
+		if (!confirmPasswordSecondary(password2)) return false;
 
-		return !emailError && !usernameError && !passwordError && !passwordError2;
+		return true;
 	}
 	const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && !disabled && !isComposing) {
       event.preventDefault();
       handleRegist();
     }
@@ -129,25 +126,29 @@ const SignUp = () => {
 				name="email" placeholder="이메일" type="text" value={email} error={emailError}
 				onChange={(e) => setEmail(e.target.value)}
 				onKeyDown={handleKeyDown}
-				onFocus={() => setFocusedInputs("email")}
+				onCompositionStart={() => setIsComposing(true)}
+				onCompositionEnd={() => setIsComposing(false)}
 			/>
 			<TextInput
 				name="username" placeholder="이름" type="text" value={username} error={usernameError}
 				onChange={(e) => setUsername(e.target.value)}
 				onKeyDown={handleKeyDown}
-				onFocus={() => setFocusedInputs("username")}
+				onCompositionStart={() => setIsComposing(true)}
+				onCompositionEnd={() => setIsComposing(false)}
 			/>
 			<TextInput
 				name="password" placeholder="비밀번호" type="password" value={password} error={passwordError}
 				onChange={(e) => setPassword(e.target.value)}
 				onKeyDown={handleKeyDown}
-				onFocus={() => setFocusedInputs("password")}
+				onCompositionStart={() => setIsComposing(true)}
+				onCompositionEnd={() => setIsComposing(false)}
 			/>
 			<TextInput
 				name="password2" placeholder="비밀번호 확인" type="password" value={password2} error={passwordError2}
 				onChange={(e) => setPassword2(e.target.value)}
 				onKeyDown={handleKeyDown}
-				onFocus={() => setFocusedInputs("password2")}
+				onCompositionStart={() => setIsComposing(true)}
+				onCompositionEnd={() => setIsComposing(false)}
 			/>
 	  </span>
 		<Button title="가입하기" variant="important" onClick={handleRegist} disabled={disabled}>
