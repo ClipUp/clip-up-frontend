@@ -75,7 +75,14 @@ const ChatRoom = ({noteId}) => {
 
 		setLoading(true);
 		const res = await sendMutation.mutateAsync({meetingId: noteId, question: message, sessionId: lastSessionId});
-		setChatList(prev => [...prev, {sender: "ai", message: res.data.answer}]);
+		const formattedText = res.data.answer
+			.split("\n")
+			.map((line, index) => (
+				<p key={`text${index}`}>
+					{line}
+				</p>
+			));
+		setChatList(prev => [...prev, {sender: "ai", message: formattedText}]);
 		setLastSessionId(res.data.sessionId);
 		setLoading(false);
 	}
