@@ -48,12 +48,18 @@
 		background-color: var(--white);
 
 		h5 {
+			color: var(--grey-900);
 			font-weight: 600;
 			font-size: 20px;
 			line-height: 28px;
 			letter-spacing: -1%;
 			padding-left: 12px;
 			box-sizing: border-box;
+			cursor: pointer;
+
+			&.disabled {
+				color: var(--grey-600);
+			}
 		}
 		.note-scroll {
 			height: 742px;

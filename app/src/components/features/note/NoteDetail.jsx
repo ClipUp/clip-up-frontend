@@ -116,7 +116,7 @@ const NoteDetail = ({ noteId }) => {
 				</article>
 				<article className="summary">
 					<span className="summary-title">
-						<h5>자동 요약</h5>
+						<h5 className={isChatOpen ? "disabled" : ""} onClick={() => setIsChatOpen(false)}>자동 요약</h5>
 						<ChatButton isOpen={isChatOpen} setIsOpen={setIsChatOpen} />
 					</span>
 					{
