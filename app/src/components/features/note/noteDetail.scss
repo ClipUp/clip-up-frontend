@@ -115,6 +115,15 @@
 				justify-content: space-between;
 				align-items: center;
 			}
+
+			.markdown-viewr {
+				font-family: 'Pretendard', system-ui, Arial, sans-serif !important;
+				font-weight: 400;
+				color: var(--grey-900);
+				ul > li {
+					list-style:disc !important;
+				}
+			}
 		}
 	}
 }

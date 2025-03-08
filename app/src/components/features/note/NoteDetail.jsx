@@ -1,10 +1,11 @@
+import MDEditor from "@uiw/react-md-editor";
 import { useEditNote, useNote } from "../../../hooks/useNote";
 import AudioController from "../audio/AudioController";
 import Calendar from "../../../assets/icon/calendar.svg";
 import {getFormatDate, formatTime} from "../../../utils/dateUtil"
 import "./noteDetail.scss"
 import { useToastStore } from "../../../store/modalStore";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ChatButton, ChatRoom } from "../chatbot/ChatRoom";
 
 const NoteDetail = ({ noteId }) => {
@@ -13,20 +14,14 @@ const NoteDetail = ({ noteId }) => {
 	const addToast = useToastStore((state) => state.addToast);
 	const editMutation = useEditNote();
 
-	const formatText = (text) => {
-		return text.replace(/(🔹|✅)/g, '\n$1');
-	};
 	const MeetingNotes = ({ text }) => {
-		if (!text) return <div></div>;
-		const formattedText = formatText(text)
-			.split("\n")
-			.map((line, index) => (
-				<p key={`text${index}`}>
-					{line}
-				</p>
-			));
+		const markdownRef = useRef(null);
 
-		return <div>{formattedText}</div>;
+		return (
+			<div ref={markdownRef}>
+				{text && <MDEditor.Markdown className="markdown-viewr" source={text} />}
+			</div>
+		);
 	};
 
 	const handleEdit = (id) => {
