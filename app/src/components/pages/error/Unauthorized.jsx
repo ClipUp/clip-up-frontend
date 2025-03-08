@@ -12,7 +12,6 @@ const Unauthorized = () => {
 
 	return (
 		<section id="unauthorized_page">
-			<div style={{ backgroundImage: `url(${Landing})`, height: window.innerHeight - 84 }}>
 				<span className="text">
 					<p className="text-s">
 						<span>
@@ -38,7 +37,6 @@ const Unauthorized = () => {
 						<path d="M3.5 12H20.33" stroke="var(--white)" strokeWidth="1.5" strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
 					</svg>
 				</Button>
-			</div>
 		</section>
 	);
 }

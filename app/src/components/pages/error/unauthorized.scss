@@ -1,18 +1,18 @@
 #unauthorized_page {
 	width: 100%;
-	> div {
-		min-width: 1024px;
-		background-color: transparent;
-		background-size: 100% auto;
-		background-repeat: no-repeat;
-		background-position: top;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
+	background-image: url('../../../assets/img/1440/landing.webp');
+	background-color: transparent;
+	background-size: 100% auto;
+	background-repeat: no-repeat;
+	background-position: top;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	user-select: none;
+
 	.text {
 		background: linear-gradient(92.26deg, var(--primary-900) -13.84%, var(--grey-900) 75.15%, var(--secondary-600) 99.53%);
-		margin-top: 12%;
+		margin-top: 128px;
 		margin-bottom: 32px;
 		background-clip: text;
 		-webkit-background-clip: text;
@@ -46,6 +46,19 @@
 
 		svg {
 			margin-left: 6px;
+		}
+	}
+}
+
+@media (min-width: 1440px) and (max-width: 1919px) {
+}
+
+@media (min-width: 1920px) {
+	#unauthorized_page {
+		background-image: url('../../../assets/img/landing.webp');
+
+		.text {
+			margin-top: 92px;
 		}
 	}
 }
