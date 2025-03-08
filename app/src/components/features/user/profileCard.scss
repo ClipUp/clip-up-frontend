@@ -50,3 +50,14 @@
 		height: 46px;
 	}
 }
+
+@media (min-width: 1440px) and (max-width: 1919px) {
+}
+
+@media (min-width: 1920px) {
+	.empty-profile-section {
+		> button {
+			height: 54px;
+		}
+	}
+}
