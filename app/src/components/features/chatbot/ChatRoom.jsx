@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import AiChat  from "../../../assets/icon/ai_chat.svg"
 import ChatSend  from "../../../assets/icon/chat_send.svg"
 import AiProfile  from "../../../assets/icon/chat_ai_profile.svg"
@@ -61,14 +61,22 @@ const ChatRoom = ({noteId}) => {
 	const [message, setMessage] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [lastSessionId, setLastSessionId] = useState(null);
+	const scrollDownRef = useRef();
 	const sendMutation = useSendAiChat();
 
+	useEffect(() => {
+		scrollDown();
+	}, [loading, chatList]);
+
+	const scrollDown = () => {
+		scrollDownRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+	};
 	const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      sendMessage(message);
-    }
-  };
+		if (event.key === "Enter") {
+		event.preventDefault();
+		sendMessage(message);
+		}
+	};
 	const sendMessage = async (message) => {
 		setMessage("");
 		setChatList(prev => [...prev, { sender: "me", message: message }]);
@@ -113,6 +121,7 @@ const ChatRoom = ({noteId}) => {
 							}
 						</div>
 					)}
+					<div ref={scrollDownRef} />
 				</div>
 			</div>
 			<div className="chat-input-group">
