@@ -73,11 +73,13 @@ const ChatRoom = ({noteId}) => {
 	};
 	const handleKeyDown = (event) => {
 		if (event.key === "Enter") {
-		event.preventDefault();
-		sendMessage(message);
+			event.preventDefault();
+			sendMessage(message);
 		}
 	};
 	const sendMessage = async (message) => {
+		if (!message) return;
+
 		setMessage("");
 		setChatList(prev => [...prev, { sender: "me", message: message }]);
 
