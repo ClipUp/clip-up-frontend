@@ -23,7 +23,7 @@ const NoteListTemplate = ({title, pageLimit, useNoteList, empty, menuIdList}) =>
   // if (status === 'error') return <p>Error loading meetings.</p>;
 
   return (
-    <section className="note-list-card">
+    <section className="note-list-card section-board">
       <h5>{title}</h5>
       <ul className="note-list">
         {

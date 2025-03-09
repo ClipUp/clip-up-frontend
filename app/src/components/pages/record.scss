@@ -1,9 +1,38 @@
-.record-section {
+#record-page {
 	width: 100%;
-	height: calc(100vh - 126px);
-	background-color: var(--white);
-	border-radius: 24px;
-	padding: 28px 24px;
-	box-sizing: border-box;
+	height: 100%;
+
 	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	.audio-recorder-card {
+		position: absolute;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+	.empty-note-list-card {
+		> img {
+			width: 156px;
+		}
+	}
+}
+
+@media (min-width: 0px) and (max-width: 1919px) {
+	#record-page {
+		.audio-recorder-card {
+			width: 542px;
+			bottom: 40px;
+		}
+	}
+}
+
+@media (min-width: 1920px) {
+	#record-page {
+		.audio-recorder-card {
+			width: 632px;
+			bottom: 44px;
+		}
+	}
 }

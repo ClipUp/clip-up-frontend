@@ -81,7 +81,7 @@ const NoteDetail = ({ noteId }) => {
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <div className="note-detail">
+    <div id="note-detail-page">
 			<div className="title-group">
 				<h3 className={`title-text-${data.id}`} onClick={() => { handleEdit(data.id) }}>{data.title}</h3>
 				<span>

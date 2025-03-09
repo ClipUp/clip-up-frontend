@@ -64,7 +64,7 @@ const AudioRecorder = () => {
 
   const handleAudioSave = async (wavBlob) => {
     showSpinner({
-      title: "회의록 생성 중",
+      title: "회의록을 생성하고 있습니다.",
       confirmText: "닫기",
     }).then((res) => {
       if (res) {

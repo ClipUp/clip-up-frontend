@@ -11,7 +11,7 @@ const Unauthorized = () => {
 	}
 
 	return (
-		<section id="unauthorized_page">
+		<section id="unauthorized-page">
 				<span className="text">
 					<p className="text-s">
 						<span>

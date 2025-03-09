@@ -1,11 +1,12 @@
 import NoteListTemplate from '../features/note/NoteListTemplate';
 import { useDeletedNoteList } from '../../hooks/useNote';
 import EmptyNoticeList from '../features/note/EmptyNoticeList';
+import "./deletedNoteList.scss"
 
 const DeletedNoteList = () => {
 
 	return (
-		<section>
+		<section id="deleted-note-list-page">
 			<NoteListTemplate
 				key="deletedNoteList"
 				title="휴지통"

@@ -1,9 +1,6 @@
 .note-list-card {
 	width: 100%;
-	background-color: var(--white);
-	border-radius: 24px;
-	padding: 28px 24px;
-	box-sizing: border-box;
+	height: 100%;
 	cursor: pointer;
 	h5 {
 		color: var(--grey-900);
@@ -20,12 +17,6 @@
 	font-size: 20px;
 	line-height: 28px;
 	letter-spacing: -1%;
-
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	text-align: center;
-	flex-direction: column;
 
 	> li {
 		width: 100%;

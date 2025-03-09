@@ -112,3 +112,27 @@
 		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 	}
 }
+
+@media (min-width: 0px) and (max-width: 1919px) {
+	.modal-overlay {
+		.confirm {
+			.confirm-button-group {
+				> button {
+					padding: 12px 20px;
+				}
+			}
+		}
+	}
+}
+
+@media (min-width: 1920px) {
+	.modal-overlay {
+		.confirm {
+			.confirm-button-group {
+				> button {
+					padding: 16px 28px;
+				}
+			}
+		}
+	}
+}

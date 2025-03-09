@@ -4,7 +4,6 @@ import More from "../../../assets/icon/more.svg";
 import Pen from "../../../assets/icon/pen.svg";
 import Trash from "../../../assets/icon/trash-active.svg";
 import Rotate from "../../../assets/icon/rotate-left.svg"
-
 import { useCancleDeleteNote, useDeleteNote, useEditNote } from '../../../hooks/useNote';
 import { ContextMenuButton, ContextMenuItem } from '../../ui/modal/ContextMenu';
 import { getFormatDate } from "../../../utils/dateUtil";
