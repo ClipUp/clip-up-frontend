@@ -1,12 +1,13 @@
+.empty-profile-section {
+	width: 100%;
+}
+
 .profile-section {
 	width: 100%;
-	height: 48px;
 	display: flex;
 	gap: 12px;
 
 	.user-icon {
-		width: 48px;
-		height: 48px;
 		background-color: var(--primary-100);
 		border-radius: 50%;
 		display: flex;
@@ -22,20 +23,21 @@
 		.username-group {
 			display: flex;
 			justify-content: space-between;
-			.more-icon {
-				width: 12px;
+			.context-menu-button {
+				padding: 0;
+				.more-icon {
+					width: 12px;
+				}
 			}
 			.username {
 				margin: 0;
 				font-weight: 600;
-				font-size: 16px;
 				line-height: 22.4px;
 			}
 		}
 		.email {
 			color: var(--grey-400);
 			font-weight: 400;
-			font-size: 14px;
 			line-height: 21px;
 		}
 	}
@@ -44,20 +46,58 @@
 	}
 }
 
-.empty-profile-section {
-	width: 100%;
-	> button {
-		height: 46px;
+@media (min-width: 0px) and (max-width: 1919px) {
+	.empty-profile-section {
+		> button {
+			height: 46px;
+		}
 	}
-}
 
-@media (min-width: 1440px) and (max-width: 1919px) {
+	.profile-section {
+		height: 48px;
+
+		.user-icon {
+			width: 48px;
+			height: 48px;
+		}
+
+		.user-data {
+			.username-group {
+				.username {
+					font-size: 16px;
+				}
+			}
+			.email {
+				font-size: 14px;
+			}
+		}
+	}
 }
 
 @media (min-width: 1920px) {
 	.empty-profile-section {
 		> button {
 			height: 54px;
+		}
+	}
+
+	.profile-section {
+		height: 48px;
+
+		.user-icon {
+			width: 50px;
+			height: 50px;
+		}
+
+		.user-data {
+			.username-group {
+				.username {
+					font-size: 18px;
+				}
+			}
+			.email {
+				font-size: 16px;
+			}
 		}
 	}
 }
