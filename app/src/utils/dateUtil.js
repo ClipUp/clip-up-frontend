@@ -1,18 +1,18 @@
 const getFormatDate = (timestamp) => {
-  if (!timestamp)
-    return timestamp;
-
   const date = new Date(timestamp);
-  const formattedDate = new Intl.DateTimeFormat('ko-KR', {
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true
-  }).format(date)
 
-  return formattedDate.replace(/(\d{1,2})\.\s([오전|오후])/, '$1 $2');
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+
+  let hours = date.getHours();
+  const minutes = date.getMinutes();
+  const period = hours >= 12 ? "오후" : "오전";
+
+  if (hours > 12) hours -= 12;
+  if (hours === 0) hours = 12;
+
+  return `${year}.${month}.${day} ${period} ${hours}:${minutes}`;
 }
 
 const formatTime = (ms) => {

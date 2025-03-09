@@ -1,6 +1,6 @@
 import { useCallback, useRef } from "react";
 import NoteItem from "./NoteItem";
-import "./noteList.scss";
+import "./noteListTemplate.scss";
 
 const NoteListTemplate = ({title, pageLimit, useNoteList, empty, menuIdList}) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useNoteList({pageLimit});
@@ -21,7 +21,6 @@ const NoteListTemplate = ({title, pageLimit, useNoteList, empty, menuIdList}) =>
 
   // if (status === 'loading') return <p>Loading...</p>;
   // if (status === 'error') return <p>Error loading meetings.</p>;
-
   return (
     <section className="note-list-card section-board">
       <h5>{title}</h5>

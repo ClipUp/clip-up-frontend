@@ -10,7 +10,6 @@ import { getFormatDate } from "../../../utils/dateUtil";
 import { useConfirmStore, useToastStore } from '../../../store/modalStore';
 
 const NoteItem = ({ ref, note, onClick, menuIdList = [] }) => {
-  // const {id, title, checked} = note;
 	const { showConfirm } = useConfirmStore();
 	const addToast = useToastStore((state) => state.addToast);
 	const deleteMutation = useDeleteNote();
