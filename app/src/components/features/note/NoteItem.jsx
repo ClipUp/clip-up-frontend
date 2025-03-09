@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import Microphone from "../../../assets/icon/microphone.svg";
+import Microphone from "../../../assets/icon/microphone_color.svg";
 import More from "../../../assets/icon/more.svg";
 import Pen from "../../../assets/icon/pen.svg";
 import Trash from "../../../assets/icon/trash-active.svg";

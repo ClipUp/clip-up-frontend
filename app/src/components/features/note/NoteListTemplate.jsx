@@ -2,7 +2,7 @@ import { useCallback, useRef } from "react";
 import NoteItem from "./NoteItem";
 import "./noteList.scss";
 
-const NoteListTemplate = ({title, height, pageLimit, useNoteList, empty, menuIdList}) => {
+const NoteListTemplate = ({title, pageLimit, useNoteList, empty, menuIdList}) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useNoteList({pageLimit});
   const observer = useRef();
   const lastMeetingRef = useCallback(
@@ -23,28 +23,27 @@ const NoteListTemplate = ({title, height, pageLimit, useNoteList, empty, menuIdL
   // if (status === 'error') return <p>Error loading meetings.</p>;
 
   return (
-    <div className="note-list-card">
+    <section className="note-list-card">
       <h5>{title}</h5>
-      <ul className="note-list" style={{ height: height }}>
-      {
-        (status === 'error' || !data?.pages || data?.pages?.flat().length === 0) ? (
-          empty
-        ) : (
-          data?.pages?.map((page, pageIndex) => (
-            page?.map((note, index) => (
-              <NoteItem
-                note={note}
-                key={note.id}
-                menuIdList={menuIdList}
-                ref={index === page.length - 1 ? lastMeetingRef : null}
-              />
+      <ul className="note-list">
+        {
+          (status === 'error' || !data?.pages || data?.pages?.flat().length === 0) ? (
+            empty
+          ) : (
+            data?.pages?.map((page) => (
+              page?.map((note, index) => (
+                <NoteItem
+                  note={note}
+                  key={note.id}
+                  menuIdList={menuIdList}
+                  ref={index === page.length - 1 ? lastMeetingRef : null}
+                />
+              ))
             ))
-          ))
-        )
-      }
-      {/* {pageLimit > 0 && isFetchingNextPage && <p>더보기</p>} */}
+          )
+        }
       </ul>
-    </div>
+    </section>
   );
 };
 

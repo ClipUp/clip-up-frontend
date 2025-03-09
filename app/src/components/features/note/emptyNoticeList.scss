@@ -1,0 +1,71 @@
+.empty-note-list-card {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	flex-direction: column;
+
+	> img {
+		width: 100px;
+	}
+	.text-group {
+		margin-top: 20px;
+		> h4 {
+			font-weight: 700;
+			font-size: 24px;
+			line-height: 33.6px;
+			letter-spacing: -1%;
+
+			margin-bottom: 4px;
+		}
+		> p {
+			font-weight: 500;
+			font-size: 16px;
+			line-height: 24px;
+			letter-spacing: 0%;
+
+			color: var(--grey-600);
+		}
+	}
+}
+
+@media (min-width: 0px) and (max-width: 1919px) {
+
+}
+
+@media (min-width: 1920px) {
+	.create-note-card {
+		margin-bottom: 36px;
+		gap: 19px;
+
+		.create-note-button {
+			height: 208px;
+			padding: 30px 32px;
+			> span {
+				p {
+					font-size: 18px;
+				}
+			}
+			> button {
+				width: 130px;
+				height: 46px;
+			}
+
+			&.record {
+				width: 739px;
+				background-image: url('../../../assets/img/record_button.webp');
+
+				h4 {
+					font-size: 28px;
+				}
+			}
+			&.upload {
+				width: 522px;
+
+				h4 {
+					font-size: 24px;
+				}
+			}
+		}
+	}
+}

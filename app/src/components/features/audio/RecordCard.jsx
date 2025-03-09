@@ -87,31 +87,31 @@ const RecordCard = () => {
 	}
 	return (
 		<>
-		<section className="create-note-card">
-			<div className="record-button" style={{ backgroundImage: `url(${RecordBtnImg})` }}>
-				<span>
-					<h4>클립업과 함께 회의를 시작해보세요</h4>
-					<p>녹음만 하면, 회의록이 완성됩니다</p>
-				</span>
-				<Button title="녹음 시작하기" onClick={handleRecordBtn} variant="primary">녹음 시작하기</Button>
-			</div>
-			<div className="upload-button">
-				<span>
-					<h4>파일을 업로드하면 AI가 회의록을 정리해줘요</h4>
-					<p>MP3, WAV, M4A 파일 지원</p>
-				</span>
-				<Button title="파일 업로드" onClick={handleButtonClick}>파일 업로드</Button>
-			</div>
-			<input
-				id="audioFile"
-				type="file"
-				ref={fileInputRef}
-				onChange={handleFileChange}
-				accept="audio/mp3, audio/wav, audio/m4a, audio/x-m4a"
-				style={{ display: 'none' }}
-			/>
-		</section>
-		<SpinnerAlert />
+			<section className="create-note-card">
+				<div className="create-note-button record">
+					<span>
+						<h4>클립업과 함께 회의를 시작해보세요</h4>
+						<p>녹음만 하면, 회의록이 완성됩니다</p>
+					</span>
+					<Button title="녹음 시작하기" onClick={handleRecordBtn} variant="primary">녹음 시작하기</Button>
+				</div>
+				<div className="create-note-button upload">
+					<span>
+						<h4>파일을 업로드하면 AI가 회의록을 정리해줘요</h4>
+						<p>MP3, WAV, M4A 파일 지원</p>
+					</span>
+					<Button title="파일 업로드" onClick={handleButtonClick}>파일 업로드</Button>
+				</div>
+				<input
+					id="audioFile"
+					type="file"
+					ref={fileInputRef}
+					onChange={handleFileChange}
+					accept="audio/mp3, audio/wav, audio/m4a, audio/x-m4a"
+					style={{ display: 'none' }}
+				/>
+			</section>
+			<SpinnerAlert />
 		</>
 	);
 }

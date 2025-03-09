@@ -1,6 +1,6 @@
 import NoteListTemplate from '../features/note/NoteListTemplate';
 import { useDeletedNoteList } from '../../hooks/useNote';
-import NoticeCard from '../features/note/NoticeCard';
+import EmptyNoticeList from '../features/note/EmptyNoticeList';
 
 const DeletedNoteList = () => {
 
@@ -11,7 +11,7 @@ const DeletedNoteList = () => {
 				title="휴지통"
 				useNoteList={useDeletedNoteList}
 				height={window.innerHeight - 230}
-				empty={<NoticeCard title="휴지통이 비어있습니다" />}
+				empty={<EmptyNoticeList title="휴지통이 비어있습니다" />}
 				menuIdList={["cancle_delete"]}
 			/>
 		</section>

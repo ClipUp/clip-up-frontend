@@ -38,8 +38,9 @@ const App = () => {
   return (
     <BrowserRouter>
       <Header />
-      <Main>
+      <div className="container">
         <SideBar />
+        <Main>
           <Routes>
             <Route path="/" element={routeWithAuth(<Home />)}></Route>
             <Route path="/note/list/all" element={routeWithAuth(<NoteList />)}></Route>
@@ -48,7 +49,8 @@ const App = () => {
             <Route path="/note/new" element={routeWithAuth(<Record />)}></Route>
             <Route path="*" element={<NotFound />}></Route>
           </Routes>
-      </Main>
+        </Main>
+      </div>
       <Footer></Footer>
       <ContextMenu />
       <ProfileContextMenu />

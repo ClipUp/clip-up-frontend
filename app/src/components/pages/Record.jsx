@@ -1,5 +1,5 @@
 import AudioRecorder from "../features/audio/AudioRecorder";
-import NoticeCard from "../features/note/NoticeCard";
+import NoticeCard from "../features/note/EmptyNoticeList";
 import VolumeImage from "../../assets/img/volume.webp"
 import "./record.scss"
 

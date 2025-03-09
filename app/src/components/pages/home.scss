@@ -1,6 +1,66 @@
-.notice-card {
-	button {
-		width: 133px;
-		margin-top: 32px;
+#home-page {
+	display: flex;
+	flex-direction: column;
+
+	.empty-note-list-card {
+		button {
+			margin-top: 32px;
+
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+
+			> img {
+				width: 24px;
+			}
+			> span {
+				font-size: 16px;
+			}
+		}
+	}
+
+	> .note-list-card {
+		width: 100%;
+
+		.note-list {
+			width: 100%;
+		}
+	}
+}
+
+@media (min-width: 0px) and (max-width: 1919px) {
+	#home-page {
+		.empty-note-list-card {
+			button {
+				width: 133px;
+				height: 48px;
+			}
+		}
+		.note-list-card {
+			min-height: 680px;
+			max-height: 704px;
+			.note-list {
+				min-height: 576px;
+				max-height: 600px;
+			}
+		}
+	}
+}
+
+@media (min-width: 1920px) {
+	#home-page {
+		.empty-note-list-card {
+			button {
+				width: 145px;
+				height: 56px;
+			}
+		}
+		.note-list-card {
+			min-height: 704px;
+			.note-list {
+				min-height: 600px;
+			}
+		}
 	}
 }
