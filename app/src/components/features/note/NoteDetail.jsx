@@ -114,17 +114,12 @@ const NoteDetail = ({ noteId }) => {
 						<h5 className={isChatOpen ? "disabled" : ""} onClick={() => setIsChatOpen(false)}>자동 요약</h5>
 						<ChatButton isOpen={isChatOpen} setIsOpen={setIsChatOpen} />
 					</span>
-					{
-					!isChatOpen ? (
-							<div className="note-scroll">
-								<div>
-									<MeetingNotes text={data.minutes} />
-								</div>
-							</div>
-						) : (
-							<ChatRoom noteId={noteId}></ChatRoom>
-						)
-					}
+					<div className="note-scroll">
+						<div>
+							<MeetingNotes text={data.minutes} />
+						</div>
+					</div>
+					<ChatRoom noteId={noteId} isOpen={isChatOpen} setIsOpen={setIsChatOpen}></ChatRoom>
 				</article>
 			</section>
     </div>

@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react"
+import IconButton from "../../ui/button/IconButton"
 import AiChat  from "../../../assets/icon/ai_chat.svg"
 import ChatSend  from "../../../assets/icon/chat_send.svg"
 import AiProfile  from "../../../assets/icon/chat_ai_profile.svg"
+import Close from "../../../assets/icon/close.svg"
 import ChatLoading  from "../../../assets/lottie/chat_loading.json"
 import "./chatRoom.scss"
 import { useSendAiChat } from "../../../hooks/useNote"
@@ -50,7 +52,7 @@ const GuideBubble = ({children, onClick}) => {
 	)
 }
 
-const ChatRoom = ({noteId}) => {
+const ChatRoom = ({noteId, isOpen, setIsOpen}) => {
 	const guideQ = [
 		{message: "To-Do list 정리해줘"},
 		{message: "이 회의 요약을 좀 더 짧게 해줘"}
@@ -61,15 +63,17 @@ const ChatRoom = ({noteId}) => {
 	const [message, setMessage] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [lastSessionId, setLastSessionId] = useState(null);
-	const scrollDownRef = useRef();
+	const chatRef = useRef(null);
 	const sendMutation = useSendAiChat();
 
 	useEffect(() => {
 		scrollDown();
-	}, [loading, chatList]);
+	}, [loading, chatList, isOpen]);
 
 	const scrollDown = () => {
-		scrollDownRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+		if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
 	};
 	const handleKeyDown = (event) => {
 		if (event.key === "Enter") {
@@ -97,10 +101,16 @@ const ChatRoom = ({noteId}) => {
 		setLoading(false);
 	}
 
+	if (!isOpen) return null;
 	return (
 		<div className="chat-room">
+			<div className="chat-header">
+				<IconButton>
+					<img src={Close} alt="닫기" onClick={() => setIsOpen(false)} />
+				</IconButton>
+			</div>
 			<div className="chat-list-group">
-				<div className="chat-bubble-list">
+				<div className="chat-bubble-list" ref={chatRef}>
 					{
 						chatList.map((chat, idx) => (
 							<ChatBubble key={idx} senderProfile={chat.sender === "ai" ? AiProfile : ""}>{chat.message}</ChatBubble>
@@ -123,7 +133,6 @@ const ChatRoom = ({noteId}) => {
 							}
 						</div>
 					)}
-					<div ref={scrollDownRef} />
 				</div>
 			</div>
 			<div className="chat-input-group">
