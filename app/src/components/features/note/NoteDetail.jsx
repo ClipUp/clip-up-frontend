@@ -5,14 +5,16 @@ import Calendar from "../../../assets/icon/calendar.svg";
 import {getFormatDate, formatTime} from "../../../utils/dateUtil"
 import "./noteDetail.scss"
 import { useToastStore } from "../../../store/modalStore";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChatButton, ChatRoom } from "../chatbot/ChatRoom";
 
 const NoteDetail = ({ noteId }) => {
 	const [isChatOpen, setIsChatOpen] = useState(false);
+	const [activatedLine, setActivatedLine] = useState(-1);
   const { data, isLoading, error } = useNote(noteId);
 	const addToast = useToastStore((state) => state.addToast);
 	const editMutation = useEditNote();
+	const noteScrollRef = useRef(null);
 
 	const MeetingNotes = ({ text }) => {
 		const markdownRef = useRef(null);
@@ -24,6 +26,19 @@ const NoteDetail = ({ noteId }) => {
 		);
 	};
 
+  useEffect(() => {
+    if (noteScrollRef.current) {
+      const highlightedEl = noteScrollRef.current.querySelector(".highlight");
+      if (highlightedEl) {
+        const container = noteScrollRef.current;
+        const containerRect = container.getBoundingClientRect();
+        const elementRect = highlightedEl.getBoundingClientRect();
+        // highlight된 요소가 컨테이너 내 중앙에 오도록 계산
+        const offset = elementRect.top - containerRect.top - (container.clientHeight / 2) + (elementRect.height / 2);
+        container.scrollBy({ top: offset, behavior: "smooth" });
+      }
+    }
+  }, [activatedLine]);
 	const handleEdit = (id) => {
 		const $title = document.querySelector(`.title-text-${id}`);
 		const originTitle = $title.innerHTML;
@@ -77,9 +92,22 @@ const NoteDetail = ({ noteId }) => {
 		}
 	};
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+	const handleTimeUpdate = (currentTime) => {
+		const ms = currentTime * 1000;
 
+		data.script?.map((line, index)=> {
+			if (isCurrentSpaech(line.startTime, line.endTime, ms)) {
+				setActivatedLine(index);
+				return;
+			}
+		});
+	}
+
+	const isCurrentSpaech = (speachStart, speachEnd, currentTime) => {
+		return currentTime >= speachStart && currentTime <= speachEnd;
+	}
+
+  if (isLoading || error) return <div id="note-detail-page"></div>;
   return (
     <div id="note-detail-page">
 			<div className="title-group">
@@ -92,10 +120,10 @@ const NoteDetail = ({ noteId }) => {
 			<section className="note-group">
 				<article className="script">
 					<h5>스크립트</h5>
-					<div className="note-scroll">
+					<div className="note-scroll" ref={noteScrollRef}>
 						<div>
 							{data.script?.map((line, index)=> (
-								<p key={index}>
+								<p key={index} className={index === activatedLine ? `highlight` : ``}>
 									<span className="note-speaker-group">
 										<span className="speaker">화자{line.speaker}</span>
 										<span className="start-time">{formatTime(line.startTime)}</span>
@@ -107,7 +135,7 @@ const NoteDetail = ({ noteId }) => {
 							))}
 						</div>
 					</div>
-					<AudioController audioUrl={data.audioFileUrl}></AudioController>
+					<AudioController audioUrl={data.audioFileUrl} setTimeUpdate={handleTimeUpdate}></AudioController>
 				</article>
 				<article className="summary">
 					<span className="summary-title">

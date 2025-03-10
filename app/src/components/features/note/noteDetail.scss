@@ -65,7 +65,6 @@
 				}
 			}
 			.note-scroll {
-				padding: 0 12px;
 				margin-top: 20px;
 				box-sizing: border-box;
 				overflow-y: scroll;
@@ -78,7 +77,7 @@
 				p {
 					line-height: 27px;
 					letter-spacing: -1%;
-					padding: 12px 0;
+					padding: 12px 12px;
 					.note-speaker-group {
 						margin-bottom: 4px;
 						.speaker {
@@ -98,6 +97,11 @@
 						color: var(--grey-700);
 						font-weight: 400;
 						font-size: 18px;
+					}
+
+					&.highlight {
+						background-color: var(--primary-50);
+						border-radius: 12px;
 					}
 				}
 			}

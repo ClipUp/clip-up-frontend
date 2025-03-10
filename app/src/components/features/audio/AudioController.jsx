@@ -3,7 +3,7 @@ import "./audioController.scss";
 import Pause from "../../../assets/icon/pause.svg";
 import Start from "../../../assets/icon/start.svg";
 
-const AudioController = ({ audioUrl }) => {
+const AudioController = ({ audioUrl, setTimeUpdate }) => {
   const audioRef = useRef(null);
   const progressBarRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -13,25 +13,38 @@ const AudioController = ({ audioUrl }) => {
 
   useEffect(() => {
     const audio = audioRef.current;
+    if (!audio) return;
 
-    if (audio) {
-      const updateTime = () => setCurrentTime(audio.currentTime);
-      const updateDuration = () => setDuration(audio.duration);
-      const handleEnd = () => {
-        setCurrentTime(audio.duration);
-        setIsPlaying(false);
-      };
+    const handleTimeUpdate = () => {
+      setTimeUpdate(audio.currentTime);
+    };
+    audio.addEventListener("timeupdate", handleTimeUpdate);
 
-      audio.addEventListener("timeupdate", updateTime);
-      audio.addEventListener("loadedmetadata", updateDuration);
-      audio.addEventListener("ended", handleEnd);
+    return () => {
+      audio.removeEventListener("timeupdate", handleTimeUpdate);
+    };
+  }, [setTimeUpdate]);
 
-      return () => {
-        audio.removeEventListener("timeupdate", updateTime);
-        audio.removeEventListener("loadedmetadata", updateDuration);
-        audio.removeEventListener("ended", handleEnd);
-      };
-    }
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const updateTime = () => setCurrentTime(audio.currentTime);
+    const updateDuration = () => setDuration(audio.duration);
+    const handleEnd = () => {
+      setCurrentTime(audio.duration);
+      setIsPlaying(false);
+    };
+
+    audio.addEventListener("timeupdate", updateTime);
+    audio.addEventListener("loadedmetadata", updateDuration);
+    audio.addEventListener("ended", handleEnd);
+
+    return () => {
+      audio.removeEventListener("timeupdate", updateTime);
+      audio.removeEventListener("loadedmetadata", updateDuration);
+      audio.removeEventListener("ended", handleEnd);
+    };
   }, []);
 
   useEffect(() => {
