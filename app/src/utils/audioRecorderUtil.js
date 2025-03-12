@@ -38,18 +38,15 @@ class AudioRecorder {
           this.audioChunks.push(event.data);
         }
       };
-
-      // 녹음 시작 시점과 누적 시간 초기화
       this.recordingStartTime = Date.now();
       this.elapsedTime = 0;
       this.isPaused = false;
       this.isRecording = true;
-
       return new Promise((resolve) => {
         this.mediaRecorder.onstop = async () => {
           const audioBlob = new Blob(this.audioChunks, { type: "audio/webm" });
           const wavBlob = await this.convertToWav(audioBlob); // WAV 형식으로 변환
-          this.onStopRecording(wavBlob); // WAV 파일 전달
+          this.onStopRecording(wavBlob, this.elapsedTime); // WAV 파일 전달
           this.stopVisualizeWaveform();
           resolve("stopped"); // 녹음 중지
         };

@@ -27,7 +27,7 @@ const AudioRecorder = () => {
   useEffect(() => {
     recorderRef.current = new AudioRecorderUtil(
       (dataArray) => drawWaveform(dataArray),
-      (audioBlob) => handleAudioSave(audioBlob)
+      (audioBlob, recordingTime) => handleAudioSave(audioBlob, recordingTime)
     );
     const interval = setInterval(() => {
       if (recorderRef.current && recorderRef.current.getRecordingTime) {
@@ -62,7 +62,7 @@ const AudioRecorder = () => {
     recorderRef.current.stopRecording();
   };
 
-  const handleAudioSave = async (wavBlob) => {
+  const handleAudioSave = async (wavBlob, recordingTime) => {
     showSpinner({
       title: "회의록을 생성하고 있습니다.",
       confirmText: "닫기",
@@ -79,7 +79,8 @@ const AudioRecorder = () => {
     };
 
     try {
-      const res = await noteMutation.mutateAsync({audioFile: wavBlob, audioFileDuration: Math.floor(recordingTime / 60)});
+      const res = {};
+       await noteMutation.mutateAsync({audioFile: wavBlob, audioFileDuration: Math.floor(recordingTime / 1000 / 60)});
       if (res.status === "CREATED") {
         addToast("회의록 생성이 완료되었습니다.");
       } else {
