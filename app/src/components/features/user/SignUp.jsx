@@ -51,16 +51,18 @@ const SignUp = () => {
 		return false;
 	}
 	const confirmPassword = (password) => {
-		const hasAlphabet = /[a-zA-Z]/.test(password);
-		const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>_\\-]/.test(password);
+		const hasSpecialChar = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
 
-    if (password.length >= 8 && hasAlphabet && hasSpecialChar) {
-      setPasswordError("");
-			return true;
-    } else {
-      setPasswordError("비밀번호는 최소 8자 이상이며, 영문, 숫자, 특수문자를 포함해야 합니다.");
+		if (password.length < 8) {
+			setPasswordError("비밀번호는 최소 8자 이상이어야 합니다.");
 			return false;
-    }
+		} else if (!hasSpecialChar) {
+			setPasswordError("비밀번호는 영문, 숫자, 특수문자(@$!%*?&)를 포함해야 합니다.");
+			return false;
+    } else {
+			setPasswordError("");
+			return true;
+		}
   };
 	const confirmPasswordSecondary = (password2) => {
     if (password === password2) {
