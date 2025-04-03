@@ -33,12 +33,14 @@ const CategoryList = () => {
 
   const handleClickCategory = async (event, idx) => {
     event.preventDefault();
-    if (accessToken || idx === DEFAULT_CATEGORY) {
-      navigate(CATEGORIES[idx].path);
-      return setActiveCategory(idx)
-    }
-    openModal(<SignIn />);
-    return location.pathname;
+    navigate(CATEGORIES[idx].path);
+    return setActiveCategory(idx)
+    // if (accessToken || idx === DEFAULT_CATEGORY) {
+    //   navigate(CATEGORIES[idx].path);
+    //   return setActiveCategory(idx)
+    // }
+    // openModal(<SignIn />);
+    // return location.pathname;
   }
 
   return (

@@ -29,6 +29,7 @@ const RecordCard = () => {
 		});
 	};
 	const handleButtonClick = () => {
+		addToast("현재 회의록 생성 서비스를 이용할 수 없습니다.");
     fileInputRef.current.click();
   };
 	const handleFileChange = async (event) => {

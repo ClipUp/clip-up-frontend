@@ -43,7 +43,10 @@ const ProfileCard = () => {
 			<section className="empty-profile-section">
 				<Button
 					title="로그인"
-					onClick={() => {openModal(<SignIn />)}}
+					// onClick={() => {openModal(<SignIn />)}}
+					onClick={() => {showConfirm({
+						title: "현재 로그인 기능을 이용할 수 없습니다.",
+						confirmText: "닫기"});}}
 				>로그인</Button>
 			</section>
 		)

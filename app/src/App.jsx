@@ -42,11 +42,11 @@ const App = () => {
         <SideBar />
         <Main>
           <Routes>
-            <Route path="/" element={routeWithAuth(<Home />)}></Route>
-            <Route path="/note/list/all" element={routeWithAuth(<NoteList />)}></Route>
-            <Route path="/note/list/deleted" element={routeWithAuth(<DeletedNoteList />)}></Route>
-            <Route path="/note/:noteId" element={routeWithAuth(<Note />)}></Route>
-            <Route path="/note/new" element={routeWithAuth(<Record />)}></Route>
+            <Route path="/" element={<Home />}></Route>
+            <Route path="/note/list/all" element={<NoteList />}></Route>
+            <Route path="/note/list/deleted" element={<DeletedNoteList />}></Route>
+            <Route path="/note/:noteId" element={<Note />}></Route>
+            <Route path="/note/new" element={<Record />}></Route>
             <Route path="*" element={<NotFound />}></Route>
           </Routes>
         </Main>

@@ -49,6 +49,7 @@ const AudioRecorder = () => {
       recorderRef.current.resumeRecording();
     } else {
       recorderRef.current.startRecording();
+      addToast("현재 회의록 생성 서비스를 이용할 수 없습니다.");
     }
   };
 
